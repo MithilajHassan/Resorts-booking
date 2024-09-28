@@ -5,6 +5,7 @@ const userRouter = Router()
 
 userRouter.post('/signup',userController.signup)
 userRouter.post('/verify-otp',userController.verifyOtp)
+userRouter.post('/resend-otp',userController.resendOtp)
 
 
 

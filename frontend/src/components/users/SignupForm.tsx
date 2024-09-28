@@ -1,6 +1,6 @@
-import { useSignupMutation, useVerifyOtpMutation } from "../../slices/apiSlice"
+import { useSignupMutation, useVerifyOtpMutation, useResendOtpMutation } from "../../slices/apiSlice"
 import { RootState } from "../../store"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { FcGoogle } from "react-icons/fc"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
@@ -11,15 +11,36 @@ const SignupForm = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+
     const [isSentOtp, setIsSentOtp] = useState(false)
     const [enteredOtp,setOtp] = useState('')
     const [errMsg,setErrMsg] = useState('')
+    const [count,setCount] = useState(0)
+    const [resendBtnVisible, setResendBtnVisible] = useState(false)
+    
 
     const { userInfo } = useSelector((state:RootState)=>state.auth)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [ signup ] = useSignupMutation()
     const [ verifyOtp ] = useVerifyOtpMutation()
+    const [ resendOtp ] = useResendOtpMutation()
+
+    useEffect(() => {
+        if (isSentOtp) { 
+            let timer: ReturnType<typeof setInterval>;
+    
+            if (count > 0) {
+                timer = setInterval(() => {
+                    setCount((prev) => prev - 1);
+                }, 1000);
+            } else if (count === 0) {
+                setResendBtnVisible(true)
+            }
+    
+            return () => clearInterval(timer);
+        }
+    }, [count, isSentOtp])
 
     const OtpVerifyHandler = async()=>{
         try {
@@ -44,6 +65,7 @@ const SignupForm = () => {
                 console.log(res)            
                 if(res.success){   
                     setIsSentOtp(true)
+                    setCount(60)
                     setErrMsg('')
                 }  
             } else {
@@ -52,6 +74,12 @@ const SignupForm = () => {
         } catch (error) {
             console.log(error)
         }   
+    }
+
+    const resendHandler = async()=>{
+        await resendOtp(email)
+        setCount(60)
+        setResendBtnVisible(false)
     }
 
     return (
@@ -75,7 +103,12 @@ const SignupForm = () => {
                     </div>
     
                     <button className="p-1.5 bg-blue-700 rounded-md text-white" onClick={OtpVerifyHandler}>Verify</button>
-                    <p className="text-end text-gray-600">Resend</p>
+                    <div className="flex justify-between">
+                        <p className="text-black">00:{count}</p>
+                        {resendBtnVisible && (
+                                <button className="text-gray-700 hover:text-black" onClick={resendHandler}>Resend</button>
+                        )}
+                    </div>
                     </>
                 ):(
                     <>
