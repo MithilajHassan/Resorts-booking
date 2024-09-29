@@ -9,7 +9,7 @@ class UserRepository {
     async findByEmail(email:string):Promise<IUser | null>{
         return await User.findOne({email})
     }
-
+    
 }
 
 export default new UserRepository()

@@ -5,7 +5,7 @@ function Signup() {
     return (
         <>
             <UserHeader/>
-            <SigninForm/>
+            <SigninForm role='user' signupUrl='/signup'/>
         </>
     )
 }

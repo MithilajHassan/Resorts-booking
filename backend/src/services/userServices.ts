@@ -1,15 +1,67 @@
-import { IUser } from "../models/userModel";
-import UserRepository from "../repositories/userRepository";
+import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken"
+import { IUser } from "../models/userModel"
+import userRepository from "../repositories/userRepository"
 import CustomError from '../errors/customError'
+import otpServices from "./otpServices"
+import { Response } from 'express'
 
 class UserServices{
-    async createUser (userData:Partial<IUser>):Promise<IUser>{
-        // const existEmail = await UserRepository.findByEmail(userData.email!)
-        // if(existEmail){
-        //     throw new CustomError('Email already exists', 400)
-        // }else{
-            return await UserRepository.create(userData)
-        //}
+    async handleUserSignup(email: string) {
+        const existEmail = await userRepository.findByEmail(email)
+        if (existEmail) {
+            throw new CustomError('Email already exists',400)
+        }
+        const otp = otpServices.generateOtp()
+        await otpServices.createOtp({ email, otp })
+        otpServices.sendOtpVerificationEmail(email, otp)
     }
+
+    async verifyOtpAndCreate(otp: string, userData: Partial<IUser>): Promise<IUser> {
+        const savedOtp = await otpServices.findOtp(userData.email!)
+        if (!savedOtp) {
+             throw new CustomError('OTP not found', 400);
+        }
+        
+        if (savedOtp.otp !== otp) {
+             throw new CustomError('OTP is incorrect', 400)
+        }
+
+        return await userRepository.create(userData)
+    }
+
+    async handleUserSignin(email: string, password:string,role:string,res:Response):Promise<IUser|undefined> {
+        const user = await userRepository.findByEmail(email)
+        if(!user){
+            throw new CustomError('Invalid Email' , 401)
+        }
+        if (await bcrypt.compare(password,user.password)) {
+            if(user.isBlock){
+                throw new CustomError('Your account is blocked', 403)
+            }else{
+                const token = jwt.sign({userId:user._id},process.env.JWT_SECRET!,{expiresIn:'30d'})
+                
+                if(role == 'user'){
+                    res.cookie('jwt',token,{
+                        httpOnly:true,
+                        secure: process.env.NODE_ENV !== 'development',
+                        sameSite: 'strict',
+                        maxAge: 30 * 24 * 60 * 60 * 1000,
+                    })
+                }else if(role == 'resortAdmin'){
+                    res.cookie('Rjwt',token,{
+                        httpOnly:true,
+                        secure: process.env.NODE_ENV !== 'development',
+                        sameSite: 'strict',
+                        maxAge: 30 * 24 * 60 * 60 * 1000,
+                    })
+                }
+                return user
+            }
+        }else{
+            throw new CustomError('Invalid password' , 401)
+        } 
+    }
+
 }
 export default new UserServices()

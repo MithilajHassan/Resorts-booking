@@ -1,11 +1,11 @@
 import UserHeader from '../../components/users/UserHeader'
-import SignupForm from '../../components/users/SignupForm'
+import SignupForm from '../../components/common/SignupForm'
 function Signup() {
 
     return (
         <>
             <UserHeader/>
-            <SignupForm/>
+            <SignupForm role='user' signinUrl='/signin' />
         </>
     )
 }

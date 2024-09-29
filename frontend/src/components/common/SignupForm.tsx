@@ -1,12 +1,16 @@
 import { useSignupMutation, useVerifyOtpMutation, useResendOtpMutation } from "../../slices/apiSlice"
-import { RootState } from "../../store"
-import { useEffect, useRef, useState } from "react"
-import { FcGoogle } from "react-icons/fc"
-import { useDispatch, useSelector } from "react-redux"
+// import { RootState } from "../../store"
+import { useEffect, useState } from "react"
+//import { FcGoogle } from "react-icons/fc"
+//import { useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
-import { setCredentials } from "../../slices/authSlice"
 
-const SignupForm = () => {
+interface SignupFormProps {
+    role: 'user'|'resortAdmin';
+    signinUrl:string;
+}
+
+const SignupForm: React.FC<SignupFormProps> = ({role,signinUrl}) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -19,8 +23,7 @@ const SignupForm = () => {
     const [resendBtnVisible, setResendBtnVisible] = useState(false)
     
 
-    const { userInfo } = useSelector((state:RootState)=>state.auth)
-    const dispatch = useDispatch()
+    // const { userInfo } = useSelector((state:RootState)=>state.auth)
     const navigate = useNavigate()
     const [ signup ] = useSignupMutation()
     const [ verifyOtp ] = useVerifyOtpMutation()
@@ -28,8 +31,7 @@ const SignupForm = () => {
 
     useEffect(() => {
         if (isSentOtp) { 
-            let timer: ReturnType<typeof setInterval>;
-    
+            let timer: ReturnType<typeof setInterval>
             if (count > 0) {
                 timer = setInterval(() => {
                     setCount((prev) => prev - 1);
@@ -38,31 +40,26 @@ const SignupForm = () => {
                 setResendBtnVisible(true)
             }
     
-            return () => clearInterval(timer);
+            return () => clearInterval(timer)
         }
     }, [count, isSentOtp])
 
     const OtpVerifyHandler = async()=>{
         try {
-            const response = await verifyOtp({otp:enteredOtp,name,email,password}).unwrap()
+            const response = await verifyOtp({otp:enteredOtp,name,email,password,role}).unwrap()
             if(response.success){
-                dispatch(setCredentials(response.user))
-                navigate('/signin')
-            }else{
-                setErrMsg(response.message)
+                navigate(signinUrl)
             }
-        } catch (error) {
-            console.log(error)
+        } catch (err:any) {
+            if(err?.data)setErrMsg(err.data.message)
+            console.log(err)
         }
     }
 
     const submitHandler = async()=>{
         try {
             if(password == confirmPassword){
-                console.log(email)
-                
-                const res = await signup(email).unwrap()
-                console.log(res)            
+                const res = await signup(email).unwrap()           
                 if(res.success){   
                     setIsSentOtp(true)
                     setCount(60)
@@ -71,15 +68,21 @@ const SignupForm = () => {
             } else {
                 setErrMsg("Passwords do not match!")
             }
-        } catch (error) {
-            console.log(error)
+        } catch (err:any) {
+            if(err?.data)setErrMsg(err.data.message)
+            console.log(err)
         }   
     }
 
     const resendHandler = async()=>{
-        await resendOtp(email)
-        setCount(60)
-        setResendBtnVisible(false)
+        try{
+            await resendOtp(email)
+            setCount(60)
+            setResendBtnVisible(false)
+        }catch (err:any) {
+            if(err?.data)setErrMsg(err.data.message)
+            console.log(err)
+        }
     }
 
     return (
@@ -164,13 +167,13 @@ const SignupForm = () => {
 
                 <button className="p-1.5 bg-blue-700 rounded-md text-white" onClick={submitHandler}>Signup</button>
 
-                <div className="flex justify-center">
+                {/* <div className="flex justify-center">
                     <div className="border-solid border border-gray-400 h-10 w-12 flex justify-center items-center">
                         <FcGoogle style={{fontSize:'1.5rem'}} />
                     </div>
-                </div>
+                </div> */}
 
-                <Link to={'/sigin'}><p className="text-center">Already have an account? signin</p></Link>
+                <p className="text-center">Already have an account?<Link to={signinUrl} className="text-blue-700 underline"> Signin</Link></p>
                 </>
                 )}
                 
