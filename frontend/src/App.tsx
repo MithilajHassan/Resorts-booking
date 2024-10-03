@@ -6,6 +6,9 @@ import UserSignin from './pages/userSide/Signin'
 import NotFound from './pages/404'
 import ResortSignup from './pages/resortSide/SignupPage'
 import ResortSignin from './pages/resortSide/ResortSignin'
+import AddResortDetails from './pages/resortSide/AddResortDetailsPage'
+import AdminSigninPage from './pages/adminSide/AdminSignin'
+import AdminDashboard from './pages/adminSide/AdminDashboard'
 
 function App() {
   
@@ -21,9 +24,11 @@ function App() {
                     {/* Resort-side */}
           <Route path='/resort/signup' element={<ResortSignup/>} />
           <Route path='/resort/signin' element={<ResortSignin/>} />
+          <Route path='/resort/addresortdetails' element={<AddResortDetails/>} />
 
                     {/* Admin-side */}
-
+          <Route path='/admin/signin' element={<AdminSigninPage/>} />
+          <Route path='/admin/dashboard' element={<AdminDashboard/>} />
 
           <Route path='*' element={<NotFound/>} />
         </Routes>

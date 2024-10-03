@@ -20,11 +20,11 @@ class UserServices{
     async verifyOtpAndCreate(otp: string, userData: Partial<IUser>): Promise<IUser> {
         const savedOtp = await otpServices.findOtp(userData.email!)
         if (!savedOtp) {
-             throw new CustomError('OTP not found', 400);
+            throw new CustomError('OTP code expired', 403)
         }
         
         if (savedOtp.otp !== otp) {
-             throw new CustomError('OTP is incorrect', 400)
+            throw new CustomError('OTP is incorrect', 401)
         }
 
         return await userRepository.create(userData)
@@ -42,20 +42,27 @@ class UserServices{
                 const token = jwt.sign({userId:user._id},process.env.JWT_SECRET!,{expiresIn:'30d'})
                 
                 if(role == 'user'){
+                    if(user.role != role){
+                        throw new CustomError('Invalid Email',401)
+                    }
                     res.cookie('jwt',token,{
                         httpOnly:true,
                         secure: process.env.NODE_ENV !== 'development',
                         sameSite: 'strict',
                         maxAge: 30 * 24 * 60 * 60 * 1000,
                     })
-                }else if(role == 'resortAdmin'){
-                    res.cookie('Rjwt',token,{
+                }else if(role == 'admin'){
+                    if(user.role != role){
+                        throw new CustomError('You are not an admin',401)
+                    }
+                    res.cookie('Ajwt',token,{
                         httpOnly:true,
                         secure: process.env.NODE_ENV !== 'development',
                         sameSite: 'strict',
                         maxAge: 30 * 24 * 60 * 60 * 1000,
                     })
                 }
+
                 return user
             }
         }else{

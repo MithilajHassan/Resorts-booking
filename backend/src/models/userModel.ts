@@ -12,18 +12,14 @@ export interface IUser extends Document {
     isBlock:boolean
 }
 
-interface Methods {
-    comparePassword(enteredPassword:string):Promise<boolean>
-}
-
-const userSchema = new Schema<IUser, {}, Methods>({
+const userSchema = new Schema<IUser>({
     name: { type: String, required: true },
     email: { type: String, required: true, unique:true },
     phone: { type: Number, required:false},
     password: { type: String, required: true },
     walletBalance: { type: Number, default:0 },
     avatar: { type: String, required: false },
-    role: { type: String,enum: ['user','admin','resortAdmin'], default:'user' },
+    role: { type: String,enum: ['user','admin'], default:'user' },
     isBlock: { type: Boolean, default:false },
 })
 userSchema.pre("save", async function(next){
@@ -31,10 +27,6 @@ userSchema.pre("save", async function(next){
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
 })
-
-userSchema.methods.comparePassword = async function (enteredPassword:string) :Promise<boolean> {
-    return await bcrypt.compare(enteredPassword,this.password)
-}
 
 const User = model<IUser>('User',userSchema)
 

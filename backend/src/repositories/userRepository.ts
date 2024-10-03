@@ -9,6 +9,10 @@ class UserRepository {
     async findByEmail(email:string):Promise<IUser | null>{
         return await User.findOne({email})
     }
+
+    async findAllUsers(userData:Partial<IUser>): Promise<IUser[]> {
+        return await User.find({role:'user'}) 
+    }
     
 }
 

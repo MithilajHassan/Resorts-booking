@@ -23,9 +23,9 @@ class UserController{
 
     async verifyOtp(req:Request,res:Response){
         try {
-            const {otp,name,email,password,role} = req.body
+            const {otp,name,email,password} = req.body
                 
-            const user = await userServices.verifyOtpAndCreate(otp,{name,email,password,role})
+            const user = await userServices.verifyOtpAndCreate(otp,{name,email,password})
 
             res.status(201).json({user,success:true})
         } catch (err) {
@@ -50,7 +50,7 @@ class UserController{
                 res.status(err.statusCode).json({ message: err.message })
             }else {
                 console.error(err)
-                res.status(400).json({ message: 'Internal Server Error' })
+                res.status(500).json({ message: 'Internal Server Error' })
             }
         }
     }
@@ -69,8 +69,25 @@ class UserController{
             })
         } catch (err) {
             if(err instanceof CustomError){
-                console.log('alfjalsfalfalhgafajfl jfj')
-                
+                res.status(err.statusCode).json({ message: err.message })
+            }else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+
+    async signout(req:Request,res:Response){
+        try {
+
+            res.cookie('jwt','',{
+                httpOnly:true,
+                expires:new Date(0),
+            })
+            
+            res.status(200).json({message:"You are signed out",success:true})
+        } catch (err) {
+            if(err instanceof CustomError){
                 res.status(err.statusCode).json({ message: err.message })
             }else {
                 console.error(err)

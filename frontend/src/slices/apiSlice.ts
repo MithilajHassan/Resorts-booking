@@ -2,20 +2,20 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
     reducerPath:'authApi',
-    baseQuery:fetchBaseQuery({baseUrl:'/api/user'}),
+    baseQuery:fetchBaseQuery({baseUrl:'/api'}),
     endpoints:(builder)=>({
 
         signup:builder.mutation({
             query:(email:string)=>({
-                url:`/signup`,
+                url:`/user/signup`,
                 method:'POST',
                 body:{email}
             })
         }),
 
         verifyOtp:builder.mutation({
-            query:(data:{otp:string,name:string,email:string,password:string,role:string})=>({
-                url:`/verify-otp`,
+            query:(data:{otp:string,name:string,email:string,password:string})=>({
+                url:`/user/verify-otp`,
                 method:'POST',
                 body:data
             })
@@ -23,7 +23,7 @@ export const authApi = createApi({
 
         resendOtp:builder.mutation({
             query:(email:string)=>({
-                url:`/resend-otp`,
+                url:`/user/resend-otp`,
                 method:'POST',
                 body:{email}
             })
@@ -31,11 +31,33 @@ export const authApi = createApi({
 
         signin:builder.mutation({
             query:(data:{email:string,password:string,role:string})=>({
-                url:`/signin`,
+                url:`/user/signin`,
                 method:'POST',
                 body:data
             })
-        })
+        }),
+
+        signoutUser:builder.mutation({
+            query:()=>({
+                url:`/user/signout`,
+                method:'POST',
+            })
+        }),
+
+        signoutResortAdmin:builder.mutation({
+            query:()=>({
+                url:`/resort/signout`,
+                method:'POST',
+            })
+        }),
+
+        signoutAdmin:builder.mutation({
+            query:()=>({
+                url:`/admin/signout`,
+                method:'POST',
+            })
+        }),
+
 
     })  
 })
@@ -45,5 +67,8 @@ export const {
     useVerifyOtpMutation,
     useResendOtpMutation,
     useSigninMutation,
+    useSignoutUserMutation,
+    useSignoutResortAdminMutation,
+    useSignoutAdminMutation,
     
 } = authApi

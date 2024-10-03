@@ -5,7 +5,7 @@ function Signin() {
     return (
         <>
             <ResortHeader/>
-            <SigninForm role='resortAdmin' signupUrl='/resort/signup'/>
+            <SigninForm role='resortAdmin' signupUrl='/resort/signup' nextPage='/resort/addresortdetails' />
         </>
     )
 }

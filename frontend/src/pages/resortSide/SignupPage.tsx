@@ -1,5 +1,5 @@
 import ResortHeader from '../../components/resort/Header'
-import SignupForm from '../../components/common/SignupForm'
+import SignupForm from '../../components/users/SignupForm'
 function SignupResort() {
 
     return (

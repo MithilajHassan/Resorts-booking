@@ -1,22 +1,22 @@
 import { AppDispatch, RootState } from "../../store"
 import { useDispatch, useSelector } from "react-redux"
-import { clearResortAdminAuth } from "../../slices/authSlice"
+import { clearAdminAuth } from "../../slices/authSlice"
 import { FaCircleUser } from "react-icons/fa6"
-import {HoverCard, HoverCardContent, HoverCardTrigger,  } from "../ui/hover-card"
+import { HoverCard, HoverCardContent, HoverCardTrigger,  } from "../ui/hover-card"
 import { useNavigate } from "react-router-dom"
 import { TbLogout } from "react-icons/tb"
-import { useSignoutResortAdminMutation } from "../../slices/apiSlice"
+import { useSignoutAdminMutation } from "../../slices/apiSlice"
 
-function ReosrtAdminNav(){
+function AdminHeader(){
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate()
-    const [ resortAdminSignout ] = useSignoutResortAdminMutation()
-    const { resortAdmin } = useSelector((state:RootState)=>state.auth)
+    const [ AdminSignout ] = useSignoutAdminMutation()
+    const { adminInfo } = useSelector((state:RootState)=>state.auth)
     const logoutHandler = async()=>{
         try {
-            await resortAdminSignout(undefined)
-            dispatch(clearResortAdminAuth())
-            navigate('')
+            await AdminSignout(undefined)
+            dispatch(clearAdminAuth())
+            navigate('/admin/signin')
         } catch (err) {
             console.log(err)
         }    
@@ -27,7 +27,7 @@ function ReosrtAdminNav(){
              <div className="flex items-center mx-4 sm:mx-8 lg:mx-14">
                 <p className="text-white font-bold italic font-serif text-xl sm:text-2xl">RESORTS</p>
             </div>
-            {resortAdmin &&(
+            {adminInfo &&(
                 <div className="grow">
                 <ul className="flex flex-row gap-4 
                  items-center justify-end text-white mr-10 h-16">
@@ -56,4 +56,4 @@ function ReosrtAdminNav(){
     )
 }
 
-export default ReosrtAdminNav
+export default AdminHeader
