@@ -81,7 +81,6 @@ const SignupForm = () => {
                 }
             }
         } catch (err) {
-            // if(err?.data)setErrMsg(err.data.message)
             console.log(err)
         }
     }

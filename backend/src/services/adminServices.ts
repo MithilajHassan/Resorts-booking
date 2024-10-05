@@ -10,6 +10,9 @@ class AdminServices {
         }
         return await categoryRepository.create(name)
     }
+    async listCategories(){
+        return await categoryRepository.find()
+    }
 }
 
 export default new AdminServices()

@@ -9,6 +9,8 @@ import ResortSignin from './pages/resortSide/ResortSignin'
 import AddResortDetails from './pages/resortSide/AddResortDetailsPage'
 import AdminSigninPage from './pages/adminSide/AdminSignin'
 import AdminDashboard from './pages/adminSide/AdminDashboard'
+import AdminCategory from './pages/adminSide/AdminCategory'
+import AdminPrivateRoute from './components/admin/AdminP'
 
 function App() {
   
@@ -28,7 +30,12 @@ function App() {
 
                     {/* Admin-side */}
           <Route path='/admin/signin' element={<AdminSigninPage/>} />
-          <Route path='/admin/dashboard' element={<AdminDashboard/>} />
+
+          <Route path='' element={<AdminPrivateRoute/>} >
+            <Route path='/admin/dashboard' element={<AdminDashboard/>} />
+            <Route path='/admin/categories' element={<AdminCategory/>} />
+
+          </Route>
 
           <Route path='*' element={<NotFound/>} />
         </Routes>

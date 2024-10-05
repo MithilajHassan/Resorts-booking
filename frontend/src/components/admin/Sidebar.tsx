@@ -14,7 +14,7 @@ export default function Sidebar ({ children }:SidebarProp) {
     const [expanded,setExpanded] = useState(true)
 
     return (
-        <aside className={`pt-16 transition-all ${expanded ? 'w-64 absolute' : 'w-16'} h-screen`}>
+        <aside className={`pt-16 transition-all ${expanded ? 'w-64 absolute lg:static' : 'w-16'} h-screen`}>
             <nav className="h-full flex flex-col bg-white border-r shadow-sm">
                 
                 <div className="p-4 pb-2 flex justify-between items-center">
@@ -61,7 +61,7 @@ export function SidebarItem({icon,text,active,alert}:SidebarItems){
         return null
     }
 
-    const { expanded } = context;
+    const { expanded } = context
     return(
         <li className={`
             relative flex items-center py-2 px-3 my-1
@@ -69,7 +69,7 @@ export function SidebarItem({icon,text,active,alert}:SidebarItems){
             transition-colors group
             ${
                 active ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-                : "hover:bg-indigo-50 text-gray-600"
+                : "hover:bg-indigo-50 text-balck"
             }
         `}>
             {icon}

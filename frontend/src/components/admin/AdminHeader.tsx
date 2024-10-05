@@ -10,11 +10,11 @@ import { useSignoutAdminMutation } from "../../slices/apiSlice"
 function AdminHeader(){
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate()
-    const [ AdminSignout ] = useSignoutAdminMutation()
+    const [ adminSignout ] = useSignoutAdminMutation()
     const { adminInfo } = useSelector((state:RootState)=>state.auth)
     const logoutHandler = async()=>{
         try {
-            await AdminSignout(undefined)
+            await adminSignout(undefined)
             dispatch(clearAdminAuth())
             navigate('/admin/signin')
         } catch (err) {

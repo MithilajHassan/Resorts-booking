@@ -7,6 +7,10 @@ class CategoryRepository{
         return await category.save()
     }
 
+    async find(){
+        return await Category.find()
+    }
+
     async findById(id:unknown):Promise<ICategroy | null>{
         return await Category.findById(id)
     }
