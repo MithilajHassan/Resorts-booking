@@ -1,3 +1,4 @@
+import { UpdateWriteOpResult } from "mongoose"
 import Category, { ICategroy } from "../models/categoryModel"
 
 
@@ -8,7 +9,7 @@ class CategoryRepository{
     }
 
     async find(){
-        return await Category.find()
+        return await Category.find({isDelete:false})
     }
 
     async findById(id:unknown):Promise<ICategroy | null>{
@@ -16,7 +17,13 @@ class CategoryRepository{
     }
 
     async findByName(name:string):Promise<ICategroy | null>{
-        return await Category.findOne({name:{$regex:'^'+ name +'$', $options:'i'}})
+        return await Category.findOne({name:{$regex:'^'+ name +'$', $options:'i'},isDelete:false})
+    }
+    async delete(id:unknown):Promise<UpdateWriteOpResult>{
+        return await Category.updateOne({_id:id},{$set:{isDelete:true}})
+    }
+    async edit(id:unknown,name:string):Promise<UpdateWriteOpResult>{
+        return await Category.updateOne({_id:id},{$set:{name}})
     }
 }
 

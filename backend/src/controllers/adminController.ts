@@ -52,7 +52,46 @@ class AdminController {
             }
         }
     }
+    async deleteCategory(req:Request,res:Response){
+        try {       
+            const { id } = req.body
+            const result = await adminServices.deleteCategory(id)
+            if(result.acknowledged){
+                res.status(200).json({success:true})
+            }else{
+                res.status(400).json({success:false})
+            }
+        } catch (err) {
+            if(err instanceof CustomError){
+                console.log(err)
+                res.status(err.statusCode).json({ message: err.message })
+            }else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
 
+    async editCategory(req:Request,res:Response){
+        try {       
+            const { id } = req.params
+            const { category } = req.body
+            const result = await adminServices.editCategory(id,category)
+            if(result.acknowledged){
+                res.status(200).json({success:true})
+            }else{
+                res.status(400).json({success:false})
+            }
+        } catch (err) {
+            if(err instanceof CustomError){
+                console.log(err)
+                res.status(err.statusCode).json({ message: err.message })
+            }else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
 }
 
 export default new AdminController

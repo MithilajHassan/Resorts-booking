@@ -1,5 +1,5 @@
 export type CategoryDetails = {
-    _id:string;
+    _id:unknown;
     name:string;
     isDelete:boolean;
 }

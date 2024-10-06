@@ -5,8 +5,7 @@ import { MdOutlineCategory, MdOutlineDashboard } from "react-icons/md"
 import { GiBlockHouse } from "react-icons/gi"
 import Sidebar, { SidebarItem } from '../../components/admin/Sidebar'
 import AdminHeader from "../../components/admin/AdminHeader"
-import CategoryForm from "../../components/admin/CategoryForm"
-import ListCategories from "../../components/admin/ListCategories"
+import CategoryManagement from "../../components/admin/CategoryManagement"
 
 
 const AdminDashboard = ()=>{
@@ -23,10 +22,7 @@ const AdminDashboard = ()=>{
                 <SidebarItem icon={<FaBox />} text="Facilities" />
             </Sidebar>
 
-            <div className="flex flex-col items-center mt-16 w-full">
-                <CategoryForm />
-                <ListCategories />
-            </div>  
+            <CategoryManagement />
             
             </div>
         </>

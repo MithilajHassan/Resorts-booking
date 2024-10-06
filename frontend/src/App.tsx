@@ -10,7 +10,7 @@ import AddResortDetails from './pages/resortSide/AddResortDetailsPage'
 import AdminSigninPage from './pages/adminSide/AdminSignin'
 import AdminDashboard from './pages/adminSide/AdminDashboard'
 import AdminCategory from './pages/adminSide/AdminCategory'
-import AdminPrivateRoute from './components/admin/AdminP'
+import AdminPrivateRoute from './components/admin/AdminPrivateRoutes'
 
 function App() {
   
