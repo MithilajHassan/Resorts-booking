@@ -1,11 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { CategoryDetails } from "../types/types"
+import { CategoryDetails, FacilityDetails } from "../types/types"
 
 export const adminApi = createApi({
     reducerPath:'adminApi',
     baseQuery:fetchBaseQuery({baseUrl:'/api'}),
-    tagTypes: ['Categories'],
+    tagTypes: ['Facilities','Categories'],
     endpoints:(builder)=>({
+
+        // Category Management-------------------------------------------------------
+
         addCategory:builder.mutation({
             query:(data:{category:string})=>({
                 url:'/admin/add-category',
@@ -39,6 +42,42 @@ export const adminApi = createApi({
             }),
             invalidatesTags: ['Categories']
         }),
+
+        // Facility Management --------------------------------------------------------------
+
+        addFacility: builder.mutation({
+            query: (data: { facilityName: string; }) => ({
+                url: '/admin/add-facility',
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['Facilities']
+        }),
+
+        listFacilities: builder.query<FacilityDetails[], void>({
+            query: () => ({
+                url: '/admin/list-facilities'
+            }),
+            providesTags: ['Facilities'],
+        }),
+
+        deleteFacility: builder.mutation({
+            query: ( id: string ) => ({
+                url: `/admin/delete-facility/${id}`,
+                method: 'PUT',
+            }),
+            invalidatesTags: ['Facilities']
+        }),
+
+        updateFacility: builder.mutation({
+            query: (data: { id: string, facilityName: string}) => ({
+                url: `/admin/edit-facility/${data.id}`,
+                method: 'PUT',
+                body: { facilityName: data.facilityName }
+            }),
+            invalidatesTags: ['Facilities']
+        }),
+
     })
 })
 
@@ -47,5 +86,9 @@ export const {
     useListCategoriesQuery,
     useDeleteCategoryMutation,
     useUpdateCategoryMutation,
+    useAddFacilityMutation,
+    useUpdateFacilityMutation,
+    useDeleteFacilityMutation,
+    useListFacilitiesQuery
 
 } = adminApi

@@ -11,6 +11,7 @@ import AdminSigninPage from './pages/adminSide/AdminSignin'
 import AdminDashboard from './pages/adminSide/AdminDashboard'
 import AdminCategory from './pages/adminSide/AdminCategory'
 import AdminPrivateRoute from './components/admin/AdminPrivateRoutes'
+import AdminFacility from './pages/adminSide/AdminFacility'
 
 function App() {
   
@@ -34,6 +35,7 @@ function App() {
           <Route path='' element={<AdminPrivateRoute/>} >
             <Route path='/admin/dashboard' element={<AdminDashboard/>} />
             <Route path='/admin/categories' element={<AdminCategory/>} />
+            <Route path='/admin/facilities' element={<AdminFacility/>} />
 
           </Route>
 

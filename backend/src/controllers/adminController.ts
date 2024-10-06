@@ -92,6 +92,81 @@ class AdminController {
             }
         }
     }
+
+//---------------------- facility Management -----------------------------------//
+    
+    async addFacility(req:Request,res:Response){
+        try {       
+            const { facilityName } = req.body
+            const facilityDetails = await adminServices.addFacility(facilityName)
+            res.status(200).json({facility:facilityDetails,success:true})
+        } catch (err) {
+            if(err instanceof CustomError){
+                res.status(err.statusCode).json({ message: err.message })
+            }else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+    
+    async listfacilities(req:Request,res:Response){
+        try {       
+            const facilities = await adminServices.listfacilities()
+            
+            res.status(200).json(facilities)
+        } catch (err) {
+            if(err instanceof CustomError){
+                res.status(err.statusCode).json({ message: err.message })
+            }else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+
+    async deleteFacility(req:Request,res:Response){
+        try {       
+            const { id } = req.params
+            const result = await adminServices.deleteFacility(id)
+            if(result.acknowledged){
+                res.status(200).json({success:true})
+            }else{
+                res.status(400).json({success:false})
+            }
+        } catch (err) {
+            if(err instanceof CustomError){
+                console.log(err)
+                res.status(err.statusCode).json({ message: err.message })
+            }else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+
+    async editFacility(req:Request,res:Response){
+        try {       
+            const { id } = req.params
+            const { facilityName } = req.body
+            
+            const result = await adminServices.editFacility(id,facilityName)
+            if(result.acknowledged){
+                res.status(200).json({success:true})
+            }else{
+                res.status(400).json({success:false})
+            }
+        } catch (err) {
+            if(err instanceof CustomError){
+                console.log(err)
+                res.status(err.statusCode).json({ message: err.message })
+            }else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+
 }
 
 export default new AdminController
