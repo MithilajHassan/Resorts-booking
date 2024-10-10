@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "../ui/input"
 import { useAddCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation } from "../../slices/adminApiSlice";
 import { useListCategoriesQuery } from "../../slices/adminApiSlice"
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { MdDelete, MdEdit } from "react-icons/md"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -23,8 +23,8 @@ const formSchema = z.object({
 function CategoryManagement() {
 
     const { data } = useListCategoriesQuery(undefined)
-    const [ deleteCategory ] = useDeleteCategoryMutation()
-    const [ updateCategory ] = useUpdateCategoryMutation()
+    const [deleteCategory] = useDeleteCategoryMutation()
+    const [updateCategory] = useUpdateCategoryMutation()
     const [addCategory] = useAddCategoryMutation()
     const [editingCategory, setEditingCategory] = useState<string | null>(null)
     const form = useForm<z.infer<typeof formSchema>>({
@@ -45,16 +45,16 @@ function CategoryManagement() {
                 cancelButtonColor: "#d33",
                 confirmButtonText: `Yes, ${editingCategory ? 'edit' : 'add'} it!`
             });
-    
+
             if (result.isConfirmed) {
-                if(editingCategory){
+                if (editingCategory) {
                     const res = await updateCategory({ id: editingCategory, category: values.category }).unwrap()
                     if (res.success) {
                         setEditingCategory(null)
                         form.reset()
                         toast(<div className='text-green-500'>Category updated successfully!</div>)
                     }
-                }else{
+                } else {
                     const res = await addCategory({ category: values.category }).unwrap()
                     if (res.success) {
                         form.reset({ category: "" })
@@ -69,7 +69,7 @@ function CategoryManagement() {
         }
     }
 
-    async function handleDelete(id:unknown) {
+    async function handleDelete(id: unknown) {
         try {
             const result = await Swal.fire({
                 title: "Are you sure?",
@@ -80,9 +80,9 @@ function CategoryManagement() {
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, delete it!"
             })
-    
+
             if (result.isConfirmed) {
-                const res = await deleteCategory({id}).unwrap()
+                const res = await deleteCategory({ id }).unwrap()
                 if (res.success) {
                     Swal.fire({
                         title: "Deleted!",
@@ -96,8 +96,8 @@ function CategoryManagement() {
             console.log(err)
         }
     }
-    function handleEdit(id:unknown,category:string) {
-        setEditingCategory( id as string )
+    function handleEdit(id: unknown, category: string) {
+        setEditingCategory(id as string)
         form.setValue('category', category)
     }
 
@@ -131,27 +131,27 @@ function CategoryManagement() {
             </Form>
 
 
-            <Table className="border w-7/12 my-5 mx-auto rounded-md">
-                <TableCaption>All categories.</TableCaption>
-                <TableHeader className="bg-indigo-100 text-black h-12">
-                    <TableRow>
-                        <TableHead className="text-black font-bold">Name</TableHead>
-                        <TableHead className="text-black font-bold text-right">Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {data?.map((item) => (
-                        <TableRow className="h-10" key={item._id as string}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-right flex justify-end items-center gap-5">
-                                <MdEdit onClick={()=>handleEdit(item._id,item.name)} style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />
-                                <MdDelete onClick={()=>handleDelete(item._id)} style={{ fontSize: '1.3rem' }} className="text-red-600 hover:text-red-400" />
-                            </TableCell>
+            <div className="w-7/12 border border-2 rounded-md mx-auto my-5">
+                <Table className="w-full">
+                    <TableHeader className="bg-blue-100 text-black h-12">
+                        <TableRow>
+                            <TableHead className="text-black font-bold">Name</TableHead>
+                            <TableHead className="text-black font-bold text-right">Actions</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            
+                    </TableHeader>
+                    <TableBody>
+                        {data?.map((item) => (
+                            <TableRow className="h-10" key={item._id as string}>
+                                <TableCell className="font-medium">{item.name}</TableCell>
+                                <TableCell className="text-right flex justify-end items-center gap-5">
+                                    <MdEdit onClick={() => handleEdit(item._id, item.name)} style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />
+                                    <MdDelete onClick={() => handleDelete(item._id)} style={{ fontSize: '1.3rem' }} className="text-red-600 hover:text-red-400" />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
         </div>
     )
 }

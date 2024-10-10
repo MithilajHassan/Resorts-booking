@@ -1,19 +1,17 @@
-import { useSignupMutation, useVerifyOtpMutation, useResendOtpMutation } from "../../slices/apiSlice"
+import { isApiError } from "../../utils/errorHandling"
+import { useSignupMutation, useVerifyOtpMutation, useResendOtpMutation } from "../../slices/userApiSlice"
 import { FormEvent, useEffect, useState } from "react"
 //import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from "react-router-dom"
 import { toast,ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { RootState } from "@/store"
+import { useSelector } from "react-redux"
 
-interface ApiError {
-    status: number;
-    data: {
-        message: string;
-        success?: boolean;
-    };
-}
 
 const SignupForm = () => {
+    const { userInfo } = useSelector((state:RootState)=>state.auth)
+
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -29,6 +27,12 @@ const SignupForm = () => {
     const [signup] = useSignupMutation()
     const [verifyOtp] = useVerifyOtpMutation()
     const [resendOtp] = useResendOtpMutation()
+
+    useEffect(()=>{
+        if(userInfo){
+            navigate('/')
+        }
+    },[])
 
     useEffect(() => {
         if (isSentOtp) {
@@ -62,9 +66,7 @@ const SignupForm = () => {
         }
     }
 
-    function isApiError(err: unknown): err is ApiError {
-        return typeof err === 'object' && err !== null && 'status' in err && 'data' in err;
-    }
+    
 
     const submitHandler = async (e: FormEvent) => {
         e.preventDefault()

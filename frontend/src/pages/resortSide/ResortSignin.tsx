@@ -1,11 +1,11 @@
 import ResortHeader from '../../components/resort/Header'
-import SigninForm from '../../components/common/SigninForm'
+import SigninForm from '../../components/resort/SigninForm'
 function Signin() {
 
     return (
         <>
             <ResortHeader/>
-            <SigninForm role='resortAdmin' signupUrl='/resort/signup' nextPage='/resort/addresortdetails' />
+            <SigninForm />
         </>
     )
 }

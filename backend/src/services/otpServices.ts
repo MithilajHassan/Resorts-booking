@@ -4,42 +4,42 @@ import OtpRepository from '../repositories/otpRepository';
 import { IOtp } from '../models/otpModel';
 
 
-export default new class OtpServices{
-    
-    async createOtp(otpDetails:IOtp){
-        return OtpRepository.create(otpDetails)
-    }
+export default new class OtpServices {
 
-    async findOtp(email: string) {
-        return await OtpRepository.findOtp(email)
-    }
+  async createOtp(otpDetails: IOtp) {
+    return OtpRepository.create(otpDetails)
+  }
 
-    generateOtp():string{
-        const otp = otpGenerator.generate(6,{
-            upperCaseAlphabets: false,
-            lowerCaseAlphabets: false,
-            specialChars:false
-        })
-        return otp
-    }
+  async findOtp(email: string) {
+    return await OtpRepository.findOtp(email)
+  }
 
-    async sendOtpVerificationEmail(email: string, otp: string) {
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            service: "Gmail",
-            secure: true,
-            auth: {
-              user: process.env.USER_EMAIL,
-              pass: process.env.USER_EMAIL_PASSWORD
-            },
-          })
+  generateOtp(): string {
+    const otp = otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false
+    })
+    return otp
+  }
 
-          transporter.sendMail({
-            to: email,
-            from: process.env.USER_EMAIL,
-            subject: "Resorts OTP Verification",
-            html: `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+  async sendOtpVerificationEmail(email: string, otp: string) {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      service: "Gmail",
+      secure: true,
+      auth: {
+        user: process.env.USER_EMAIL,
+        pass: process.env.USER_EMAIL_PASSWORD
+      },
+    })
+
+    transporter.sendMail({
+      to: email,
+      from: process.env.USER_EMAIL,
+      subject: "Resorts OTP Verification",
+      html: `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
               <div style="margin:50px auto;width:70%;padding:20px 0">
                 <div style="border-bottom:1px solid #eee">
                   <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Resorts</a>
@@ -59,6 +59,6 @@ export default new class OtpServices{
                 </div>
               </div>
             </div>`
-          })
-    }
+    })
+  }
 }

@@ -2,11 +2,11 @@ import SigninForm from "../../components/common/SigninForm"
 import AdminHeader from "../../components/admin/AdminHeader"
 
 
-function AdminSigninPage(){
+function AdminSigninPage() {
 
     return (
         <>
-            <AdminHeader/>
+            <AdminHeader />
             <SigninForm role="admin" nextPage="/admin/dashboard" />
         </>
     )

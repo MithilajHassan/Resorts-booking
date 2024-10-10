@@ -9,7 +9,7 @@ class FacilityRepository{
         return await facility.save()
     }
 
-    async find(){
+    async find():Promise<IFacility[]>{
         return await Facility.find({isDelete:false})
     }
 

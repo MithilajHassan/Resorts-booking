@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { authApi } from "./slices/apiSlice";
+import { authApi } from "./slices/userApiSlice";
 import authReducer from "./slices/authSlice";
 import { adminApi } from "./slices/adminApiSlice";
+import { resortAdminApi } from './slices/resortAdminApiSlice';
 
 
 const store = configureStore({
@@ -10,9 +11,12 @@ const store = configureStore({
         
         [authApi.reducerPath]:authApi.reducer,
         [adminApi.reducerPath]:adminApi.reducer,
-
+        [resortAdminApi.reducerPath]:resortAdminApi.reducer
     },
-    middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(authApi.middleware).concat(adminApi.middleware),
+    middleware:(getDefaultMiddleware)=> getDefaultMiddleware()
+    .concat(authApi.middleware)
+    .concat(adminApi.middleware)
+    .concat(resortAdminApi.middleware),
     devTools:true
 })
 

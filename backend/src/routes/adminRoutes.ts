@@ -1,21 +1,35 @@
 import { Router } from "express"
 import adminController from "../controllers/adminController"
+import { adminProtect } from "../middleware/auth"
 
 
 const adminRouter = Router()
 
-adminRouter.post('/signout',adminController.signout)
-//---------------------- Category Management -----------------------------------//
-adminRouter.get('/list-categories',adminController.listCategories)
-adminRouter.post('/add-category',adminController.addCategory)
-adminRouter.put('/edit-category/:id',adminController.editCategory)
-adminRouter.put('/delete-category',adminController.deleteCategory)
+adminRouter.post('/signout', adminProtect, adminController.signout)
 
-//---------------------- facility Management -----------------------------------//
-adminRouter.get('/list-facilities',adminController.listfacilities)
-adminRouter.post('/add-facility',adminController.addFacility)
-adminRouter.put('/edit-facility/:id',adminController.editFacility)
-adminRouter.put('/delete-facility/:id',adminController.deleteFacility)
+//---------------------- Category Management -----------------------------------//
+adminRouter.get('/categories', adminProtect, adminController.listCategories)
+adminRouter.post('/categories', adminProtect, adminController.addCategory)
+adminRouter.put('/categories/:id', adminProtect, adminController.editCategory)
+adminRouter.patch('/categories/:id/soft-delete', adminProtect, adminController.deleteCategory)
+
+//---------------------- Facility Management -----------------------------------//
+adminRouter.get('/facilities', adminProtect, adminController.listfacilities)
+adminRouter.post('/facilities', adminProtect, adminController.addFacility)
+adminRouter.put('/facilities/:id', adminProtect, adminController.editFacility)
+adminRouter.patch('/facilities/:id/soft-delete', adminProtect, adminController.deleteFacility)
+
+//---------------------- Resort Management -----------------------------------//
+adminRouter.get('/resorts', adminProtect, adminController.listResorts)
+adminRouter.patch('/resorts/:id/accept', adminProtect, adminController.acceptResort)
+adminRouter.patch('/resorts/:id/reject', adminProtect, adminController.rejectResort)
+adminRouter.patch('/resorts/:id/manage-block', adminProtect, adminController.manageResortBlock)
+
+//---------------------- User Management -----------------------------------//
+adminRouter.get('/users', adminProtect, adminController.listUsers)
+adminRouter.patch('/users/:id/manage-block', adminProtect, adminController.manageUserBlock)
+
+
 
 
 

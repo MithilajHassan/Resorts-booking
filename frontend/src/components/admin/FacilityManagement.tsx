@@ -83,7 +83,7 @@ function FacilityManagement() {
             });
 
             if (result.isConfirmed) {
-                const res = await deleteFacility( id ).unwrap()
+                const res = await deleteFacility(id).unwrap()
                 if (res.success) {
                     Swal.fire({
                         title: "Deleted!",
@@ -130,26 +130,26 @@ function FacilityManagement() {
                     </form>
                 </div>
             </Form>
-
-            <Table className="border w-7/12 my-5 mx-auto rounded-md">
-                <TableHeader className="bg-indigo-100 text-black h-12">
-                    <TableRow>
-                        <TableHead className="text-black font-bold">Name</TableHead>
-                        <TableHead className="text-black font-bold text-right">Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {data?.map((item) => (
-                        <TableRow className="h-10" key={item._id}>
-                            <TableCell className="font-medium">{item.facilityName}</TableCell>
-                            <TableCell className="text-right flex justify-end items-center gap-5">
-                                <MdEdit onClick={() => handleEdit(item._id, item.facilityName)} style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />
-                                <MdDelete onClick={() => handleDelete(item._id)} style={{ fontSize: '1.3rem' }} className="text-red-500 hover:text-red-300" />
-                            </TableCell>
+            <div className="w-7/12 border border-2 rounded-md mx-auto my-5">
+                <Table className="w-full">
+                    <TableHeader className="bg-blue-100 text-black h-12">
+                        <TableRow>
+                            <TableHead className="text-black font-bold">Name</TableHead>
+                            <TableHead className="text-black font-bold text-right">Actions</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <TableBody>
+                        {data?.map((item) => (
+                            <TableRow className="h-10" key={item._id}>
+                                <TableCell className="font-medium">{item.facilityName}</TableCell>
+                                <TableCell className="text-right flex justify-end items-center gap-5">
+                                    <MdEdit onClick={() => handleEdit(item._id, item.facilityName)} style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />
+                                    <MdDelete onClick={() => handleDelete(item._id)} style={{ fontSize: '1.3rem' }} className="text-red-500 hover:text-red-300" />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table></div>
         </div>
     );
 }
