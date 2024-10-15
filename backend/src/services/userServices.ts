@@ -41,7 +41,7 @@ class UserServices {
             if (user.isBlock) {
                 throw new CustomError('Your account is blocked', 403)
             } else {
-                const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '30d' })
+                const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, { expiresIn: '30d' })
 
                 if (role == 'user') {
                     if (user.role != role) {

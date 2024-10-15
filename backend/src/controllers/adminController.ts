@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import CustomError from "../errors/customError"
 import adminServices from "../services/adminServices"
+import userServices from "../services/userServices"
 
 
 class AdminController {
@@ -110,9 +111,9 @@ class AdminController {
         }
     }
 
-    async listfacilities(req: Request, res: Response) {
+    async listFacilities(req: Request, res: Response) {
         try {
-            const facilities = await adminServices.listfacilities()
+            const facilities = await adminServices.listFacilities()
 
             res.status(200).json(facilities)
         } catch (err) {

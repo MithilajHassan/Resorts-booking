@@ -8,7 +8,7 @@ interface UserInfo {
     avatar?: string;
 }
 interface ResortAdmin {
-    _id: unknown;
+    _id: string;
     name: string;
     email: string;
     avatar?: string;

@@ -1,9 +1,10 @@
-import { CategoryDetails, FacilityDetails, IResort } from '../types/types'
+import { CategoryDetails, FacilityDetails, IResort, IRoom } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const resortAdminApi = createApi({
     reducerPath: 'resortAdminApi',
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+    tagTypes: ['Resort', 'Rooms'],
     endpoints: (builder) => ({
         registerResort: builder.mutation({
             query: (resortData: IResort) => ({
@@ -33,6 +34,45 @@ export const resortAdminApi = createApi({
             }),
         }),
 
+        getMyResort: builder.query<IResort, string>({
+            query: (id: string) => ({
+                url: `/resort/myresort/${id}`
+            }),
+            providesTags: ['Resort']
+        }),
+
+        editResort: builder.mutation({
+            query: (data: { resortData: IResort, id: string }) => ({
+                url: `/resort/myresort/${data.id}`,
+                method: 'PUT',
+                body: data.resortData
+            }),
+            invalidatesTags: ['Resort']
+        }),
+
+
+        listRooms: builder.query<IRoom[], string>({
+            query: (resortId: string) => ({
+                url: `/resort/rooms/${resortId}`
+            }),
+            providesTags: ['Rooms']
+        }),
+
+        getRoom: builder.query<IRoom[], string>({
+            query: (id: string) => ({
+                url: `/resort/rooms/${id}`
+            }),
+            providesTags: ['Rooms']
+        }),
+
+        addRoom: builder.mutation({
+            query: (data: IRoom) => ({
+                url: `/resort/rooms`,
+                method: 'POST',
+                body:data
+            }),
+            invalidatesTags: ['Rooms']
+        }),
 
     })
 })
@@ -42,6 +82,11 @@ export const {
     useResortSigninMutation,
     useListCategoriesQuery,
     useListFacilitiesQuery,
+    useGetMyResortQuery,
+    useEditResortMutation,
+    useListRoomsQuery,
+    useGetRoomQuery,
+    useAddRoomMutation,
 
 
 } = resortAdminApi

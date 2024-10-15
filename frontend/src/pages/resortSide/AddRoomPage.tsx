@@ -5,10 +5,10 @@ import { MdOutlineBedroomParent, MdOutlineDashboard } from 'react-icons/md'
 import { GiBlockHouse } from 'react-icons/gi'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import MyResort from '../../components/resort/MyResort'
+import AddRoom from '../../components/resort/AddRoom'
 
 
-function AddResortDetails() {
+function AddRoomPage() {
     const { resortAdmin } = useSelector((state: RootState) => state.auth)
     return (
         <>
@@ -16,16 +16,16 @@ function AddResortDetails() {
             <div className="flex">
                 <Sidebar adminName={resortAdmin?.name!} adminEmail={resortAdmin?.email!} >
                     <Link to={'/resort/dashboard'}><SidebarItem icon={<MdOutlineDashboard />} text="Dashboard" /></Link>
-                    <SidebarItem icon={<GiBlockHouse />} text="My Resort" active={true} />
-                    <Link to={'/resort/rooms'}><SidebarItem icon={<MdOutlineBedroomParent />} text="Rooms" /></Link>
+                    <Link to={'/resort/myresort'}><SidebarItem icon={<GiBlockHouse />} text="My Resort" /></Link>
+                    <SidebarItem icon={<MdOutlineBedroomParent />} text="Rooms" active={true} />
 
                 </Sidebar>
 
-                <MyResort />
+                <AddRoom />
             </div>
 
         </>
     )
 }
 
-export default AddResortDetails
+export default AddRoomPage

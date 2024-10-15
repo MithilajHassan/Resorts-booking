@@ -14,7 +14,7 @@ adminRouter.put('/categories/:id', adminProtect, adminController.editCategory)
 adminRouter.patch('/categories/:id/soft-delete', adminProtect, adminController.deleteCategory)
 
 //---------------------- Facility Management -----------------------------------//
-adminRouter.get('/facilities', adminProtect, adminController.listfacilities)
+adminRouter.get('/facilities', adminProtect, adminController.listFacilities)
 adminRouter.post('/facilities', adminProtect, adminController.addFacility)
 adminRouter.put('/facilities/:id', adminProtect, adminController.editFacility)
 adminRouter.patch('/facilities/:id/soft-delete', adminProtect, adminController.deleteFacility)

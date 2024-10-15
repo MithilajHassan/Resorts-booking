@@ -5,6 +5,9 @@ class UserRepository {
         const user = new User(userData)
         return await user.save() 
     }
+    async findById(id:string):Promise<IUser | null>{
+        return await User.findById(id)
+    }
     
     async findByEmail(email:string):Promise<IUser | null>{
         return await User.findOne({email})

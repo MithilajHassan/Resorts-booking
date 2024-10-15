@@ -1,19 +1,18 @@
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod"
-import z from "zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
-import { ToastContainer, toast } from "react-toastify"
-import { useEffect, useState } from "react"
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { firebaseStore } from "../../config/firebaseConfig"
-import { Checkbox } from "../ui/checkbox"
-import { useListCategoriesQuery, useListFacilitiesQuery } from "../../slices/resortAdminApiSlice"
-import { useRegisterResortMutation } from "../../slices/resortAdminApiSlice"
-import { useNavigate } from "react-router-dom"
-import { Textarea } from "../ui/textarea"
-import { isApiError } from "../../utils/errorHandling"
+import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { ToastContainer, toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
+import { firebaseStore } from "../../config/firebaseConfig";
+import { Checkbox } from "../ui/checkbox";
+import { useListCategoriesQuery, useListFacilitiesQuery, useGetMyResortQuery, useEditResortMutation } from "../../slices/resortAdminApiSlice";
+import { useNavigate } from "react-router-dom";
+import { Textarea } from "../ui/textarea";
+import { isApiError } from "../../utils/errorHandling";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 
@@ -22,7 +21,6 @@ const formSchema = z.object({
         .max(50, { message: "Resort name cannot exceed 50 characters" })
         .regex(/^[A-Z\sa-z]+$/, { message: "Resort name should contain only letters" }),
     email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().min(4, { message: "Password must be at least 4 characters" }),
     address: z.string().min(10, { message: "Address is required" })
         .max(150, { message: "Address cannot exceed 150 characters" }),
     city: z.string().min(3, { message: "City is required" })
@@ -32,25 +30,24 @@ const formSchema = z.object({
         .max(500, { message: "Description cannot exceed 500 characters" }),
     categories: z.array(z.string()).min(1, { message: "At least one category must be selected" }),
     facilities: z.array(z.string()).min(1, { message: "At least one facility must be selected" }),
-    images: z.array(z.instanceof(File)).min(1, { message: "At least one image is required" })
-})
+    images: z.array(z.string()).optional(),
+});
 
-
-export default function ResortRegistrationForm() {
-
-    const { resortAdmin } = useSelector((state:RootState)=>state.auth)
-    const { data: facilitiesOptions = [] } = useListFacilitiesQuery()
-    const { data: categoriesOptions = [] } = useListCategoriesQuery()
-    const [registerResort] = useRegisterResortMutation()
-    const navigate = useNavigate()
-    const [imagePreviews, setImagePreviews] = useState<string[]>([])
+export default function ResortEditForm() {
+    const { resortAdmin } = useSelector((state: RootState) => state.auth);
+    const { data: facilitiesOptions = [] } = useListFacilitiesQuery();
+    const { data: categoriesOptions = [] } = useListCategoriesQuery();
+    const { data: resortData, isLoading } = useGetMyResortQuery(resortAdmin?._id!);
+    const [updateResort] = useEditResortMutation();
+    const navigate = useNavigate();
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+    const [newImages, setNewImages] = useState<File[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             resortName: "",
             email: "",
-            password: "",
             address: "",
             city: "",
             phone: "",
@@ -59,60 +56,82 @@ export default function ResortRegistrationForm() {
             facilities: [],
             images: [],
         },
-    })
+    });
 
-    useEffect(()=>{
-        if(resortAdmin){
-            navigate('/resort/dashboard')
+    useEffect(() => {
+        if (resortData) {
+
+            form.reset({
+                resortName: resortData.resortName,
+                email: resortData.email,
+                address: resortData.address,
+                city: resortData.city,
+                phone: resortData.phone,
+                description: resortData.description,
+                categories: resortData.categories.map((category) => typeof category === 'string' ? category : category._id),
+                facilities: resortData.facilities.map((facility) => typeof facility === 'string' ? facility : facility._id),
+                images: resortData.images,
+            });
+            setImagePreviews(resortData.images);
         }
-    },[])
+    }, [resortData]);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const imageLinks: string[] = []
+            const uploadedImageLinks: string[] = [...values.images!];
 
-            const uploadPromises = values.images.map(async (image) => {
-                const storageRef = ref(firebaseStore, `resorts/${image.name}`)
+            const uploadPromises = newImages.map(async (image) => {
+                const storageRef = ref(firebaseStore, `resorts/${image.name}`);
                 await uploadBytes(storageRef, image);
-                const downloadURL = await getDownloadURL(storageRef)
-                imageLinks.push(downloadURL)
-            })
+                const downloadURL = await getDownloadURL(storageRef);
+                uploadedImageLinks.push(downloadURL);
+            });
 
-            await Promise.all(uploadPromises)
+            await Promise.all(uploadPromises);
 
-            const result = await registerResort({
-                resortName: values.resortName,
-                email: values.email,
-                password: values.password,
-                address: values.address,
-                city: values.city,
-                phone: values.phone,
-                description: values.description,
-                categories: values.categories,
-                facilities: values.facilities,
-                images: imageLinks,
-            }).unwrap()
+            const result = await updateResort({
+                resortData: {
+                    resortName: values.resortName,
+                    email: values.email,
+                    address: values.address,
+                    city: values.city,
+                    phone: values.phone,
+                    description: values.description,
+                    categories: values.categories,
+                    facilities: values.facilities,
+                    images: uploadedImageLinks,
+                },
+                id:resortAdmin?._id!
+            }).unwrap();
+
             if (result.success) {
-                toast(<div className="text-green-500">Resort registered successfully!</div>)
-                form.reset()
-                setImagePreviews([])
-                navigate('/resort/signin')
+                toast(<div className="text-green-500">Resort updated successfully!</div>);
+                navigate(`/resort/myresort`);
             }
         } catch (err) {
             if (isApiError(err)) {
-                toast(<div className="text-red-600">{err.data.message}</div>)
+                toast(<div className="text-red-600">{err.data.message}</div>);
             } else {
-                console.log('An unexpected error occurred:', err)
+                console.log('An unexpected error occurred:', err);
             }
         }
     }
 
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(event.target.files || [])
-        const filePreviews = files.map(file => URL.createObjectURL(file))
-        setImagePreviews(filePreviews)
-        form.setValue("images", files)
-    }
+    const handleNewImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(event.target.files || []);
+        const filePreviews = files.map(file => URL.createObjectURL(file));
+        setImagePreviews((prev) => [...prev, ...filePreviews]);
+        setNewImages((prev) => [...prev, ...files]);
+    };
+
+    const handleImageDelete = (index: number, imageUrl: string) => {
+        setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+        form.setValue("images", form.getValues("images")!.filter((img) => img !== imageUrl));
+        const imageRef = ref(firebaseStore, imageUrl);
+        deleteObject(imageRef).catch((err) => console.log("Error deleting image:", err));
+    };
+
+    if (isLoading) return <p>Loading...</p>;
 
     return (
         <div className="flex flex-col items-center mt-16 w-full">
@@ -120,7 +139,7 @@ export default function ResortRegistrationForm() {
                 <div className="shadow w-7/12 my-5 rounded-md">
                     <ToastContainer />
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 m-6 mx-12">
-                        <h3 className="font-bold text-center text-xl">Register Resort</h3>
+                        <h3 className="font-bold text-center text-xl">Edit Resort</h3>
                         <FormField
                             control={form.control}
                             name="resortName"
@@ -142,19 +161,6 @@ export default function ResortRegistrationForm() {
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
                                         <Input className="bg-indigo-50" placeholder="Enter email" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                        <Input className="bg-indigo-50" type="password" placeholder="Enter password" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -206,12 +212,7 @@ export default function ResortRegistrationForm() {
                                 <FormItem>
                                     <FormLabel>Description</FormLabel>
                                     <FormControl>
-                                        <Textarea
-                                            className="bg-indigo-50"
-                                            placeholder="Enter description"
-                                            {...field}
-                                            rows={4}
-                                        />
+                                        <Textarea className="bg-indigo-50" placeholder="Enter description" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -271,60 +272,22 @@ export default function ResortRegistrationForm() {
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name="images"
-                            render={() => (
-                                <FormItem>
-                                    <FormLabel>Images</FormLabel>
-                                    <FormControl>
-                                        <Input className="bg-indigo-50" type="file" multiple accept="image/*" onChange={handleImageUpload} />
-                                    </FormControl>
-                                    <FormMessage />
-                                    <div className="mt-2 flex">
-                                        {imagePreviews.map((image, index) => (
-                                            <img key={index} src={image} alt="preview" className="w-20 h-20 mr-2" />
-                                        ))}
+                        <div className="form-group">
+                            <label>Resort Images</label>
+                            <div className="image-previews flex flex-wrap gap-1 mb-2">
+                                {imagePreviews.map((imgUrl, idx) => (
+                                    <div key={idx} className="preview-item">
+                                        <img src={imgUrl} alt={`Preview ${idx}`} width="70" height="70" />
+                                        <Button type="button" className="bg-red-600 hover:bg-red-400 w-full h-5 font-normal" onClick={() => handleImageDelete(idx, imgUrl)}>Delete</Button>
                                     </div>
-                                </FormItem>
-                            )}
-                        />
-                        <div className="flex justify-center">
-                            <Button className="bg-blue-700" type="submit">Submit</Button>
+                                ))}
+                            </div>
+                            <Input type="file" accept="image/*" multiple onChange={handleNewImageUpload} />
                         </div>
+                        <Button type="submit" className="bg-blue-600 hover:bg-blue-500 w-full">EDIT</Button>
                     </form>
                 </div>
             </Form>
         </div>
-    )
+    );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

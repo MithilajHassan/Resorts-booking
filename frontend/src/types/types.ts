@@ -5,7 +5,7 @@ export type CategoryDetails = {
     isDelete:boolean;
 }
 
-export interface FacilityDetails {
+export type FacilityDetails = {
     _id: string;
     facilityName: string;
     isDelete:boolean;
@@ -15,12 +15,12 @@ export interface IResort {
     _id?:string;
     resortName:string;
     email:string;
-    password:string;
+    password?:string;
     address:string;
     city:string;
     phone:string;
     description:string;
-    categories:string[];
+    categories:string[] | CategoryDetails[];
     facilities:string[] | FacilityDetails[];
     images:string[];
     isVerify?:boolean;
@@ -46,4 +46,16 @@ export interface ApiError {
         message: string;
         success?: boolean;
     };
+}
+
+export interface IRoom {
+    _id?:string;
+    resortId: string; 
+    name: string;
+    numberOfGuests: number;
+    totalRooms: number;
+    normalPrice: number;
+    offerPercentage: number;
+    offerPrice?: number;
+    isDeleted?: boolean;
 }

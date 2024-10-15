@@ -26,7 +26,7 @@ export default new class ResortService {
             } else if (resort.isBlock) {
                 throw new CustomError('Your account is blocked', 403)
             } else {
-                const token = jwt.sign({ userId: resort._id }, process.env.JWT_SECRET!, { expiresIn: '30d' })
+                const token = jwt.sign({ id: resort._id }, process.env.JWT_SECRET!, { expiresIn: '30d' })
                 res.cookie('Rjwt', token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV !== 'development',
@@ -38,6 +38,14 @@ export default new class ResortService {
         } else {
             throw new CustomError('Invalid password', 401)
         }
+    }
+
+    async editResort(resortData: IResort,resortId:string): Promise<IResort | null> {
+        const exist = await resortRepository.findByEmail(resortData.email)
+        if (exist && exist.email != resortData.email) {
+            throw new CustomError('Eamil is already exist', 409)
+        }
+        return await resortRepository.editResort(resortData,resortId)
     }
 
 }

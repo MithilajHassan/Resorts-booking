@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import ResortHeader from '../../components/resort/Header'
 import Dashboard from '../../components/resort/Dashboard'
 import Sidebar, { SidebarItem } from '../../components/common/Sidebar'
-import { MdOutlineDashboard } from 'react-icons/md'
+import { MdOutlineBedroomParent, MdOutlineDashboard } from 'react-icons/md'
 import { GiBlockHouse } from 'react-icons/gi'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
@@ -16,7 +16,7 @@ const ResortDashboard = () => {
                 <Sidebar adminName={resortAdmin?.name!} adminEmail={resortAdmin?.email!} >
                     <SidebarItem icon={<MdOutlineDashboard />} text="Dashboard" active={true} />
                     <Link to={'/resort/myresort'}><SidebarItem icon={<GiBlockHouse />} text="My Resort" /></Link>
-                    <Link to={'/resort/rooms'}><SidebarItem icon={<GiBlockHouse />} text="Rooms" /></Link>
+                    <Link to={'/resort/rooms'}><SidebarItem icon={<MdOutlineBedroomParent />} text="Rooms" /></Link>
 
                 </Sidebar>
 

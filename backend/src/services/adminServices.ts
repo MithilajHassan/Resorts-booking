@@ -43,7 +43,7 @@ class AdminServices {
         return await facilityRepository.create(name)
     }
 
-    async listfacilities() {
+    async listFacilities() {
         return await facilityRepository.find()
     }
 
