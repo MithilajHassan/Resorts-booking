@@ -16,7 +16,7 @@ function ReosrtAdminNav(){
         try {
             await resortAdminSignout(undefined)
             dispatch(clearResortAdminAuth())
-            navigate('')
+            navigate('/resort/signin')
         } catch (err) {
             console.log(err)
         }    

@@ -1,3 +1,4 @@
+import { UpdateWriteOpResult } from 'mongoose'
 import Room, { IRoom } from '../models/roomModel'
 
 export default new class RoomRepository {
@@ -18,12 +19,16 @@ export default new class RoomRepository {
         return await Room.find({ resortId: id, isDeleted: false })
     }
 
-    async editRoom(roomData: IRoom, id: string): Promise<IRoom | null> {
+    async editRoom(id: string, roomData: IRoom): Promise<IRoom | null> {
         return await Room.findByIdAndUpdate(id, { $set: roomData }, { new: true })
     }
 
-    async findByname(name: string): Promise<IRoom | null> {
-        return await Room.findOne({ name: { $regex: '^' + name + '$', $options: 'i' }, isDeleted: false })
+    async deleteRoom(id:unknown):Promise<UpdateWriteOpResult>{
+        return await Room.updateOne({_id:id},{$set:{isDeleted:true}})
+    }
+
+    async findByname(name: string, resortId: unknown): Promise<IRoom | null> {
+        return await Room.findOne({ name: { $regex: '^' + name + '$', $options: 'i' }, resortId, isDeleted: false })
     }
 
 }

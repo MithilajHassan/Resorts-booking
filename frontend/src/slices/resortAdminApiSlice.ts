@@ -58,9 +58,9 @@ export const resortAdminApi = createApi({
             providesTags: ['Rooms']
         }),
 
-        getRoom: builder.query<IRoom[], string>({
+        getRoom: builder.query<IRoom, string>({
             query: (id: string) => ({
-                url: `/resort/rooms/${id}`
+                url: `/resort/rooms/detail/${id}`
             }),
             providesTags: ['Rooms']
         }),
@@ -70,6 +70,23 @@ export const resortAdminApi = createApi({
                 url: `/resort/rooms`,
                 method: 'POST',
                 body:data
+            }),
+            invalidatesTags: ['Rooms']
+        }),
+
+        editRoom: builder.mutation({
+            query: (data: { roomData: IRoom, id: string }) => ({
+                url: `/resort/rooms/${data.id}`,
+                method: 'PUT',
+                body: data.roomData
+            }),
+            invalidatesTags: ['Rooms']
+        }),
+
+        deleteRoom: builder.mutation({
+            query: (id: string) => ({
+                url: `/resort/rooms/${id}/delete`,
+                method: 'PATCH',
             }),
             invalidatesTags: ['Rooms']
         }),
@@ -87,6 +104,8 @@ export const {
     useListRoomsQuery,
     useGetRoomQuery,
     useAddRoomMutation,
+    useDeleteRoomMutation,
+    useEditRoomMutation
 
 
 } = resortAdminApi

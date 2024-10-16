@@ -11,10 +11,11 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { useAddRoomMutation } from '../../slices/resortAdminApiSlice';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { useNavigate } from 'react-router-dom';
+import { useEditRoomMutation, useGetRoomQuery } from '../../slices/resortAdminApiSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { isApiError } from '../../utils/errorHandling';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 const roomFormSchema = z.object({
     name: z.string().regex(/^[A-Z\sa-z]+$/, 'Room name must be letters').min(1, 'Room name is required'),
@@ -26,10 +27,10 @@ const roomFormSchema = z.object({
 
 type RoomFormValues = z.infer<typeof roomFormSchema>
 
-const AddRoom: React.FC = () => {
-
-    const { resortAdmin } = useSelector((state: RootState) => state.auth)
-    const [addRoom] = useAddRoomMutation()
+const EditRoom: React.FC = () => {
+    const { id } = useParams()
+    const { data:roomData } = useGetRoomQuery(id!)
+    const [ editRoom ] = useEditRoomMutation()
     const navigate = useNavigate()
     const form = useForm<RoomFormValues>({
         resolver: zodResolver(roomFormSchema),
@@ -42,27 +43,49 @@ const AddRoom: React.FC = () => {
         },
     });
 
+    useEffect(()=>{
+        if(roomData){
+            form.reset({
+                name:roomData.name,
+                numberOfGuests: String(roomData.numberOfGuests),
+                totalRooms:String(roomData.totalRooms),
+                normalPrice:String(roomData.normalPrice),
+                offerPercentage:String(roomData.offerPercentage)
+            })
+        }
+    },[roomData])
 
     const onSubmit = async (data: RoomFormValues) => {
-        const {
-            name,
-            numberOfGuests,
-            totalRooms,
-            normalPrice,
-            offerPercentage,
-        } = data
-        const room = await addRoom({
-            name,
-            resortId: resortAdmin?._id!,
-            numberOfGuests: Number(numberOfGuests),
-            totalRooms: Number(totalRooms),
-            normalPrice: Number(normalPrice),
-            offerPercentage: Number(offerPercentage),
-        })
-        if (room) {
-            navigate('/resort/rooms')
+        try{
+            const {
+                name,
+                numberOfGuests,
+                totalRooms,
+                normalPrice,
+                offerPercentage,
+            } = data
+            const room = await editRoom({
+                id:id!,
+                roomData:{
+                    name,
+                    resortId: roomData?.resortId!,
+                    numberOfGuests: Number(numberOfGuests),
+                    totalRooms: Number(totalRooms),
+                    normalPrice: Number(normalPrice),
+                    offerPercentage: Number(offerPercentage), 
+                }
+                
+            })
+            if (room) {
+                navigate('/resort/rooms')
+            }   
+        } catch (err) {
+            if (isApiError(err)) {
+                toast(<div className="text-red-600">{err.data.message}</div>);
+            } else {
+                console.log('An unexpected error occurred:', err);
+            }
         }
-
     }
 
     return (
@@ -157,7 +180,7 @@ const AddRoom: React.FC = () => {
                     />
 
                     <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-400 text-white">
-                        Add Room
+                        Edit Room
                     </Button>
                 </form>
             </Form>
@@ -165,4 +188,4 @@ const AddRoom: React.FC = () => {
     );
 };
 
-export default AddRoom;
+export default EditRoom;

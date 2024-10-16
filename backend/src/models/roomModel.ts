@@ -46,7 +46,7 @@ const roomSchema: Schema<IRoom> = new Schema({
     },
     isDeleted: {
         type: Boolean,
-        required: true
+        default: false
     }
 });
 

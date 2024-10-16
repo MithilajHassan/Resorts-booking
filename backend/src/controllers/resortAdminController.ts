@@ -78,10 +78,10 @@ class ResortAdminController {
     async editResort(req: Request, res: Response) {
         try {
             const { id } = req.params
-            const resortData:IResort = req.body
-            console.log(id,resortData);
-            
-            const resort = await resortServices.editResort(resortData,id)
+            const resortData: IResort = req.body
+            console.log(id, resortData);
+
+            const resort = await resortServices.editResort(resortData, id)
             return res.status(201).json({ success: true, data: resort })
         } catch (err) {
             if (err instanceof CustomError) {
@@ -93,6 +93,7 @@ class ResortAdminController {
         }
     }
 
+
     async getRoomsByResortId(req: Request, res: Response) {
         try {
             const { resortId } = req.params
@@ -103,13 +104,62 @@ class ResortAdminController {
         }
     }
 
-    async addRoom(req: Request, res: Response) {
+    async getRoomsById(req: Request, res: Response) {
         try {
-            const { roomData } = req.body
-            const rooms = await roomServices.createRoom(roomData)
+            const { id } = req.params
+            const rooms = await roomServices.getRoomsById(id)
             res.status(200).json(rooms)
         } catch (error) {
             res.status(500).json({ message: 'Failed to get rooms', error })
+        }
+    }
+
+    async addRoom(req: Request, res: Response) {
+        try {
+            const roomData = req.body
+
+            const rooms = await roomServices.createRoom(roomData)
+            res.status(200).json(rooms)
+        } catch (err) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
+                console.error(err)
+                res.status(500).json({ message: 'Failed to get rooms', err })
+            }
+        }
+    }
+
+    async editRoom(req: Request, res: Response) {
+        try {
+            const { id } = req.params
+            const roomData = req.body
+
+            const room = await roomServices.editRoom(id, roomData)
+            res.status(200).json({room, success:true})
+        } catch (err) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
+                console.error(err)
+                res.status(500).json({ message: 'Failed to delete room', err })
+            }
+        }
+    }
+
+    async deleteRoom(req: Request, res: Response) {
+        try {
+            const { id } = req.params
+
+            await roomServices.deleteRoom(id)
+            res.status(200).json({success:true})
+        } catch (err) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
+                console.error(err)
+                res.status(500).json({ message: 'Failed to delete room', err })
+            }
         }
     }
 
