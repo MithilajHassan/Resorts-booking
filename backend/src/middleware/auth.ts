@@ -2,9 +2,13 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import userRepository from '../repositories/userRepository';
 import resortRepository from '../repositories/resortRepository';
+import { IUser } from '../models/userModel';
 
 interface JwtPayload {
     id: string;
+}
+export interface CustomRequest extends Request {
+    user: IUser;
 }
 
 export const adminProtect = async(req: Request, res: Response, next: NextFunction) => {
@@ -14,6 +18,7 @@ export const adminProtect = async(req: Request, res: Response, next: NextFunctio
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
             const user = await userRepository.findById(decoded.id)
+            
             if (user?.role !== 'admin') {
                 return res.status(401).json({ message: 'Not authorized, invalid token' })
             }
@@ -42,7 +47,7 @@ export const userProtect = async(req: Request, res: Response, next: NextFunction
             }else if(user.isBlock){
                 return res.status(401).json({ messsage:'Your account is blocked', isBlocked:user.isBlock})
             }
-
+            (req as CustomRequest).user = user
             next()
         } catch (error) {
             res.status(401);

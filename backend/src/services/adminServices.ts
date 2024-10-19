@@ -96,7 +96,7 @@ class AdminServices {
         return await resortRepository.manageResortBlock(id, status)
     }
 
-//----------------------- Users ---------------------------------------//
+    //----------------------- Users ---------------------------------------//
 
     async manageUserBlock(id: string, status: boolean) {
         return await userRepository.manageUserBlock(id, status)

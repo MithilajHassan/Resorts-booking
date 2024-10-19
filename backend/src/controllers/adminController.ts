@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import CustomError from "../errors/customError"
 import adminServices from "../services/adminServices"
-import userServices from "../services/userServices"
 
 
 class AdminController {
@@ -77,9 +76,9 @@ class AdminController {
         try {
             const { id } = req.params
             const { category } = req.body
-            const result = await adminServices.editCategory(id, category)
-            if (result.acknowledged) {
-                res.status(200).json({ success: true })
+            const categoryData = await adminServices.editCategory(id, category)
+            if (categoryData) {
+                res.status(200).json({ success: true, category: categoryData })
             } else {
                 res.status(400).json({ success: false })
             }
@@ -151,9 +150,9 @@ class AdminController {
             const { id } = req.params
             const { facilityName } = req.body
 
-            const result = await adminServices.editFacility(id, facilityName)
-            if (result.acknowledged) {
-                res.status(200).json({ success: true })
+            const facility = await adminServices.editFacility(id, facilityName)
+            if (facility) {
+                res.status(200).json({ success: true, facility })
             } else {
                 res.status(400).json({ success: false })
             }

@@ -2,7 +2,7 @@ import { AppDispatch } from "../../store"
 import { useSigninMutation } from "../../slices/userApiSlice"
 import { setAdminAuth, setCredentials } from "../../slices/authSlice"
 import { FormEvent, useEffect, useState } from "react"
-// import { FcGoogle } from "react-icons/fc"
+import { FcGoogle } from "react-icons/fc"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import { RootState } from "../../store"
@@ -11,9 +11,10 @@ interface SigninFormProps {
     role: 'user' | 'admin';
     signupUrl?: string;
     nextPage: string;
+    alertMsg?: string;
 }
 
-const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) => {
+const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage, alertMsg }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -24,6 +25,12 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
     const [signin] = useSigninMutation()
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        if(alertMsg){
+            setErrMsg(alertMsg)
+        }
+    })
 
     useEffect(() => {
         if (role == 'admin') {
@@ -43,9 +50,7 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
             const res = await signin({ email, password, role }).unwrap()
             if (role == 'user') {
                 dispatch(setCredentials(res))
-            } else if (role == 'admin') {
-                dispatch(setAdminAuth(res))
-            }
+            } 
             navigate(nextPage)
         } catch (err: any) {
             if (err?.data) {
@@ -88,12 +93,12 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
                 </div>
 
                 <button type="submit" className="p-1.5 bg-blue-700 rounded-md text-white">Signin</button>
-                {/*<p className="text-center">Or</p>
+                <p className="text-center">Or</p>
                  <div className="flex justify-center">
                     <div className="border-solid border border-gray-400 h-10 w-12 flex justify-center items-center">
                         <FcGoogle style={{fontSize:'1.5rem'}} />
                     </div>
-                </div> */}
+                </div>
                 {signupUrl && (<p className="text-center">New user?<Link to={signupUrl} className="text-blue-700 underline"> signup</Link></p>)}
             </form>
         </section>

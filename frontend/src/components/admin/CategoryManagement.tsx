@@ -1,17 +1,19 @@
-import Swal from 'sweetalert2'
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "../ui/form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from "../ui/input"
-import { useAddCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation } from "../../slices/adminApiSlice";
-import { useListCategoriesQuery } from "../../slices/adminApiSlice"
+import { useAddCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation, useListCategoriesQuery } from "../../slices/adminApiSlice";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
-import { MdDelete, MdEdit } from "react-icons/md"
+import {  MdEdit } from "react-icons/md"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import DeletConfirm from '../common/DeleteConfirm'
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../../store"
+import { addOneCategory, deleteOneCategory, setCategories, updateOneCategory } from "../../slices/categorySlice";
 
 const formSchema = z.object({
     category: z.string().trim().regex(/^[a-z A-Z]+$/, { message: "Only letters are allowed." }).min(2, {
@@ -22,7 +24,10 @@ const formSchema = z.object({
 
 function CategoryManagement() {
 
-    const { data } = useListCategoriesQuery(undefined)
+    const dispatch = useDispatch()
+    const categories = useSelector((state: RootState) => state.categories.categories)
+
+    const { data: fetchedCategories, error } = useListCategoriesQuery(undefined)
     const [deleteCategory] = useDeleteCategoryMutation()
     const [updateCategory] = useUpdateCategoryMutation()
     const [addCategory] = useAddCategoryMutation()
@@ -34,32 +39,30 @@ function CategoryManagement() {
         },
     })
 
+    useEffect(() => {
+        if (fetchedCategories) {
+            dispatch(setCategories(fetchedCategories))
+        }else{
+            console.log(error)
+        }
+    }, [fetchedCategories])
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const result = await Swal.fire({
-                title: editingCategory ? "Confirm Edit" : "Confirm Addition",
-                text: `Are you sure you want to ${editingCategory ? 'edit' : 'add'} the category "${values.category}"?`,
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: `Yes, ${editingCategory ? 'edit' : 'add'} it!`
-            });
-
-            if (result.isConfirmed) {
-                if (editingCategory) {
-                    const res = await updateCategory({ id: editingCategory, category: values.category }).unwrap()
-                    if (res.success) {
-                        setEditingCategory(null)
-                        form.reset()
-                        toast(<div className='text-green-500'>Category updated successfully!</div>)
-                    }
-                } else {
-                    const res = await addCategory({ category: values.category }).unwrap()
-                    if (res.success) {
-                        form.reset({ category: "" })
-                        toast(<div className='text-green-500'>Category added successfully!</div>)
-                    }
+            if (editingCategory) {
+                const res = await updateCategory({ id: editingCategory, category: values.category }).unwrap()
+                if (res.success) {
+                    dispatch(updateOneCategory(res.category))
+                    setEditingCategory(null)
+                    form.reset()
+                    toast(<div className='text-green-500'>Category updated successfully!</div>)
+                }
+            } else {
+                const res = await addCategory({ category: values.category }).unwrap()
+                if (res.success) {
+                    dispatch(addOneCategory(res.category))
+                    form.reset({ category: "" })
+                    toast(<div className='text-green-700'>Category added successfully!</div>)
                 }
             }
 
@@ -69,27 +72,12 @@ function CategoryManagement() {
         }
     }
 
-    async function handleDelete(id: unknown) {
+    async function handleDelete(id: string) {
         try {
-            const result = await Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            })
-
-            if (result.isConfirmed) {
-                const res = await deleteCategory({ id }).unwrap()
-                if (res.success) {
-                    Swal.fire({
-                        title: "Deleted!",
-                        text: "The category has been deleted.",
-                        icon: "success"
-                    })
-                }
+            const res = await deleteCategory({ id }).unwrap()
+            if (res.success) {
+                dispatch(deleteOneCategory(id))
+                toast(<div className='text-green-700'>The category has been deleted.</div>)
             }
         } catch (err: any) {
             if (err?.data) toast(<div className="text-red-600">Something went wrong</div>)
@@ -140,12 +128,12 @@ function CategoryManagement() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {data?.map((item) => (
+                        {categories?.map((item) => (
                             <TableRow className="h-10" key={item._id as string}>
                                 <TableCell className="font-medium">{item.name}</TableCell>
                                 <TableCell className="text-right flex justify-end items-center gap-5">
                                     <MdEdit onClick={() => handleEdit(item._id, item.name)} style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />
-                                    <MdDelete onClick={() => handleDelete(item._id)} style={{ fontSize: '1.3rem' }} className="text-red-600 hover:text-red-400" />
+                                    <DeletConfirm id={item._id} onConfirm={handleDelete} />
                                 </TableCell>
                             </TableRow>
                         ))}

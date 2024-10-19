@@ -1,36 +1,35 @@
-import Swal from "sweetalert2"
 import { useListUsersQuery, useManageBlockUnblockUserMutation } from "../../slices/adminApiSlice"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { toast } from 'react-toastify';
+import BlockConfirm from "../common/BlockConfirm";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { setBlockStatus, setUsers } from "../../slices/userSlice";
 
 function UsersList() {
-    const { data: users = [] } = useListUsersQuery(undefined)
+    const { data } = useListUsersQuery(undefined)
+    const dispatch = useDispatch()
+    const { users } = useSelector((state: RootState) => state.users)
     const [manageUserBlock] = useManageBlockUnblockUserMutation()
+    
+    useEffect(() => {
+        if (data) {
+            dispatch(setUsers(data))
+        }
+    }, [data])
 
     const handleBlockUnblock = async (userId: string, status: boolean) => {
-        const action = status ? 'Block' : 'Unblock'
-        const result = await Swal.fire({
-            title: `Are you sure you want to ${action} this user?`,
-            text: `This user will be ${action.toLowerCase()}ed.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: status ? '#d33' : '#3085d6',
-            cancelButtonColor: '#aaa',
-            confirmButtonText: `Yes, ${action} them!`
-        });
-
-        if (result.isConfirmed) {
-            try {
-
-                const response = await manageUserBlock({ id: userId, status }).unwrap()
-                if(response.success){
-                    toast(`The user has been ${action.toLowerCase()}ed successfully.`)
-                }
-
-            } catch (err) {
-                console.error(`Error :`, err)
-                toast(`There was a problem ${action.toLowerCase()}ing the user.`)
+        const action = status ? 'Unblock' : 'Block'
+        try {
+            const response = await manageUserBlock({ id: userId, status: !status }).unwrap()
+            if (response.success) {
+                dispatch(setBlockStatus({ id: userId, status: !status }))
+                toast(`The user has been ${action.toLowerCase()}ed successfully.`)
             }
+        } catch (err) {
+            console.error(`Error :`, err)
+            toast(`There was a problem ${action.toLowerCase()}ing the user.`)
         }
     }
 
@@ -52,15 +51,7 @@ function UsersList() {
                             <TableCell>{user.email}</TableCell>
                             {/* <TableCell>{user.phone}</TableCell> */}
                             <TableCell className="text-right">
-                                <button
-                                    onClick={() => handleBlockUnblock(user._id, !user.isBlock)}
-                                    className={`px-3 py-1 text-sm rounded ${user.isBlock
-                                        ? 'bg-red-600 text-white hover:bg-red-400'
-                                        : 'bg-green-600 text-white hover:bg-green-400'
-                                        }`}
-                                >
-                                    {user.isBlock ? 'Unblock' : 'Block'}
-                                </button>
+                                <BlockConfirm id={user._id} onConfirm={handleBlockUnblock} isBlocked={user.isBlock} />
                             </TableCell>
                         </TableRow>
                     ))}

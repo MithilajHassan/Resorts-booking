@@ -1,7 +1,7 @@
 import { isApiError } from "../../utils/errorHandling"
 import { useSignupMutation, useVerifyOtpMutation, useResendOtpMutation } from "../../slices/userApiSlice"
 import { FormEvent, useEffect, useState } from "react"
-//import { FcGoogle } from "react-icons/fc"
+import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from "react-router-dom"
 import { toast,ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -70,8 +70,14 @@ const SignupForm = () => {
 
     const submitHandler = async (e: FormEvent) => {
         e.preventDefault()
+        const nameRegex = /^[a-zA-Z]+[a-z\sA-Z]+$/
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         try {
-            if (password != confirmPassword) {
+            if (!nameRegex.test(name)) {
+                setErrMsg("Only alphabets are allowed in name.")
+            }else if (!emailRegex.test(email)) {
+                setErrMsg("Invalid email format!")
+            }else if (password != confirmPassword) {
                 setErrMsg("Passwords do not match!")
             } else {
                 const res = await signup(email).unwrap()
@@ -186,11 +192,11 @@ const SignupForm = () => {
 
                     <button type="submit" className="p-1.5 bg-blue-700 rounded-md text-white">Signup</button>
 
-                    {/* <div className="flex justify-center">
+                    <div className="flex justify-center">
                     <div className="border-solid border border-gray-400 h-10 w-12 flex justify-center items-center">
                         <FcGoogle style={{fontSize:'1.5rem'}} />
                     </div>
-                </div> */}
+                </div>
 
                     <p className="text-center">Already have an account?<Link to={'/signin'} className="text-blue-700 underline"> Signin</Link></p>
                 </form>

@@ -4,7 +4,7 @@ import { CategoryDetails, FacilityDetails, IUser } from "../types/types"
 export const adminApi = createApi({
     reducerPath: 'adminApi',
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-    tagTypes: ['Facilities', 'Categories', 'Resorts', 'Users'],
+    tagTypes: ['Resorts'],
     endpoints: (builder) => ({
 
         //------------------------ Category Management-----------------------------//
@@ -14,15 +14,13 @@ export const adminApi = createApi({
                 url: '/admin/categories',
                 method: 'POST',
                 body: data
-            }),
-            invalidatesTags: ['Categories']
+            })
         }),
 
         listCategories: builder.query<CategoryDetails[], void>({
             query: () => ({
                 url: '/admin/categories'
-            }),
-            providesTags: ['Categories'],
+            })
         }),
 
         deleteCategory: builder.mutation({
@@ -30,8 +28,7 @@ export const adminApi = createApi({
                 url: `/admin/categories/${data.id}/soft-delete`,
                 method: 'PATCH',
                 body: data
-            }),
-            invalidatesTags: ['Categories']
+            })
         }),
 
         updateCategory: builder.mutation({
@@ -39,8 +36,7 @@ export const adminApi = createApi({
                 url: `/admin/categories/${data.id}`,
                 method: 'PUT',
                 body: { category: data.category }
-            }),
-            invalidatesTags: ['Categories']
+            })
         }),
 
         //--------------------------- Facility Management ----------------------------//
@@ -50,23 +46,20 @@ export const adminApi = createApi({
                 url: '/admin/facilities',
                 method: 'POST',
                 body: data
-            }),
-            invalidatesTags: ['Facilities']
+            })
         }),
 
         listFacilities: builder.query<FacilityDetails[], void>({
             query: () => ({
                 url: '/admin/facilities'
-            }),
-            providesTags: ['Facilities'],
+            })
         }),
 
         deleteFacility: builder.mutation({
             query: (id: string) => ({
                 url: `/admin/facilities/${id}/soft-delete`,
                 method: 'PATCH',
-            }),
-            invalidatesTags: ['Facilities']
+            })
         }),
 
         updateFacility: builder.mutation({
@@ -74,8 +67,7 @@ export const adminApi = createApi({
                 url: `/admin/facilities/${data.id}`,
                 method: 'PUT',
                 body: { facilityName: data.facilityName }
-            }),
-            invalidatesTags: ['Facilities']
+            })
         }),
 
 
@@ -116,7 +108,6 @@ export const adminApi = createApi({
 
         listUsers: builder.query<IUser[], void>({
             query: () => '/admin/users',
-            providesTags: ['Users'],
         }),
 
         manageBlockUnblockUser: builder.mutation({
@@ -124,8 +115,7 @@ export const adminApi = createApi({
                 url: `/admin/users/${data.id}/manage-block`,
                 method: "PATCH",
                 body: { status: data.status }
-            }),
-            invalidatesTags: ['Users']
+            })
         }),
 
     })

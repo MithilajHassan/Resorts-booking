@@ -1,4 +1,4 @@
-import { CategoryDetails, FacilityDetails, IResort, IRoom } from '../types/types'
+import { CategoryDetails, FacilityDetails, IResort, IRoom, IUser } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const resortAdminApi = createApi({
@@ -21,6 +21,10 @@ export const resortAdminApi = createApi({
                 body: data
             })
         }),
+
+        verifyAdmin:builder.query<IUser , null>({
+            query:()=> `/admin/verifyuser` 
+         }),
 
         listCategories: builder.query<CategoryDetails[], void>({
             query: () => ({
@@ -105,7 +109,9 @@ export const {
     useGetRoomQuery,
     useAddRoomMutation,
     useDeleteRoomMutation,
-    useEditRoomMutation
+    useEditRoomMutation,
+    useVerifyAdminQuery,
+    
 
 
 } = resortAdminApi

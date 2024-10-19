@@ -25,8 +25,8 @@ class FacilityRepository{
         return await Facility.updateOne({_id:id},{$set:{isDelete:true}})
     }
 
-    async edit(id:unknown,name:string):Promise<UpdateWriteOpResult>{
-        return await Facility.updateOne({_id:id},{$set:{facilityName:name}})
+    async edit(id:unknown,name:string):Promise<IFacility | null>{
+        return await Facility.findByIdAndUpdate(id,{$set:{facilityName:name}}, {new:true})
     }
 }
 

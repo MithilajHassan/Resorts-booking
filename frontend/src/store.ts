@@ -1,6 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./slices/userApiSlice";
 import authReducer from "./slices/authSlice";
+import categoryReducer from "./slices/categorySlice"
+import facilityReducer from "./slices/facilitySlice"
+import userReducer from "./slices/userSlice"
 import { adminApi } from "./slices/adminApiSlice";
 import { resortAdminApi } from './slices/resortAdminApiSlice';
 
@@ -8,6 +11,9 @@ import { resortAdminApi } from './slices/resortAdminApiSlice';
 const store = configureStore({
     reducer:{
         auth:authReducer,
+        categories:categoryReducer,
+        facilities:facilityReducer,
+        users:userReducer,
         
         [authApi.reducerPath]:authApi.reducer,
         [adminApi.reducerPath]:adminApi.reducer,

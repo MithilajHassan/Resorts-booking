@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2'
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
@@ -7,10 +6,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from "../ui/input"
 import { useAddFacilityMutation, useDeleteFacilityMutation, useUpdateFacilityMutation, useListFacilitiesQuery } from "../../slices/adminApiSlice"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-import { MdDelete, MdEdit } from "react-icons/md"
+import { MdEdit } from "react-icons/md"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import DeletConfirm from '../common/DeleteConfirm'
+import { addOneFacility, deleteOneFacility, setFacilities, updateOneFacility } from '../../slices/facilitySlice'
+import { RootState } from '../../store'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 const formSchema = z.object({
@@ -20,8 +23,10 @@ const formSchema = z.object({
 })
 
 function FacilityManagement() {
+    const dispatch = useDispatch()
+    const facilities = useSelector((state: RootState) => state.facilities.facilities)
 
-    const { data } = useListFacilitiesQuery(undefined)
+    const { data: fetchedfacilities, error } = useListFacilitiesQuery(undefined)
     const [deleteFacility] = useDeleteFacilityMutation()
     const [updateFacility] = useUpdateFacilityMutation()
     const [addFacility] = useAddFacilityMutation()
@@ -32,38 +37,34 @@ function FacilityManagement() {
         defaultValues: {
             facilityName: ""
         },
-    });
+    })
+
+    useEffect(() => {
+        if (fetchedfacilities) {
+            dispatch(setFacilities(fetchedfacilities))
+        }else{
+            console.log(error)
+        }
+    }, [fetchedfacilities])
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-
-            const result = await Swal.fire({
-                title: editingFacility ? "Confirm Edit" : "Confirm Addition",
-                text: `Are you sure you want to ${editingFacility ? 'edit' : 'add'} the facility "${values.facilityName}"?`,
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: `Yes, ${editingFacility ? 'edit' : 'add'} it!`
-            })
-
-            if (result.isConfirmed) {
-                if (editingFacility) {
-                    const res = await updateFacility({ id: editingFacility, facilityName: values.facilityName }).unwrap();
-                    if (res.success) {
-                        setEditingFacility(null)
-                        form.reset()
-                        toast(<div className='text-green-500'>Facility updated successfully!</div>)
-                    }
-                } else {
-                    const res = await addFacility({ facilityName: values.facilityName }).unwrap()
-                    if (res.success) {
-                        form.reset()
-                        toast(<div className='text-green-500'>Facility added successfully!</div>)
-                    }
+            if (editingFacility) {
+                const res = await updateFacility({ id: editingFacility, facilityName: values.facilityName }).unwrap();
+                if (res.success) {
+                    setEditingFacility(null)
+                    dispatch(updateOneFacility(res.facility))
+                    form.reset()
+                    toast(<div className='text-green-500'>Facility updated successfully!</div>)
+                }
+            } else {
+                const res = await addFacility({ facilityName: values.facilityName }).unwrap()
+                if (res.success) {
+                    dispatch(addOneFacility(res.facility))
+                    form.reset()
+                    toast(<div className='text-green-500'>Facility added successfully!</div>)
                 }
             }
-
         } catch (err: any) {
             if (err?.data) toast(<div className="text-red-600">{err.data.message}</div>)
             console.log(err)
@@ -72,25 +73,10 @@ function FacilityManagement() {
 
     async function handleDelete(id: string) {
         try {
-            const result = await Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            });
-
-            if (result.isConfirmed) {
-                const res = await deleteFacility(id).unwrap()
-                if (res.success) {
-                    Swal.fire({
-                        title: "Deleted!",
-                        text: "The facility has been deleted.",
-                        icon: "success"
-                    });
-                }
+            const res = await deleteFacility(id).unwrap()
+            if (res.success) {
+                dispatch(deleteOneFacility(id))
+                toast(<div className='text-green-700'>The facility has been deleted.</div>)
             }
         } catch (err: any) {
             if (err?.data) toast(<div className="text-red-600">Something went wrong</div>)
@@ -139,12 +125,12 @@ function FacilityManagement() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {data?.map((item) => (
+                        {facilities?.map((item) => (
                             <TableRow className="h-10" key={item._id}>
                                 <TableCell className="font-medium">{item.facilityName}</TableCell>
                                 <TableCell className="text-right flex justify-end items-center gap-5">
                                     <MdEdit onClick={() => handleEdit(item._id, item.facilityName)} style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />
-                                    <MdDelete onClick={() => handleDelete(item._id)} style={{ fontSize: '1.3rem' }} className="text-red-500 hover:text-red-300" />
+                                    <DeletConfirm id={item._id} onConfirm={handleDelete} />
                                 </TableCell>
                             </TableRow>
                         ))}

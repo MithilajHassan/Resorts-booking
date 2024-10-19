@@ -1,11 +1,13 @@
 import { Router } from "express"
 import adminController from "../controllers/adminController"
 import { adminProtect } from "../middleware/auth"
+import userController from "../controllers/userController"
 
 
 const adminRouter = Router()
 
 adminRouter.post('/signout', adminProtect, adminController.signout)
+adminRouter.get('/verifyadmin', adminProtect, userController.verifyUser)
 
 //---------------------- Category Management -----------------------------------//
 adminRouter.get('/categories', adminProtect, adminController.listCategories)

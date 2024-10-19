@@ -1,4 +1,4 @@
-import { IResort } from '../types/types'
+import { IResort, IUser } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
@@ -36,6 +36,10 @@ export const authApi = createApi({
                 method: 'POST',
                 body: data
             })
+        }),
+
+        verifyUser:builder.query<IUser , null>({
+           query:()=> `/user/verifyuser` 
         }),
 
         signoutUser: builder.mutation({
@@ -80,5 +84,6 @@ export const {
     useSignoutAdminMutation,
     useListResortsQuery,
     useResortDetailsQuery,
+    useVerifyUserQuery,
 
 } = authApi

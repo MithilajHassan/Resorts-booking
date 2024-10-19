@@ -32,6 +32,10 @@ class UserServices {
         return await userRepository.create(userData)
     }
 
+    async findUserById(id:string):Promise<IUser | null>{
+        return await userRepository.findById(id)
+    }
+
     async handleUserSignin(email: string, password: string, role: string, res: Response): Promise<IUser | undefined> {
         const user = await userRepository.findByEmail(email)
         if (!user) {
@@ -41,7 +45,7 @@ class UserServices {
             if (user.isBlock) {
                 throw new CustomError('Your account is blocked', 403)
             } else {
-                const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, { expiresIn: '30d' })
+                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, { expiresIn: '30d' })
 
                 if (role == 'user') {
                     if (user.role != role) {

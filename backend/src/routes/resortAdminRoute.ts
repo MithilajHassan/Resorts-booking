@@ -10,8 +10,8 @@ resortAdminRouter.post('/register', resortAdminController.register)
 resortAdminRouter.post('/signin', resortAdminController.signin)
 resortAdminRouter.post('/signout', resortProtect, resortAdminController.signout)
 
-resortAdminRouter.get('/categories', resortProtect, adminController.listCategories)
-resortAdminRouter.get('/facilities', resortProtect, adminController.listFacilities)
+resortAdminRouter.get('/categories', adminController.listCategories)
+resortAdminRouter.get('/facilities', adminController.listFacilities)
 
 resortAdminRouter.get('/myresort/:id', resortProtect, resortAdminController.getMyResort)
 resortAdminRouter.put('/myresort/:id', resortProtect, resortAdminController.editResort)

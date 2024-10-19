@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import userServices from "../services/userServices"
 import CustomError from "../errors/customError"
+import { CustomRequest } from "../middleware/auth"
 
 class UserController {
 
@@ -66,6 +67,28 @@ class UserController {
                 name: user?.name,
                 email: user?.email,
                 avatar: user?.avatar,
+            })
+        } catch (err) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+
+    async verifyUser(req:Request, res: Response) {
+        try {
+            const { _id, name, email, avatar, isBlock} = (req as CustomRequest).user
+            console.log(name);
+            
+            res.status(200).json({
+                _id,
+                name,
+                email,
+                avatar,
+                isBlock
             })
         } catch (err) {
             if (err instanceof CustomError) {
