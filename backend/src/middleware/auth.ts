@@ -8,10 +8,10 @@ interface JwtPayload {
     id: string;
 }
 export interface CustomRequest extends Request {
-    user: IUser;
+    user?: IUser;
 }
 
-export const adminProtect = async(req: Request, res: Response, next: NextFunction) => {
+export const adminProtect = async(req: CustomRequest, res: Response, next: NextFunction) => {
     let token = req.cookies?.Ajwt
 
     if (token) {
@@ -22,7 +22,7 @@ export const adminProtect = async(req: Request, res: Response, next: NextFunctio
             if (user?.role !== 'admin') {
                 return res.status(401).json({ message: 'Not authorized, invalid token' })
             }
-
+            req.user = user
             next()
         } catch (error) {
             res.status(401);
@@ -47,7 +47,7 @@ export const userProtect = async(req: Request, res: Response, next: NextFunction
             }else if(user.isBlock){
                 return res.status(401).json({ messsage:'Your account is blocked', isBlocked:user.isBlock})
             }
-            (req as CustomRequest).user = user
+            // req.user = user
             next()
         } catch (error) {
             res.status(401);

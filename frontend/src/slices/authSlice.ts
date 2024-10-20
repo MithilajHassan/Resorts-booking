@@ -20,6 +20,7 @@ interface AdminInfo {
     name: string;
     email: string;
     avatar?: string;
+    isBlock?: boolean;
 }
 
 
@@ -32,7 +33,7 @@ interface authState {
 const initialState: authState = {
     userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!) : null,
     resortAdmin: localStorage.getItem('resortAdmin') ? JSON.parse(localStorage.getItem('resortAdmin')!) : null,
-    adminInfo: null
+    adminInfo:localStorage.getItem('adminInfo') ? JSON.parse(localStorage.getItem('adminInfo')!) : null,
 }
 
 const authSlice = createSlice({
@@ -49,6 +50,7 @@ const authSlice = createSlice({
         },
         setAdminAuth: (state, action: PayloadAction<AdminInfo | null>) => {
             state.adminInfo = action.payload
+            localStorage.setItem('adminInfo', JSON.stringify(action.payload))
         },
         clearUserAuth: (state) => {
             state.userInfo = null

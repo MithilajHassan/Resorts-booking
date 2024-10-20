@@ -78,9 +78,9 @@ class UserController {
         }
     }
 
-    async verifyUser(req:Request, res: Response) {
+    async verifyUser(req:CustomRequest, res: Response) {
         try {
-            const { _id, name, email, avatar, isBlock} = (req as CustomRequest).user
+            const { _id, name, email, avatar, isBlock} = req.user!
             console.log(name);
             
             res.status(200).json({
