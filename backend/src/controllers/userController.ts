@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import userServices from "../services/userServices"
 import CustomError from "../errors/customError"
 import { CustomRequest } from "../middleware/auth"
+import { generateAccessToken, verifyRefreshToken } from "../utils/jwtHelper"
 
 class UserController {
 
@@ -81,7 +82,7 @@ class UserController {
     async verifyUser(req:CustomRequest, res: Response) {
         try {
             const { _id, name, email, avatar, isBlock} = req.user!
-            console.log(name);
+            console.log(name)
             
             res.status(200).json({
                 _id,
@@ -103,10 +104,15 @@ class UserController {
     async signout(req: Request, res: Response) {
         try {
 
-            res.cookie('jwt', '', {
+            res.cookie('userAccessT', '', {
                 httpOnly: true,
                 expires: new Date(0),
             })
+            res.cookie('userRefreshT', '', {
+                httpOnly: true,
+                expires: new Date(0),
+            })
+
 
             res.status(200).json({ message: "You are signed out", success: true })
         } catch (err) {

@@ -49,7 +49,11 @@ class ResortAdminController {
 
     async signout(req: Request, res: Response) {
         try {
-            res.cookie('Rjwt', '', {
+            res.cookie('resortAccessT', '', {
+                httpOnly: true,
+                expires: new Date(0),
+            })
+            res.cookie('resortRefreshT', '', {
                 httpOnly: true,
                 expires: new Date(0),
             })

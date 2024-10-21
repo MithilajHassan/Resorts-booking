@@ -73,7 +73,7 @@ export const resortAdminApi = createApi({
             query: (data: IRoom) => ({
                 url: `/resort/rooms`,
                 method: 'POST',
-                body:data
+                body: data
             }),
             invalidatesTags: ['Rooms']
         }),
@@ -111,7 +111,7 @@ export const {
     useDeleteRoomMutation,
     useEditRoomMutation,
     // useVerifyAdminQuery,
-    
+
 
 
 } = resortAdminApi

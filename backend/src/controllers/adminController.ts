@@ -1,13 +1,18 @@
 import { Request, Response } from "express"
 import CustomError from "../errors/customError"
 import adminServices from "../services/adminServices"
+import { CustomRequest } from "../middleware/auth"
 
 
 class AdminController {
 
     async signout(req: Request, res: Response) {
         try {
-            res.cookie('Ajwt', '', {
+            res.cookie('adminAccessT', '', {
+                httpOnly: true,
+                expires: new Date(0),
+            })
+            res.cookie('adminRefreshT', '', {
                 httpOnly: true,
                 expires: new Date(0),
             })

@@ -55,6 +55,10 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
         }
     }
 
+    const loginWithGoogle = ()=> {
+        window.location.href = 'http://localhost:7000/auth/google'
+    }
+
     return (
         <section className="bg-white min-h-screen flex items-center justify-center">
             <form className="flex flex-col space-y-2.5 w-94 md:w-96 sm:w-96 lg:w-96" onSubmit={(e) => submitHandler(e)}>
@@ -89,7 +93,7 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
 
                 <button type="submit" className="p-1.5 bg-blue-700 rounded-md text-white">Signin</button>
                 {role == 'user' && (<><p className="text-center">Or</p>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center" onClick={() => loginWithGoogle() }>
                         <div className="border-solid border border-gray-400 h-10 w-12 flex justify-center items-center">
                             <FcGoogle style={{ fontSize: '1.5rem' }} />
                         </div>

@@ -6,16 +6,28 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setBlockStatus, setUsers } from "../../slices/userSlice";
+import { isApiError } from "../../utils/errorHandling";
+import { clearAdminAuth } from "../../slices/authSlice";
 
 function UsersList() {
-    const { data } = useListUsersQuery(undefined)
+    const { data, error:err } = useListUsersQuery(undefined)
     const dispatch = useDispatch()
     const { users } = useSelector((state: RootState) => state.users)
-    const [manageUserBlock] = useManageBlockUnblockUserMutation()
+    const [ manageUserBlock ] = useManageBlockUnblockUserMutation()
     
     useEffect(() => {
         if (data) {
             dispatch(setUsers(data))
+        }else if(err){
+            if(err){
+                if(isApiError(err)){
+                    if(err.status == 401){
+                        dispatch(clearAdminAuth())
+                    }
+                }else{
+                    console.log(err)
+                }
+            }
         }
     }, [data])
 

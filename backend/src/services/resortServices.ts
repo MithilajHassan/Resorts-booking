@@ -4,6 +4,7 @@ import { IResort } from '../models/resortModel'
 import resortRepository from '../repositories/resortRepository'
 import bcrypt from 'bcrypt'
 import { Response } from 'express'
+import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper';
 
 export default new class ResortService {
 
@@ -26,12 +27,19 @@ export default new class ResortService {
             } else if (resort.isBlock) {
                 throw new CustomError('Your account is blocked', 403)
             } else {
-                const token = jwt.sign({ id: resort._id }, process.env.JWT_SECRET!, { expiresIn: '30d' })
-                res.cookie('Rjwt', token, {
+                const accessToken = generateAccessToken({id:resort._id as string,role:'resort'})
+                const refreshToken = generateRefreshToken(resort._id as string)
+                res.cookie('resortAccessT', accessToken, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV !== 'development',
                     sameSite: 'strict',
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
+                    maxAge: 15 * 60 * 1000,
+                })
+                res.cookie('resortRefreshT', refreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV !== 'development',
+                    sameSite: 'strict',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
                 })
                 return resort
             }

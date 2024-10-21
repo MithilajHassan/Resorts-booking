@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import jwt from "jsonwebtoken"
 import { IUser } from "../models/userModel"
 import userRepository from "../repositories/userRepository"
 import CustomError from '../errors/customError'
@@ -7,6 +6,7 @@ import otpServices from "./otpServices"
 import { Response } from 'express'
 import resortRepository from '../repositories/resortRepository'
 import { IResort } from '../models/resortModel'
+import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper'
 
 class UserServices {
     async handleUserSignup(email: string) {
@@ -32,7 +32,7 @@ class UserServices {
         return await userRepository.create(userData)
     }
 
-    async findUserById(id:string):Promise<IUser | null>{
+    async findUserByI(id: string): Promise<IUser | null> {
         return await userRepository.findById(id)
     }
 
@@ -41,31 +41,45 @@ class UserServices {
         if (!user) {
             throw new CustomError('Invalid Email', 401)
         }
-        if (await bcrypt.compare(password, user.password)) {
+
+        if (user?.password && await bcrypt.compare(password, user?.password)) {
             if (user.isBlock) {
                 throw new CustomError('Your account is blocked', 403)
             } else {
-                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, { expiresIn: '30d' })
+                const accessToken = generateAccessToken({id: user._id as string, role: user.role})
+                const refreshToken = generateRefreshToken(user._id as string)
 
                 if (role == 'user') {
                     if (user.role != role) {
                         throw new CustomError('Invalid Email', 401)
                     }
-                    res.cookie('jwt', token, {
+                    res.cookie('userRefreshT', refreshToken, {
                         httpOnly: true,
                         secure: process.env.NODE_ENV !== 'development',
                         sameSite: 'strict',
-                        maxAge: 30 * 24 * 60 * 60 * 1000,
+                        maxAge: 7 * 24 * 60 * 60 * 1000,
+                    })
+                    res.cookie('userAccessT', accessToken, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV !== 'development',
+                        sameSite: 'strict',
+                        maxAge: 15 * 60 * 1000,
                     })
                 } else if (role == 'admin') {
                     if (user.role != role) {
                         throw new CustomError('You are not an admin', 401)
                     }
-                    res.cookie('Ajwt', token, {
+                    res.cookie('adminRefreshT', refreshToken, {
                         httpOnly: true,
                         secure: process.env.NODE_ENV !== 'development',
                         sameSite: 'strict',
-                        maxAge: 30 * 24 * 60 * 60 * 1000,
+                        maxAge: 7 * 24 * 60 * 60 * 1000,
+                    })
+                    res.cookie('adminAccessT', accessToken, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV !== 'development',
+                        sameSite: 'strict',
+                        maxAge: 15 * 60 * 1000,
                     })
                 }
 

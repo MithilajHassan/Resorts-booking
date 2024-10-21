@@ -38,14 +38,18 @@ export const authApi = createApi({
             })
         }),
 
-        verifyUser:builder.query<IUser , null>({
-           query:()=> `/user/verifyuser` 
-        }),
-
         signoutUser: builder.mutation({
             query: () => ({
                 url: `/user/signout`,
                 method: 'POST',
+            })
+        }),
+
+        getUser: builder.query({
+            query: () => ({
+                url: '/user/verifyuser',
+                method: 'GET',
+                credentials: 'include' 
             })
         }),
 
@@ -84,6 +88,6 @@ export const {
     useSignoutAdminMutation,
     useListResortsQuery,
     useResortDetailsQuery,
-    useVerifyUserQuery,
+    useGetUserQuery,
 
 } = authApi
