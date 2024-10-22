@@ -34,4 +34,12 @@ export default new class ResortRepository {
         return await Resort.findByIdAndUpdate(id, { $set: resortData }, { new: true })
     }
 
+    async findResortsByCity(city: string): Promise<IResort[] | null> {
+        return Resort.find({
+            city: { $regex: city, $options: "i" },
+            isBlock: false,
+            isVerify: true
+        })
+    }
+
 }

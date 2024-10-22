@@ -49,7 +49,7 @@ export const authApi = createApi({
             query: () => ({
                 url: '/user/verifyuser',
                 method: 'GET',
-                credentials: 'include' 
+                credentials: 'include'
             })
         }),
 
@@ -73,21 +73,30 @@ export const authApi = createApi({
 
         resortDetails: builder.query<IResort, string>({
             query: (id: string) => `/user/resorts/${id}`
-        })
+        }),
 
+        searchRooms: builder.mutation({
+            query: (data:{ place:string, guestCount:number, checkIn:string, checkOut:string }) => ({
+                url: '/user/search-resort',
+                method: 'GET',
+                body: data
+            }),
+
+        }),
     })
 })
 
 export const {
-    useSignupMutation,
-    useVerifyOtpMutation,
-    useResendOtpMutation,
-    useSigninMutation,
-    useSignoutUserMutation,
-    useSignoutResortAdminMutation,
-    useSignoutAdminMutation,
-    useListResortsQuery,
-    useResortDetailsQuery,
-    useGetUserQuery,
+        useSignupMutation,
+        useVerifyOtpMutation,
+        useResendOtpMutation,
+        useSigninMutation,
+        useSignoutUserMutation,
+        useSignoutResortAdminMutation,
+        useSignoutAdminMutation,
+        useListResortsQuery,
+        useResortDetailsQuery,
+        useGetUserQuery,
+        useSearchRoomsMutation,
 
-} = authApi
+    } = authApi

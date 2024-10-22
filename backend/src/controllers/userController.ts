@@ -3,6 +3,8 @@ import userServices from "../services/userServices"
 import CustomError from "../errors/customError"
 import { CustomRequest } from "../middleware/auth"
 import { generateAccessToken, verifyRefreshToken } from "../utils/jwtHelper"
+import roomServices from "../services/roomServices"
+import resortServices from "../services/resortServices"
 
 class UserController {
 
@@ -79,11 +81,11 @@ class UserController {
         }
     }
 
-    async verifyUser(req:CustomRequest, res: Response) {
+    async verifyUser(req: CustomRequest, res: Response) {
         try {
-            const { _id, name, email, avatar, isBlock} = req.user!
+            const { _id, name, email, avatar, isBlock } = req.user!
             console.log(name)
-            
+
             res.status(200).json({
                 _id,
                 name,
@@ -144,6 +146,36 @@ class UserController {
         }
     }
 
+    async searchRooms(req: Request, res: Response) {
+        try {
+            const { place, guestCount, checkIn, checkOut } = req.body;
+            console.log(place);
+            
+
+            if (!place || !guestCount || !checkIn || !checkOut) {
+                return res.status(400).json({ error: "Missing required search parameters" });
+            }
+
+            const checkInDate = new Date(checkIn)
+            const checkOutDate = new Date(checkOut)
+
+            const availableRooms = await resortServices.searchRooms({
+                place,
+                guestCount: parseInt(guestCount),
+                checkIn: checkInDate,
+                checkOut: checkOutDate
+            });
+
+            if (!availableRooms.length) {
+                return res.status(404).json({ message: "No available rooms found" });
+            }
+
+            return res.status(200).json(availableRooms);
+        } catch (error) {
+            console.error(error)
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+    }
 
 }
 

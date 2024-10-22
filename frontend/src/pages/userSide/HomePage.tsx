@@ -1,11 +1,17 @@
+import SearchSection from '../../components/users/home/SearchSection'
 import UserHeader from '../../components/users/UserHeader'
-import Home from '../../components/users/Home'
+import TrendResorts from '../../components/users/home/TrendResorts'
 const HomePage = ()=>{
 
     return (
         <>
             <UserHeader/>
-            <Home/>
+            <div className="mt-16">
+                <SearchSection />
+                <TrendResorts />
+
+            </div>
+            
         </>
     )
 }

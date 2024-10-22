@@ -8,10 +8,13 @@ userRouter.post('/signup', userController.signup)
 userRouter.post('/verify-otp', userController.verifyOtp)
 userRouter.post('/resend-otp', userController.resendOtp)
 userRouter.post('/signin', userController.signin)
-userRouter.get('/verifyuser', userProtect, userController.verifyUser)
 userRouter.post('/signout', userController.signout)
+
+userRouter.get('/verifyuser', userProtect, userController.verifyUser)
 userRouter.get('/resorts', userUnProtect, userController.findResorts)
 userRouter.get('/resorts/:id', userUnProtect, userController.resortDetails)
+userRouter.get('/search-resort', userUnProtect, userController.searchRooms)
+
 
 
 

@@ -5,6 +5,7 @@ import resortRepository from '../repositories/resortRepository'
 import bcrypt from 'bcrypt'
 import { Response } from 'express'
 import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper';
+import roomRepository from '../repositories/roomRepository';
 
 export default new class ResortService {
 
@@ -27,7 +28,7 @@ export default new class ResortService {
             } else if (resort.isBlock) {
                 throw new CustomError('Your account is blocked', 403)
             } else {
-                const accessToken = generateAccessToken({id:resort._id as string,role:'resort'})
+                const accessToken = generateAccessToken({ id: resort._id as string, role: 'resort' })
                 const refreshToken = generateRefreshToken(resort._id as string)
                 res.cookie('resortAccessT', accessToken, {
                     httpOnly: true,
@@ -48,12 +49,38 @@ export default new class ResortService {
         }
     }
 
-    async editResort(resortData: IResort,resortId:string): Promise<IResort | null> {
+    async editResort(resortData: IResort, resortId: string): Promise<IResort | null> {
         const exist = await resortRepository.findByEmail(resortData.email)
         if (exist && exist.email != resortData.email) {
             throw new CustomError('Eamil is already exist', 409)
         }
-        return await resortRepository.editResort(resortData,resortId)
+        return await resortRepository.editResort(resortData, resortId)
+    }
+
+    async searchRooms({ place, guestCount, checkIn, checkOut }: {
+        place: string;
+        guestCount: number;
+        checkIn: Date;
+        checkOut: Date;
+    }) {
+
+        const resorts = await resortRepository.findResortsByCity(place)
+        if (!resorts || resorts.length === 0) {
+            return []
+        }
+
+        const availableRooms = [];
+        for (const resort of resorts) {
+            const rooms = await roomRepository.findAvailableRooms(resort._id as string, guestCount, checkIn, checkOut);
+            if (rooms && rooms.length > 0) {
+                availableRooms.push({
+                    resort,
+                    rooms,
+                })
+            }
+        }
+
+        return availableRooms;
     }
 
 }

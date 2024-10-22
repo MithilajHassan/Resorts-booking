@@ -5,6 +5,7 @@ import UserSignin from "../pages/userSide/Signin";
 import ResortDetailsPage from "../pages/userSide/ResortDetailsPage";
 import NotFound from "../components/common/404";
 import UserPrivateRoutes from "../components/users/UserPrivateRoutes";
+import SearchResultsPage from "../pages/userSide/SearchResultPage";
 
 const UserRoutes = () => {
     return (
@@ -12,6 +13,7 @@ const UserRoutes = () => {
             <Route path='/' element={<HomePage />} />
             <Route path='/signup' element={<UserSignup />} />
             <Route path='/signin' element={<UserSignin />} />
+            <Route path='/search' element={<SearchResultsPage />} />
             <Route path='/resortdetails/:id' element={<ResortDetailsPage />} />
             
             <Route path="" element={<UserPrivateRoutes/>} >

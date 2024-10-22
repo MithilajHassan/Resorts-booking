@@ -4,6 +4,7 @@ import authReducer from "./slices/authSlice";
 import categoryReducer from "./slices/categorySlice"
 import facilityReducer from "./slices/facilitySlice"
 import userReducer from "./slices/userSlice"
+import searchReducer from "./slices/searchSlice"
 import { adminApi } from "./slices/adminApiSlice";
 import { resortAdminApi } from './slices/resortAdminApiSlice';
 
@@ -14,6 +15,7 @@ const store = configureStore({
         categories:categoryReducer,
         facilities:facilityReducer,
         users:userReducer,
+        search:searchReducer,
         
         [authApi.reducerPath]:authApi.reducer,
         [adminApi.reducerPath]:adminApi.reducer,
