@@ -149,7 +149,6 @@ class UserController {
     async searchRooms(req: Request, res: Response) {
         try {
             const { place, guestCount, checkIn, checkOut } = req.body;
-            console.log(place);
             
 
             if (!place || !guestCount || !checkIn || !checkOut) {

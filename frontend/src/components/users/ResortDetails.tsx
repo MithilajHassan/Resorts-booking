@@ -11,20 +11,22 @@ function ResortDetails() {
 
 
   return (
-    <section className=" bg-white p-2 mt-20">
-      <div className="w-full flex flex-col items-center justify-center">
+    <section className="bg-white p-6 mt-20">
+      <div className="max-w-7xl mx-auto flex flex-col items-center">
 
-        <div className="flex">
-          <div className="me-2">
+        <div className="w-full flex justify-between mb-6">
+
+          <div className="w-2/3 pr-4">
             <div className="mb-4">
-              <h1 className="text-xl font-bold mb-4">{resort?.resortName}</h1>
+              <h1 className="text-3xl font-bold mb-2">{resort?.resortName}</h1>
               <p className="flex items-center text-gray-600 text-md">
                 <FaMapMarkerAlt className="mr-2 text-red-500" />
                 {resort?.address}
               </p>
             </div>
 
-            <div className="flex-1 grid grid-cols-2 gap-2">
+
+            <div className="grid grid-cols-2 gap-2">
               {resort?.images && (
                 <>
                   <div className="col-span-2">
@@ -47,54 +49,41 @@ function ResortDetails() {
             </div>
           </div>
 
-          <div>
-            <div className="mt-24 flex justify-center items-center relative mb-2">
+
+          <div className="w-1/3 pl-4 flex flex-col items-center">
+
+            <div className="relative mb-6 flex justify-center items-center">
               <img
                 src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/master/w_1600,c_limit/GoogleMapTA.jpg"
-                className="w-48 rounded-md"
-                alt="" />
-              <Button className="bg-blue-600 hover:bg-blue-400 absolute" size={"sm"}>Show on map</Button>
+                className="w-full h-48 rounded-md object-cover"
+                alt="Map"
+              />
+              <Button className="absolute bg-blue-600 hover:bg-blue-400">
+                Show on map
+              </Button>
             </div>
-            <div>
-            <Card className="bg-gray-100">
+
+
+            <Card className="bg-gray-100 w-full">
               <CardContent className="p-4">
-                <h3 className="text-xl font-semibold mb-2 text-center">Facilities</h3>
-                <ul className="text-blue-700 flex flex-wrap gap-3 font-semibold">
+                <h3 className="text-xl font-semibold mb-4 text-center">Facilities</h3>
+                <ul className="text-blue-700 flex flex-wrap gap-3 justify-center font-semibold">
                   {resort?.facilities?.map((facility, index) => (
-                    <li key={index}>{typeof facility === "string"
-                      ? facility
-                      : facility?.facilityName}</li>
+                    <li key={index}>
+                      {typeof facility === "string"
+                        ? facility
+                        : facility?.facilityName}
+                    </li>
                   ))}
                 </ul>
               </CardContent>
             </Card>
           </div>
-          </div>
-
         </div>
 
-
-        <div className="mt-4 flex">
-          <div className="mx-32">
-            <p className="text-black text-md">{resort?.description}</p>
-          </div>
-
-          {/* <div>
-            <Card className="">
-              <CardContent className="p-4">
-                <h3 className="text-xl font-semibold mb-2 text-center">Facilities</h3>
-                <ul className="text-blue-700 flex flex-wrap gap-3 font-semibold">
-                  {resort?.facilities?.map((facility, index) => (
-                    <li key={index}>{typeof facility === "string"
-                      ? facility
-                      : facility?.facilityName}</li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </div> */}
+        <div className="w-full mt-6">
+          <p className="text-black text-lg">{resort?.description}</p>
         </div>
-
       </div>
     </section>
   )

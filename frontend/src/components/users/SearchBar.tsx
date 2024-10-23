@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAvailableRooms } from '../../slices/availableRoomsSlice'
 import { setSearchParams } from '../../slices/searchSlice';
@@ -7,34 +7,44 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import MyDatePicker from './DatePicker';
 import { useSearchRoomsMutation } from "../../slices/userApiSlice";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const SearchBar = () => {
+const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
     const [place, setPlace] = useState('');
     const [guestCount, setGuestCount] = useState('');
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
-    const [showDatePicker, setShowDatePicker] = useState(true)
+    const [showDatePicker, setShowDatePicker] = useState(false)
     const dispatch = useDispatch()
-    const [ searchRoom ] = useSearchRoomsMutation()
+    const navigate = useNavigate()
+    const [searchRoom] = useSearchRoomsMutation()
 
-    const submitHandler = async(e: FormEvent) => {
+    const submitHandler = async (e: FormEvent) => {
         e.preventDefault()
-        console.log(place, guestCount, checkIn, checkOut)
-        dispatch(setSearchParams({ 
-            place, 
-            guestCount:Number(guestCount), 
-            checkIn, 
-            checkOut
-        }))
+        try {
+            dispatch(setSearchParams({
+                place,
+                guestCount: Number(guestCount),
+                checkIn,
+                checkOut
+            }))
 
-        const res = await searchRoom({
-            place,
-            guestCount:Number(guestCount), 
-            checkIn, 
-            checkOut
-        }).unwrap()
+            const res = await searchRoom({
+                place,
+                guestCount: Number(guestCount),
+                checkIn,
+                checkOut
+            }).unwrap()
 
-        console.log(res)  
+           dispatch(setAvailableRooms(res))
+           if(redirect) navigate(redirect)
+           
+
+        } catch (err) {
+            console.log(err)
+            toast('Internal server error')
+        }
 
     }
 
@@ -49,6 +59,7 @@ const SearchBar = () => {
 
     return (
         <div className="bg-green-400 ">
+            <ToastContainer />
             <form onSubmit={submitHandler} className="flex justify-center items-center p-2 space-x-1 sm:space-y-0 sm:space-x-2 mb-4">
                 <Input
                     type="text"
@@ -90,7 +101,7 @@ const SearchBar = () => {
                             <MyDatePicker
                                 setCheckIn={handleSetCheckIn}
                                 setCheckOut={handleSetCheckOut}
-                                // setShowDatePicker={setShowDatePicker}
+                            // setShowDatePicker={setShowDatePicker}
                             />
                         </div>
                     )}

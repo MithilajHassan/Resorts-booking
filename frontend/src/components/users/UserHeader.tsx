@@ -55,10 +55,10 @@ function UserNav(){
                     </li>
                     <HoverCard>
                         <HoverCardTrigger>
-                            <li className="flex items-center gap-2 hover:scale-110 transition-transform hover:text-black">
+                           <Link to={'/myprofile'}> <li className="flex items-center gap-2 hover:scale-110 transition-transform hover:text-black">
                                 <FaCircleUser />
                                 <span>Account</span>
-                            </li>
+                            </li></Link>
                         </HoverCardTrigger>
                         <HoverCardContent>
                         <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">

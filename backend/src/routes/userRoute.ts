@@ -13,7 +13,7 @@ userRouter.post('/signout', userController.signout)
 userRouter.get('/verifyuser', userProtect, userController.verifyUser)
 userRouter.get('/resorts', userUnProtect, userController.findResorts)
 userRouter.get('/resorts/:id', userUnProtect, userController.resortDetails)
-userRouter.get('/search-resort', userUnProtect, userController.searchRooms)
+userRouter.post('/search-resort', userUnProtect, userController.searchRooms)
 
 
 

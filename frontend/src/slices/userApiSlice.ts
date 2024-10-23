@@ -1,4 +1,4 @@
-import { IResort, IUser } from '../types/types'
+import { IResort, IRoom, IUser } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
@@ -75,12 +75,12 @@ export const authApi = createApi({
             query: (id: string) => `/user/resorts/${id}`
         }),
 
-        searchRooms: builder.mutation({
-            query: (data:{ place:string, guestCount:number, checkIn:string, checkOut:string }) => ({
+        searchRooms: builder.mutation<{ resort: IResort; rooms: IRoom[] }[],{ place:string, guestCount:number, checkIn:string, checkOut:string }>({
+            query: (data) => ({
                 url: '/user/search-resort',
-                method: 'GET',
+                method: 'POST',
                 body: data
-            }),
+            })
 
         }),
     })
