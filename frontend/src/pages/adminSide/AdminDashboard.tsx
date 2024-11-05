@@ -23,7 +23,7 @@ const AdminDashboard = () => {
                 </Sidebar>
 
                 <p className="ml-72 text-2xl mt-72">Admin Dashboard</p>
-
+                
             </div>
         </>
     )

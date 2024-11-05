@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ToastContainer, toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
 import { firebaseStore } from "../../config/firebaseConfig";
 import { Checkbox } from "../ui/checkbox";
@@ -15,6 +15,7 @@ import { Textarea } from "../ui/textarea";
 import { isApiError } from "../../utils/errorHandling";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import MapSelector, { Location } from "../common/LocationSelecting";
 
 const formSchema = z.object({
     resortName: z.string().min(3, { message: "Resort name is required" })
@@ -42,6 +43,8 @@ export default function ResortEditForm() {
     const navigate = useNavigate();
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const [newImages, setNewImages] = useState<File[]>([]);
+    const [location, setLocation] = useState<Location | null>(null)
+    const [showMap,setShowMap] = useState<boolean>(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -73,11 +76,26 @@ export default function ResortEditForm() {
                 images: resortData.images,
             });
             setImagePreviews(resortData.images);
+            if(resortData.location){
+                setLocation(resortData.location)
+            }
         }
     }, [resortData]);
 
+    const handleLocationSelect = (mark:Location) => {
+        setLocation(mark)        
+        setShowMap(false)
+        toast(<div className="text-green-600 text-sm">Location selected.</div>)
+    }
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
+
+            if(location == null){
+                toast(<div className="text-red-600 text-sm">Please select location</div>)
+                return
+            }
+
             const uploadedImageLinks: string[] = [...values.images!];
 
             const uploadPromises = newImages.map(async (image) => {
@@ -100,6 +118,7 @@ export default function ResortEditForm() {
                     categories: values.categories,
                     facilities: values.facilities,
                     images: uploadedImageLinks,
+                    location
                 },
                 id:resortAdmin?._id!
             }).unwrap();
@@ -135,6 +154,9 @@ export default function ResortEditForm() {
 
     return (
         <div className="flex flex-col items-center mt-16 w-full">
+            {showMap && <div className="fixed z-10 top-20 border-2 bg-white ">
+                <MapSelector location={location} onLocationSelect={handleLocationSelect} />
+            </div>}
             <Form {...form}>
                 <div className="shadow w-7/12 my-5 rounded-md">
                     <ToastContainer />
@@ -284,6 +306,12 @@ export default function ResortEditForm() {
                             </div>
                             <Input type="file" accept="image/*" multiple onChange={handleNewImageUpload} />
                         </div>
+
+                        <FormItem>
+                            <FormLabel>Location</FormLabel>
+                            <button type="button" className="bg-indigo-50 py-1.5 text-sm font-semibold border rounded-md w-full" onClick={(e:FormEvent)=>setShowMap(true)} >Change Your location</button>
+                        </FormItem>
+
                         <Button type="submit" className="bg-blue-600 hover:bg-blue-500 w-full">EDIT</Button>
                     </form>
                 </div>

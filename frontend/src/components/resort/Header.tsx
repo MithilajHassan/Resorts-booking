@@ -23,7 +23,7 @@ function ReosrtAdminNav(){
     }
 
     return (
-        <nav className="bg-blue-800 h-16 flex fixed w-full top-0 z-10">
+        <nav className="bg-blue-800 h-16 flex fixed w-full top-0 z-40">
              <div className="flex items-center mx-4 sm:mx-8 lg:mx-14">
                 <p className="text-white font-bold italic font-serif text-xl sm:text-2xl">RESORTS</p>
             </div>

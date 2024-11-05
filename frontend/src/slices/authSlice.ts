@@ -2,9 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 
 interface UserInfo {
-    _id: unknown;
+    _id: string;
     name: string;
     email: string;
+    phone?: number;
     avatar?: string;
     isBlock?: boolean; 
 }

@@ -1,3 +1,4 @@
+import { Location } from "@/components/common/LocationSelecting";
 
 export type CategoryDetails = {
     _id:string;
@@ -25,6 +26,7 @@ export interface IResort {
     images:string[];
     isVerify?:boolean;
     isBlock?:boolean;
+    location:Location
 }
 
 export interface IUser{
@@ -58,4 +60,25 @@ export interface IRoom {
     offerPercentage: number;
     offerPrice?: number;
     isDeleted?: boolean;
+}
+
+
+export interface IBooking {
+    _id?: string;
+    userId: string;
+    resortId: IResort | string;
+    roomId: IRoom | string;
+    guestName: string;
+    guestPhone: number;
+    guestEmail: string;
+    guestCount: number;
+    checkInDate: Date;
+    checkOutDate: Date;
+    checkInTime: string;
+    checkOutTime: string;
+    totalPrice: number;
+    paymentMethod?: string;
+    paymentStatus?: boolean;
+    status?: string;
+    transactionId?: string;
 }

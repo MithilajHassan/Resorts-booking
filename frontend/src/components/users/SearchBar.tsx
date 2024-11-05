@@ -58,7 +58,7 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
     }
 
     return (
-        <div className="bg-green-400 ">
+        <div className="bg-blue-300 ">
             <ToastContainer />
             <form onSubmit={submitHandler} className="flex justify-center items-center p-2 space-x-1 sm:space-y-0 sm:space-x-2 mb-4">
                 <Input
@@ -101,7 +101,6 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
                             <MyDatePicker
                                 setCheckIn={handleSetCheckIn}
                                 setCheckOut={handleSetCheckOut}
-                            // setShowDatePicker={setShowDatePicker}
                             />
                         </div>
                     )}

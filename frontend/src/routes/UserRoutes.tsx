@@ -7,6 +7,10 @@ import NotFound from "../components/common/404";
 import UserPrivateRoutes from "../components/users/UserPrivateRoutes";
 import SearchResultsPage from "../pages/userSide/SearchResultPage";
 import UserProfilePage from "../pages/userSide/UserProfilePage";
+import Checkout from "../pages/userSide/Checkout";
+import BookingSuccessPage from "../pages/userSide/BookingSuccessPage";
+import BookingsPage from "../pages/userSide/BookingsPage";
+import BookingDetailsPage from "../pages/userSide/BookingDetailsPage";
 
 const UserRoutes = () => {
     return (
@@ -19,7 +23,10 @@ const UserRoutes = () => {
             
             <Route path="" element={<UserPrivateRoutes/>} >
                 <Route path='/myprofile' element={<UserProfilePage />} />
-                {/* <Route path='/Checkout' element={<CheckoutPage />} /> */}
+                <Route path='/checkout' element={<Checkout />} />
+                <Route path="/booking-success" element={<BookingSuccessPage />} />
+                <Route path="/bookings" element={<BookingsPage />} />
+                <Route path="/bookings/:id" element={<BookingDetailsPage />} />
             </Route>
 
             <Route path='*' element={<NotFound baseRoute="/" />} />

@@ -1,18 +1,29 @@
 import { useResortDetailsQuery } from "../../slices/userApiSlice"
 import { useParams } from "react-router-dom"
-import { FaMapMarkerAlt } from "react-icons/fa"
+import { FaMapMarkerAlt, FaWindowClose } from "react-icons/fa"
 import { Card, CardContent } from "../ui/card"
 import { Button } from "../ui/button"
+import { useState } from "react"
+import MapComponent from "../common/Map"
 
 function ResortDetails() {
   const { id } = useParams()
   const { data: resort } = useResortDetailsQuery(id!)
+  const [showMap, setShowMap] = useState<boolean>(false);
 
 
 
   return (
     <section className="bg-white p-6 mt-20">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
+
+        {showMap && <div className="fixed z-10 top-20 border-2 border-black rounded bg-white ">
+          <div className="flex justify-between z-50">
+            <span className="my-auto ms-1 text-blue-800 font-semibold font-serif">Street Map</span>
+            <FaWindowClose className="text-red-600 hover:text-red-400 text-2xl m-1" onClick={() => setShowMap(false)} />
+          </div>
+          <MapComponent location={resort?.location} resortName={resort!.resortName} />
+        </div>}
 
         <div className="w-full flex justify-between mb-6">
 
@@ -58,10 +69,11 @@ function ResortDetails() {
                 className="w-full h-48 rounded-md object-cover"
                 alt="Map"
               />
-              <Button className="absolute bg-blue-600 hover:bg-blue-400">
+              <Button type="button" className="absolute bg-blue-600 hover:bg-blue-400" onClick={() => setShowMap(true)}>
                 Show on map
               </Button>
             </div>
+
 
 
             <Card className="bg-gray-100 w-full">

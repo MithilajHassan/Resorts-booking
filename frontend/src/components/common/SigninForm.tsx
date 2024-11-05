@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import { RootState } from "../../store"
+import Loader from "./Loader"
 
 interface SigninFormProps {
     role: 'user' | 'admin';
@@ -16,12 +17,11 @@ interface SigninFormProps {
 const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
     const [errMsg, setErrMsg] = useState('')
 
     const { adminInfo } = useSelector((state: RootState) => state.auth)
     const { userInfo } = useSelector((state: RootState) => state.auth)
-    const [signin] = useSigninMutation()
+    const [signin, { isLoading }] = useSigninMutation()
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate()
 
@@ -55,7 +55,7 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
         }
     }
 
-    const loginWithGoogle = ()=> {
+    const loginWithGoogle = async () => {
         window.location.href = 'http://localhost:7000/auth/google'
     }
 
@@ -93,13 +93,21 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
 
                 <button type="submit" className="p-1.5 bg-blue-700 rounded-md text-white">Signin</button>
                 {role == 'user' && (<><p className="text-center">Or</p>
-                    <div className="flex justify-center" onClick={() => loginWithGoogle() }>
+                    <div className="flex justify-center" onClick={() => loginWithGoogle()}>
                         <div className="border-solid border border-gray-400 h-10 w-12 flex justify-center items-center">
                             <FcGoogle style={{ fontSize: '1.5rem' }} />
                         </div>
                     </div></>)}
                 {signupUrl && (<p className="text-center">New user?<Link to={signupUrl} className="text-blue-700 underline"> signup</Link></p>)}
             </form>
+            {isLoading && (
+                <>
+                    <div className="fixed inset-0 bg-gray-900 bg-opacity-50"></div>
+                    <div className="absolute modal p-8 bg-white">
+                        <Loader />
+                    </div>
+                </>
+            )}
         </section>
     )
 }

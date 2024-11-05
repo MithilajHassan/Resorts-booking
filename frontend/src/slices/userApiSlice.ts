@@ -1,4 +1,5 @@
-import { IResort, IRoom, IUser } from '../types/types'
+import { TbBuildingBroadcastTower } from 'react-icons/tb';
+import { IBooking, IResort, IRoom } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
@@ -45,6 +46,21 @@ export const authApi = createApi({
             })
         }),
 
+        // getGoogleLoginUrl: builder.mutation({
+        //     query: () => ({
+        //         url: '/user/auth/google/url',
+        //         method: 'GET',
+        //     }),
+        // }),
+
+        // googleCallback: builder.mutation({
+        //     query: (code) => ({
+        //         url: '/user/auth/google/callback',
+        //         method: 'POST',
+        //         body: { code },
+        //     }),
+        // }),
+
         getUser: builder.query({
             query: () => ({
                 url: '/user/verifyuser',
@@ -75,14 +91,31 @@ export const authApi = createApi({
             query: (id: string) => `/user/resorts/${id}`
         }),
 
-        searchRooms: builder.mutation<{ resort: IResort; rooms: IRoom[] }[],{ place:string, guestCount:number, checkIn:string, checkOut:string }>({
+        searchRooms: builder.mutation<{ resort: IResort; rooms: IRoom[] }[], { place: string, guestCount: number, checkIn: string, checkOut: string }>({
             query: (data) => ({
                 url: '/user/search-resort',
                 method: 'POST',
                 body: data
             })
-
         }),
+
+        createBooking: builder.mutation<{orderId:string, amount:string|number, bookingId:string}, IBooking>({
+            query: (data) => ({
+                url: '/user/checkout',
+                method: 'POST',
+                body: data
+            })
+        }),
+        setPaymentStatus: builder.mutation<{success:boolean}, {bookingId:string,status:boolean}>({
+            query: (data) => ({
+                url: '/user/paymentstatus',
+                method: 'PATCH',
+                body: data
+            })
+        }),
+        listBookings: builder.query<{bookings:IBooking[]},string>({
+            query:(userId)=> `/user/bookings/${userId}`
+        })
     })
 })
 
@@ -98,5 +131,10 @@ export const {
         useResortDetailsQuery,
         useGetUserQuery,
         useSearchRoomsMutation,
+        useCreateBookingMutation,
+        useSetPaymentStatusMutation,
+        useListBookingsQuery,
+        // useGetGoogleLoginUrlMutation,
+        // useGoogleCallbackMutation,
 
     } = authApi

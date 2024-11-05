@@ -14,6 +14,10 @@ export interface IResort extends Document {
     images: string[],
     isVerify?: boolean,
     isBlock?: boolean,
+    location:{
+        lat: number;
+        lng: number;
+    }
 }
 const resortSchema = new Schema<IResort>({
     resortName: { type: String, required: true },
@@ -28,6 +32,11 @@ const resortSchema = new Schema<IResort>({
     images: [{ type: String }],
     isVerify: { type: Boolean, default: false },
     isBlock: { type: Boolean, default: false },
+    location: { 
+        lat: { type: Number, required: true },
+        lng: { type: Number, required: true }
+    }
+    
 }, {
     timestamps: true
 })

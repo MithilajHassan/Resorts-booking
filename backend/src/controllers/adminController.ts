@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import CustomError from "../errors/customError"
 import adminServices from "../services/adminServices"
-import { CustomRequest } from "../middleware/auth"
 
 
 class AdminController {

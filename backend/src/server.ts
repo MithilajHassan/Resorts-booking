@@ -65,12 +65,9 @@ app.get('/auth/google/callback',
 )
 
 
-
 app.use('/api/user', userRouter)
 app.use('/api/resort', resortAdminRouter)
 app.use('/api/admin', adminRouter)
-
-
 
 
 app.listen(port, () => {

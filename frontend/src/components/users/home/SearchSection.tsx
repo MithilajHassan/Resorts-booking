@@ -18,10 +18,10 @@ const SearchSection = () => {
     return (
         <section
             style={{ backgroundImage: "url('/images/Resort-bg.jpg')" }}
-            className="min-h-64 mb-2 flex flex-col justify-center"
+            className="min-h-80 mb-2 flex flex-col justify-center mt-16"
         >
-            <h1 className="text-2xl font-bold text-white ms-3">Best resorts in Kerala</h1>
-            <h2 className="text-md font-semibold text-white ms-3">Find the resorts that appeal to you the most</h2>
+            <h1 className="text-3xl font-bold text-white ms-3">Best resorts in India</h1>
+            <h2 className="text-xl font-semibold text-white ms-3 ">Find the resorts that appeal to you the most</h2>
            <div className="flex justify-start h-14 ms-3">
 
             <SearchBar redirect="/search" />

@@ -2,8 +2,6 @@ import { Request, Response } from "express"
 import userServices from "../services/userServices"
 import CustomError from "../errors/customError"
 import { CustomRequest } from "../middleware/auth"
-import { generateAccessToken, verifyRefreshToken } from "../utils/jwtHelper"
-import roomServices from "../services/roomServices"
 import resortServices from "../services/resortServices"
 
 class UserController {
@@ -84,7 +82,6 @@ class UserController {
     async verifyUser(req: CustomRequest, res: Response) {
         try {
             const { _id, name, email, avatar, isBlock } = req.user!
-            console.log(name)
 
             res.status(200).json({
                 _id,

@@ -83,7 +83,6 @@ class ResortAdminController {
         try {
             const { id } = req.params
             const resortData: IResort = req.body
-            console.log(id, resortData);
 
             const resort = await resortServices.editResort(resortData, id)
             return res.status(201).json({ success: true, data: resort })

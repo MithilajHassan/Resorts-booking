@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { ToastContainer, toast } from "react-toastify"
-import { useEffect, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { firebaseStore } from "../../config/firebaseConfig"
 import { Checkbox } from "../ui/checkbox"
@@ -16,6 +16,7 @@ import { Textarea } from "../ui/textarea"
 import { isApiError } from "../../utils/errorHandling"
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import MapSelector, { Location } from "../common/LocationSelecting";
 
 const formSchema = z.object({
     resortName: z.string().min(3, { message: "Resort name is required" })
@@ -38,12 +39,14 @@ const formSchema = z.object({
 
 export default function ResortRegistrationForm() {
 
-    const { resortAdmin } = useSelector((state:RootState)=>state.auth)
+    const { resortAdmin } = useSelector((state: RootState) => state.auth)
     const { data: facilitiesOptions = [] } = useListFacilitiesQuery()
     const { data: categoriesOptions = [] } = useListCategoriesQuery()
     const [registerResort] = useRegisterResortMutation()
     const navigate = useNavigate()
     const [imagePreviews, setImagePreviews] = useState<string[]>([])
+    const [location, setLocation] = useState<Location | null>(null)
+    const [showMap,setShowMap] = useState<boolean>(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -61,14 +64,24 @@ export default function ResortRegistrationForm() {
         },
     })
 
-    useEffect(()=>{
-        if(resortAdmin){
+    useEffect(() => {
+        if (resortAdmin) {
             navigate('/resort/dashboard')
         }
-    },[])
+    }, [])
+
+    const handleLocationSelect = (mark:Location) => {
+        setLocation(mark)        
+        setShowMap(false)
+        toast(<div className="text-green-600 text-sm">Location selected.</div>)
+    }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
+            if(location == null){
+                toast(<div className="text-red-600 text-sm">Please select location</div>)
+                return
+            }
             const imageLinks: string[] = []
 
             const uploadPromises = values.images.map(async (image) => {
@@ -91,6 +104,7 @@ export default function ResortRegistrationForm() {
                 categories: values.categories,
                 facilities: values.facilities,
                 images: imageLinks,
+                location
             }).unwrap()
             if (result.success) {
                 toast(<div className="text-green-500">Resort registered successfully!</div>)
@@ -116,6 +130,9 @@ export default function ResortRegistrationForm() {
 
     return (
         <div className="flex flex-col items-center mt-16 w-full">
+           {showMap && <div className="fixed z-10 top-20 border-2 bg-white ">
+                <MapSelector location={location} onLocationSelect={handleLocationSelect} />
+            </div>}
             <Form {...form}>
                 <div className="shadow w-7/12 my-5 rounded-md">
                     <ToastContainer />
@@ -289,8 +306,14 @@ export default function ResortRegistrationForm() {
                                 </FormItem>
                             )}
                         />
+
+                        <FormItem>
+                            <FormLabel>Location</FormLabel>
+                            <button type="button" className="bg-indigo-50 py-1.5 text-sm font-semibold border rounded-md w-full" onClick={(e:FormEvent)=>setShowMap(true)} >Select Your Location</button>
+                        </FormItem>
+
                         <div className="flex justify-center">
-                            <Button className="bg-blue-700" type="submit">Submit</Button>
+                            <Button className="bg-blue-700 hover:bg-blue-400" type="submit">Submit</Button>
                         </div>
                     </form>
                 </div>

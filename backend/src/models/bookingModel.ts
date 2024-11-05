@@ -5,26 +5,29 @@ export interface IBooking extends Document {
     resortId: mongoose.Types.ObjectId;
     roomId: mongoose.Types.ObjectId;
     guestName: string;
-    guestPhone: number;
     guestEmail: string;
+    guestPhone: number;
+    guestCount: number;
     checkInDate: Date;
     checkOutDate: Date;
     checkInTime: string;
     checkOutTime: string;
     totalPrice: number;
     paymentMethod: string;
-    paymentStatus: boolean;
+    paymentStatus?: boolean;
+    status?: string;
     transactionId?: string;
 }
 
-const BookingSchema: Schema = new Schema(
+const BookingSchema = new Schema<IBooking>(
     {
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
         resortId: { type: mongoose.Schema.Types.ObjectId, ref: "Resort", required: true },
         roomId: {type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
         guestName: { type: String, required: true },
-        guestPhone: { type: Number, required: true },
         guestEmail: { type: String, required: true },
+        guestPhone: { type: Number, required: true },
+        guestCount: { type: Number, required: true },
         checkInDate: { type: Date, required: true },
         checkOutDate: { type: Date, required: true },
         checkInTime: { type: String, required: true },
@@ -32,6 +35,7 @@ const BookingSchema: Schema = new Schema(
         totalPrice: { type: Number, required: true },
         paymentMethod: { type: String, required: true },
         paymentStatus: { type: Boolean, default: false },
+        status: { type: String, enum:['Cancelled','Booked','Stayed'], default: 'Booked'},
         transactionId: { type: String },
     },
     { timestamps: true }
