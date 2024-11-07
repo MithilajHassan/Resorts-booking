@@ -40,8 +40,8 @@ class BookingService {
         return await BookingRepository.findAll();
     }
 
-    async updateBooking(id: string, bookingData: IBooking): Promise<IBooking | null> {
-        return await BookingRepository.editBooking(bookingData, id);
+    async updateBookingStatus(id: string, status: string): Promise<IBooking | null> {
+        return await BookingRepository.editBookingStatus(id, status );
     }
 }
 

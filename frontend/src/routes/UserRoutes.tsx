@@ -11,6 +11,7 @@ import Checkout from "../pages/userSide/Checkout";
 import BookingSuccessPage from "../pages/userSide/BookingSuccessPage";
 import BookingsPage from "../pages/userSide/BookingsPage";
 import BookingDetailsPage from "../pages/userSide/BookingDetailsPage";
+import UserProfileEditPage from "../pages/userSide/UserProfileEditPage";
 
 const UserRoutes = () => {
     return (
@@ -23,6 +24,7 @@ const UserRoutes = () => {
             
             <Route path="" element={<UserPrivateRoutes/>} >
                 <Route path='/myprofile' element={<UserProfilePage />} />
+                <Route path='/myprofile/update' element={<UserProfileEditPage />} />
                 <Route path='/checkout' element={<Checkout />} />
                 <Route path="/booking-success" element={<BookingSuccessPage />} />
                 <Route path="/bookings" element={<BookingsPage />} />

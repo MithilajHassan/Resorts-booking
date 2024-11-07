@@ -1,5 +1,4 @@
-import { TbBuildingBroadcastTower } from 'react-icons/tb';
-import { IBooking, IResort, IRoom } from '../types/types'
+import { IBooking, IResort, IRoom, IUser } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
@@ -43,6 +42,14 @@ export const authApi = createApi({
             query: () => ({
                 url: `/user/signout`,
                 method: 'POST',
+            })
+        }),
+
+        updateUser: builder.mutation<{id:string,name:string,email:string,phone:number,avatar?:string},{id:string,name:string,phone:number,avatar?:string}>({
+            query: ({ id,name,phone,avatar }) => ({
+                url: `/user/update/${id}`,
+                method: 'PATCH',
+                body:{ name,phone,avatar }
             })
         }),
 
@@ -115,6 +122,13 @@ export const authApi = createApi({
         }),
         listBookings: builder.query<{bookings:IBooking[]},string>({
             query:(userId)=> `/user/bookings/${userId}`
+        }),
+        editBookingStatus: builder.mutation<{booking:IBooking},{id:string,status:string}>({
+            query:({id,status})=>({
+                url:`/user/bookings/${id}`,
+                method:'PATCH',
+                body:{ status:status }
+            }) 
         })
     })
 })
@@ -134,6 +148,9 @@ export const {
         useCreateBookingMutation,
         useSetPaymentStatusMutation,
         useListBookingsQuery,
+        useEditBookingStatusMutation,
+        useUpdateUserMutation,
+
         // useGetGoogleLoginUrlMutation,
         // useGoogleCallbackMutation,
 

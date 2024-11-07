@@ -19,6 +19,10 @@ class UserServices {
         otpServices.sendOtpVerificationEmail(email, otp)
     }
 
+    async updateUser(id: string, data: Partial<IUser>): Promise<IUser | null> {
+        return await userRepository.updateUser(id, data);
+    }
+
     async verifyOtpAndCreate(otp: string, userData: Partial<IUser>): Promise<IUser> {
         const savedOtp = await otpServices.findOtp(userData.email!)
         if (!savedOtp) {
@@ -46,7 +50,7 @@ class UserServices {
             if (user.isBlock) {
                 throw new CustomError('Your account is blocked', 403)
             } else {
-                const accessToken = generateAccessToken({id: user._id as string, role: user.role})
+                const accessToken = generateAccessToken({ id: user._id as string, role: user.role })
                 const refreshToken = generateRefreshToken(user._id as string)
 
                 if (role == 'user') {
@@ -73,7 +77,7 @@ class UserServices {
                         httpOnly: true,
                         secure: process.env.NODE_ENV !== 'development',
                         sameSite: 'strict',
-                        maxAge: 7* 24 * 60 * 60 * 1000,
+                        maxAge: 7 * 24 * 60 * 60 * 1000,
                     })
                     res.cookie('adminAccessT', accessToken, {
                         httpOnly: true,

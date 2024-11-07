@@ -1,16 +1,16 @@
-import UserProfile from '../../components/users/UserProfile';
 import UserHeader from '../../components/users/UserHeader'
+import EditUserProfile from '../../components/users/editUserProfile';
 
-const UserProfilePage = () => {
+const UserProfileEditPage = () => {
 
   return (
     <>
       <UserHeader />
       <div className='pt-16 flex items-center justify-center min-h-screen'>
-        <UserProfile />
+        <EditUserProfile />
       </div>
     </>
   );
 }
 
-export default UserProfilePage;
+export default UserProfileEditPage;

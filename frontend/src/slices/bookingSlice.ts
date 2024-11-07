@@ -16,6 +16,14 @@ const bookingSlice = createSlice({
         setBookings: (state, action: PayloadAction<IBooking[]>) => {
             state.bookings = action.payload;
         },
+        updateOneBooking: (state, action: PayloadAction<IBooking>) => {
+            if (state.bookings) {
+                const index = state.bookings.findIndex(booking => booking._id === action.payload._id)
+                if (index !== -1) {
+                    state.bookings[index] = action.payload
+                }
+            }
+        },
     }
 })
 
@@ -23,6 +31,6 @@ export default bookingSlice.reducer
 
 export const { 
     setBookings,
-    
+    updateOneBooking
 } = bookingSlice.actions
 

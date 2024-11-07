@@ -9,6 +9,10 @@ class UserRepository {
         return await User.findById(id)
     }
     
+    async updateUser(id: string, data: Partial<IUser>): Promise<IUser | null> {
+        return await User.findByIdAndUpdate(id, { $set: data },{ new: true, runValidators: true })
+    }
+    
     async findByEmail(email:string):Promise<IUser | null>{
         return await User.findOne({email})
     }

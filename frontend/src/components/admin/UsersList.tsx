@@ -49,7 +49,7 @@ function UsersList() {
     }
 
     return (
-        <div className="w-7/12 border border-2 mt-20 rounded-md mx-auto my-5 h-fit">
+        <div className="w-7/12 border-2 mt-20 rounded-md mx-auto my-5 h-fit">
             <Table className="w-full">
                 <TableHeader className="bg-blue-100 text-black h-12">
                     <TableRow>

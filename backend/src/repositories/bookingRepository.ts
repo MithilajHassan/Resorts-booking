@@ -22,12 +22,13 @@ export default new class BookingRepository {
         return await Booking.find()
     }
 
-    async editBooking(BookingData: IBooking, id: string): Promise<IBooking | null> {
-        return await Booking.findByIdAndUpdate(id, { $set: BookingData }, { new: true })
+    async editBookingStatus(id: string , status: string): Promise<IBooking | null> {
+        return await Booking.findByIdAndUpdate(id, { $set: { status } }, { new: true }).populate('resortId').populate('roomId')
     }
 
     async setPaymentStatus(id:string, status:boolean): Promise<IBooking | null> {
         return await Booking.findByIdAndUpdate(id, { $set: {paymentStatus:status} }, { new: true })
     }
+    
 
 }

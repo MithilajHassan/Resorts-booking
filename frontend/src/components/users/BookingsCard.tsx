@@ -32,7 +32,7 @@ const BookingsCard: React.FC = () => {
         <h1 className="text-2xl font-bold mb-5">Bookings</h1>
         {bookings?.length ? (bookings.map((booking) => (
 
-          <Link to={`/bookings/${booking._id}`}  key={booking._id}>
+          <Link to={`/bookings/${booking._id}`} key={booking._id}>
             <Card className="flex flex-col md:flex-row items-center p-4 shadow-md mb-2">
 
               <img
@@ -47,18 +47,22 @@ const BookingsCard: React.FC = () => {
                 ${format(booking.checkInDate, "dd-MM-yyyy")} - 
                 ${format(booking.checkOutDate, "dd-MM-yyyy")}
               `}</p>
-                <p className="text-sm font-medium text-blue-600">{booking.status}</p>
+                <p className="text-sm font-medium">Status :
+                  <span className={`${booking?.status === 'Cancelled' ? 'text-red-700' : 'text-blue-700'} ml-1`}>
+                    {booking.status}
+                  </span>
+                </p>
               </div>
 
-              <div className="flex flex-col items-end ml-4 space-y-2">
-                <span className="text-lg font-bold text-gray-900">₹{booking.totalPrice}</span>
-                <Button
+              <div className="flex flex-col items-end ml-4 ">
+                <span className="text-lg font-bold text-green-800">₹{booking.totalPrice}</span>
+                {/* <Button
                   size={'sm'}
                   variant="outline"
                   className="text-red-600 border-red-600 hover:bg-red-500 flex items-center space-x-1"
                 >
                   Cancel
-                </Button>
+                </Button> */}
               </div>
             </Card>
           </Link>

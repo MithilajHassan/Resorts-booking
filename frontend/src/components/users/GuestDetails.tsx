@@ -23,19 +23,19 @@ export default function GuestDetails({ bookingDetails }: Props) {
 
                     <div>
                         <label>Guest Name</label>
-                        <Input className="bg-indigo-50" value={bookingDetails.guestName} readOnly={true} />
+                        <Input className="bg-indigo-50 focus-visible:ring-0" value={bookingDetails.guestName} readOnly={true} />
                     </div>
 
                     <div>
                         <label>Guest Email</label>
-                        <Input className="bg-indigo-50" value={bookingDetails.guestEmail} readOnly={true} />
+                        <Input className="bg-indigo-50 focus-visible:ring-0" value={bookingDetails.guestEmail} readOnly={true} />
                     </div>
 
                 </div>
 
                 <div>
-                    <label>Guest Phone</label>
-                    <Input className="bg-indigo-50" value={bookingDetails.guestPhone} readOnly={true} />
+                    <label>Guest Phone</label> 
+                    <Input className="bg-indigo-50 focus-visible:ring-0" value={bookingDetails.guestPhone} readOnly={true} />
                 </div>
 
             </form>

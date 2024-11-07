@@ -12,6 +12,7 @@ userRouter.post('/signin', userController.signin)
 userRouter.post('/signout', userController.signout)
 
 userRouter.get('/verifyuser', userProtect, userController.verifyUser)
+userRouter.patch('/update/:id', userProtect, userController.updateUser)
 userRouter.get('/resorts', userUnProtect, userController.findResorts)
 userRouter.get('/resorts/:id', userUnProtect, userController.resortDetails)
 userRouter.post('/search-resort', userUnProtect, userController.searchRooms)
@@ -19,6 +20,7 @@ userRouter.post('/search-resort', userUnProtect, userController.searchRooms)
 userRouter.post('/checkout', userProtect, bookingController.createBooking)
 userRouter.patch('/paymentstatus',userProtect, bookingController.setPaymentStatus)
 userRouter.get('/bookings/:userId', userProtect, bookingController.getBookingsByUserId)
+userRouter.patch('/bookings/:id', userProtect, bookingController.updateBookingStatus)
 
 
 

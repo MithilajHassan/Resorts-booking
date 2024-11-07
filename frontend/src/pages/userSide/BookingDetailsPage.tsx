@@ -1,10 +1,13 @@
 import Bill from "../../components/users/checkout/Bill"
 import BookingDetails from "../../components/users/checkout/BookingDetails"
 import UserHeader from "../../components/users/UserHeader"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/store"
 import { useParams } from "react-router-dom"
 import GuestDetails from "../../components/users/GuestDetails"
+import { useEditBookingStatusMutation } from "../../slices/userApiSlice"
+import CancelConfirm from "../../components/common/CancelConfirm"
+import { updateOneBooking } from "../../slices/bookingSlice"
 import { Button } from "../../components/ui/button"
 
 
@@ -12,6 +15,15 @@ export default function BookingDetailsPage() {
     const { bookings } = useSelector((state: RootState) => state.bookings)
     const { id } = useParams()
     const bookingData = bookings?.find((value) => value._id == id)
+    const [editBookingStatus] = useEditBookingStatusMutation()
+    const dispatch = useDispatch()
+
+    const cancelBooking = async () => {
+        const res = await editBookingStatus({ id:id!, status:'Cancelled' }).unwrap()
+        console.log(res.booking);
+        
+        dispatch(updateOneBooking(res.booking))
+    }
 
     return (
         <>
@@ -37,12 +49,22 @@ export default function BookingDetailsPage() {
                                 {bookingData?.status}
                             </span>
                         </p>
-
-                        <div className="flex justify-center w-full">
-                            <Button className="w-52 bg-red-600 hover:bg-red-400 text-md" size={'lg'}>Cancell</Button>
-                        </div>
+                        {
+                            bookingData?.status === 'Booked' && (
+                                <div className="flex justify-center w-full">
+                                    <CancelConfirm id={id!} onConfirm={cancelBooking} >
+                                        <Button
+                                            className="w-52 bg-red-600 hover:bg-red-400 text-md"
+                                            size={'lg'}
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </CancelConfirm>
+                                </div>
+                            )
+                        }
                     </div>
-                    
+
                 </div>
             </div>
         </>

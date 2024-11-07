@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import BookingService from './../services/bookingServices';
-import Booking, { IBooking } from './../models/bookingModel';
+import { IBooking } from './../models/bookingModel';
 
 class BookingController {
 
@@ -17,11 +17,11 @@ class BookingController {
 
     async setPaymentStatus(req: Request, res: Response): Promise<void> {
         try {
-            const { bookingId, status}:{bookingId:string, status:boolean} = req.body;
-            
-            await BookingService.setPaymentStatus(bookingId,status)
+            const { bookingId, status }: { bookingId: string, status: boolean } = req.body;
 
-            res.status(201).json({success:true})
+            await BookingService.setPaymentStatus(bookingId, status)
+
+            res.status(201).json({ success: true })
         } catch (error) {
             res.status(500).json({ message: 'Error set payment status', error });
         }
@@ -44,10 +44,10 @@ class BookingController {
     async getBookingsByUserId(req: Request, res: Response): Promise<void> {
         try {
             const { userId } = req.params;
-            
+
             const bookings = await BookingService.getBookingsByUserId(userId);
-            
-            res.status(200).json({bookings});
+
+            res.status(200).json({ bookings });
         } catch (error) {
             res.status(500).json({ message: 'Error retrieving bookings', error });
         }
@@ -72,16 +72,12 @@ class BookingController {
         }
     }
 
-    async updateBooking(req: Request, res: Response): Promise<void> {
+    async updateBookingStatus(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params;
-            const bookingData: IBooking = req.body;
-            const updatedBooking = await BookingService.updateBooking(id, bookingData);
-            if (updatedBooking) {
-                res.status(200).json(updatedBooking);
-            } else {
-                res.status(404).json({ message: 'Booking not found' });
-            }
+            const body: { status: string } = req.body;
+            const updatedBooking = await BookingService.updateBookingStatus(id, body.status);
+            res.status(200).json({booking:updatedBooking})
         } catch (error) {
             res.status(500).json({ message: 'Error updating booking', error });
         }
