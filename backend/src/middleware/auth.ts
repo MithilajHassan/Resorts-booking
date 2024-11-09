@@ -174,13 +174,13 @@ export const resortProtect = async (req: Request, res: Response, next: NextFunct
     }else if (refreshToken) {
         try {
             const decodedRefresh = verifyRefreshToken(refreshToken)
-            const user = await userRepository.findById(decodedRefresh.id);
+            const user = await resortRepository.findResortById(decodedRefresh.id);
 
             if (!user) {
                 return res.status(401).json({ message: 'User not found' });
             }
 
-            const newAccessToken = generateAccessToken({ id: user._id as string, role: user.role });
+            const newAccessToken = generateAccessToken({ id: user._id as string });
             res.cookie('resortAccessT', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',

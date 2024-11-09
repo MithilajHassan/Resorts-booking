@@ -1,4 +1,4 @@
-import { CategoryDetails, FacilityDetails, IResort, IRoom } from '../types/types'
+import { ApiError, CategoryDetails, FacilityDetails, IBooking, IResort, IRoom } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const resortAdminApi = createApi({
@@ -94,6 +94,9 @@ export const resortAdminApi = createApi({
             }),
             invalidatesTags: ['Rooms']
         }),
+        listBookings: builder.query<{ bookings: IBooking[] }, string>({
+            query: (resortId) => `/resort/bookings/${resortId}`
+        }),
 
     })
 })
@@ -111,6 +114,7 @@ export const {
     useDeleteRoomMutation,
     useEditRoomMutation,
     // useVerifyAdminQuery,
+    useListBookingsQuery,
 
 
 

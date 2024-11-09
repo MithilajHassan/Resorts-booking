@@ -96,11 +96,11 @@ function UserNav() {
                                 <span>Bookings</span>
                             </li>
                             <li className="flex items-center gap-2 hover:scale-110 transition-transform hover:text-black">
-                                <FaWallet />
+                                <FaHeart />
                                 <span>Wishlist</span>
                             </li>
                             <li className="flex items-center gap-2 hover:scale-110 transition-transform hover:text-black">
-                                <FaHeart />
+                                <FaWallet />
                                 <span>Wallet</span>
                             </li>
                             <li className="flex items-center gap-2 hover:scale-110 transition-transform hover:text-black" onClick={logoutHandler}>

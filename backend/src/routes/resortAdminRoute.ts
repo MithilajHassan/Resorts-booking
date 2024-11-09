@@ -2,6 +2,7 @@ import { Router } from "express"
 import resortAdminController from "../controllers/resortAdminController"
 import adminController from "../controllers/adminController"
 import { resortProtect } from "../middleware/auth"
+import bookingController from "../controllers/bookingController"
 
 
 const resortAdminRouter = Router()
@@ -22,6 +23,7 @@ resortAdminRouter.post('/rooms', resortProtect, resortAdminController.addRoom)
 resortAdminRouter.put('/rooms/:id', resortProtect, resortAdminController.editRoom)
 resortAdminRouter.patch('/rooms/:id/delete', resortProtect, resortAdminController.deleteRoom)
 
+resortAdminRouter.get('/bookings/:resortId', resortProtect, bookingController.getBookingsByResortId)
 
 
 

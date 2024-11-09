@@ -15,7 +15,7 @@ export default new class BookingRepository {
     }
 
     async findByResortId(id: string): Promise<IBooking[] | null> {
-        return await Booking.find({userId:id}).populate('userId').populate('roomId')
+        return await Booking.find({resortId:id}).populate('userId').populate('roomId')
     }
 
     async findAll(): Promise<IBooking[] | []> {

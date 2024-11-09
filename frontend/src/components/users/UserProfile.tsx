@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 const UserProfile = () => {
   const { userInfo } = useSelector((state: RootState) => state.auth);
-  const defaultAvatar = '/public/images/defaultAvatar.jpg'
+  const defaultAvatar = '/images/defaultAvatar.jpg'
 
   return (
-    <div className="w-full max-w-md mx-auto mt-30 p-6 bg-white border-2 rounded-lg">
+    <div className="w-4/5 mx-auto p-6 bg-white border-2 rounded-lg">
       <h2 className="text-2xl font-bold text-center mb-4">User Profile</h2>
       <div className="flex flex-col items-center">
         <img

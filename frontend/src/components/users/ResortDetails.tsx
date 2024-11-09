@@ -12,7 +12,6 @@ function ResortDetails() {
   const [showMap, setShowMap] = useState<boolean>(false);
 
 
-
   return (
     <section className="bg-white p-6 mt-20">
       <div className="max-w-7xl mx-auto flex flex-col items-center">

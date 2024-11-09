@@ -6,6 +6,7 @@ import { GiBlockHouse } from 'react-icons/gi'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import EditResortForm from '../../components/resort/EditResortForm'
+import { FaBook } from 'react-icons/fa'
 
 
 function EditResortDetails() {
@@ -18,7 +19,7 @@ function EditResortDetails() {
                     <Link to={'/resort/dashboard'}><SidebarItem icon={<MdOutlineDashboard />} text="Dashboard" /></Link>
                     <SidebarItem icon={<GiBlockHouse />} text="My Resort" active={true} />
                     <Link to={'/resort/rooms'}><SidebarItem icon={<MdOutlineBedroomParent />} text="Rooms" /></Link>
-
+                    <Link to={'/resort/bookings'}><SidebarItem icon={<FaBook />} text="Bookings" /></Link>
                 </Sidebar>
 
                 <EditResortForm />

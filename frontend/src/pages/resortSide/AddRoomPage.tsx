@@ -6,6 +6,7 @@ import { GiBlockHouse } from 'react-icons/gi'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import AddRoom from '../../components/resort/AddRoom'
+import { FaBook } from 'react-icons/fa'
 
 
 function AddRoomPage() {
@@ -18,7 +19,7 @@ function AddRoomPage() {
                     <Link to={'/resort/dashboard'}><SidebarItem icon={<MdOutlineDashboard />} text="Dashboard" /></Link>
                     <Link to={'/resort/myresort'}><SidebarItem icon={<GiBlockHouse />} text="My Resort" /></Link>
                     <SidebarItem icon={<MdOutlineBedroomParent />} text="Rooms" active={true} />
-
+                    <Link to={'/resort/bookings'}><SidebarItem icon={<FaBook />} text="Bookings" /></Link>
                 </Sidebar>
 
                 <AddRoom />

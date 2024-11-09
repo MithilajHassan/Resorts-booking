@@ -57,7 +57,7 @@ class BookingController {
         try {
             const { resortId } = req.params;
             const bookings = await BookingService.getBookingsByResortId(resortId);
-            res.status(200).json(bookings);
+            res.status(200).json({ bookings });
         } catch (error) {
             res.status(500).json({ message: 'Error retrieving bookings', error });
         }
@@ -77,7 +77,7 @@ class BookingController {
             const { id } = req.params;
             const body: { status: string } = req.body;
             const updatedBooking = await BookingService.updateBookingStatus(id, body.status);
-            res.status(200).json({booking:updatedBooking})
+            res.status(200).json({ booking: updatedBooking })
         } catch (error) {
             res.status(500).json({ message: 'Error updating booking', error });
         }

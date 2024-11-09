@@ -28,7 +28,7 @@ const ListRooms = () => {
                     <Button className="bg-blue-600 hover:bg-blue-400 text-white">Add Room</Button>
                 </Link>
             </div>
-            <div className="border border-2 rounded-md ">
+            <div className="border-2 rounded-md ">
                 <Table className="">
                     <TableHeader className="bg-blue-100 text-black h-12">
                         <TableRow>
