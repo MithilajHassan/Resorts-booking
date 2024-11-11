@@ -31,7 +31,8 @@ export default function BookingsList() {
         } else {
             dispatch(setBookings(data?.bookings!))
         }
-    }, [bookings])
+    }, [data])
+    
 
     return (
         <div className="w-4/6 h-fit border-2 rounded-md" >
@@ -41,7 +42,9 @@ export default function BookingsList() {
                     <TableRow>
                         <TableHead className="text-black font-bold">Customers</TableHead>
                         <TableHead className="text-black font-bold">Room</TableHead>
+                        <TableHead className="text-black font-bold">Checkin</TableHead>
                         <TableHead className="text-black font-bold">Price</TableHead>
+                        <TableHead className="text-black font-bold">Status</TableHead>
                         <TableHead className="text-black font-bold text-right">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -51,9 +54,13 @@ export default function BookingsList() {
                             <TableRow className="h-10" >
                                 <TableCell className="">{booking.guestName}</TableCell>
                                 <TableCell className="">{typeof booking.roomId != 'string' && booking.roomId.name}</TableCell>
+                                <TableCell className="">{new Date(booking.checkInDate).toDateString()}</TableCell>
                                 <TableCell className="text-green-800 font-bold">₹{typeof booking.roomId != 'string' && booking.totalPrice - 200}</TableCell>
+                                <TableCell className={`font-semibold ${booking.status=='Cancelled'?'text-red-600':booking.status=='Booked'?'text-blue-800':'text-green-600'}`}>
+                                    {booking.status}
+                                </TableCell>
                                 <TableCell className="text-end">
-                                    <Link to={''}>View</Link>
+                                    <Link to={`/resort/bookings/${booking._id}`} key={booking._id} className="bg-blue-700 hover:bg-blue-400 py-1 px-2 rounded-sm text-sm text-white">View</Link>
                                 </TableCell>
                             </TableRow>
                         ))

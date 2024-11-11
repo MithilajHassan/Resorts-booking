@@ -1,5 +1,4 @@
 import { Card } from "../ui/card";
-import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import { useListBookingsQuery } from "../../slices/userApiSlice";
@@ -22,7 +21,6 @@ const BookingsCard: React.FC = () => {
     } else {
       // alert('Internal server error')
     }
-    console.log(data?.bookings);
   }, [data])
 
 
@@ -47,7 +45,7 @@ const BookingsCard: React.FC = () => {
                 ${format(booking.checkOutDate, "dd-MM-yyyy")}
               `}</p>
               <p className="text-sm font-medium">Status :
-                <span className={`${booking?.status === 'Cancelled' ? 'text-red-700' : 'text-blue-700'} ml-1`}>
+                <span className={`${booking?.status === 'Cancelled' ? 'text-red-700' : booking?.status === 'Stayed' ? 'text-green-700' : 'text-blue-700'} ml-1 font-bold`}>
                   {booking.status}
                 </span>
               </p>

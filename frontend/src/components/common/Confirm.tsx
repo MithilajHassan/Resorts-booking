@@ -13,10 +13,11 @@ import {
 interface ConfirmDialogProps {
     id: string;
     onConfirm: (id: string) => void;
+    action: string;
     children: ReactElement;
 }
 
-const CancelConfirm: React.FC<ConfirmDialogProps> = ({ id, onConfirm, children }) => {
+const Confirm: React.FC<ConfirmDialogProps> = ({ id, onConfirm, action, children }) => {
     const [isOpen, setIsOpen] = useState(false)
 
     const handleConfirm = () => {
@@ -38,16 +39,16 @@ const CancelConfirm: React.FC<ConfirmDialogProps> = ({ id, onConfirm, children }
                     <DialogTitle>Are you sure?</DialogTitle>
                 </DialogHeader>
                 <DialogDescription>
-                    Do you really want to cancel this booking?
+                    Do you really want to {action}?
                 </DialogDescription>
                 <DialogFooter>
-                    <Button className='bg-blue-600 hover:bg-blue-400' onClick={handleCancel}>Close</Button>
-                    <Button variant="destructive" onClick={handleConfirm}>Cancel</Button>
+                    <Button className='bg-blue-600 hover:bg-blue-400' onClick={handleCancel}>No</Button>
+                    <Button className='bg-green-600 hover:bg-green-400' onClick={handleConfirm}>Yes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
     )
 }
 
-export default CancelConfirm
+export default Confirm
 

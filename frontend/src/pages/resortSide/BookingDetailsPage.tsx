@@ -6,10 +6,9 @@ import { RootState } from "@/store"
 import { useParams } from "react-router-dom"
 import GuestDetails from "../../components/users/GuestDetails"
 import { useEditBookingStatusMutation } from "../../slices/userApiSlice"
-import CancelConfirm from "../../components/common/CancelConfirm"
 import { updateOneBooking } from "../../slices/bookingSlice"
 import { Button } from "../../components/ui/button"
-import WriteReview from "./WriteReview"
+import Confirm from "../../components/common/Confirm"
 
 
 export default function BookingDetailsPage() {
@@ -19,10 +18,12 @@ export default function BookingDetailsPage() {
     const [editBookingStatus] = useEditBookingStatusMutation()
     const dispatch = useDispatch()
 
-    const cancelBooking = async () => {
-        const res = await editBookingStatus({ id: id!, status: 'Cancelled' }).unwrap()
-        console.log(res.booking);
-
+    const stayedBooking = async () => {
+        const res = await editBookingStatus({ id: id!, status: 'Stayed' }).unwrap()
+        dispatch(updateOneBooking(res.booking))
+    }
+    const bookedBooking = async () => {
+        const res = await editBookingStatus({ id: id!, status: 'Booked' }).unwrap()
         dispatch(updateOneBooking(res.booking))
     }
 
@@ -46,32 +47,25 @@ export default function BookingDetailsPage() {
 
                     <div className="w-80">
                         <p className="py-4 text-center md:text-lg font-semibold">Booking Status :
-                            <span className={`${bookingData?.status === 'Cancelled' ? 'text-red-700' : bookingData?.status === 'Stayed' ? 'text-green-700' : 'text-blue-700'} ms-1 font-bold`}>
+                            <span className={`${bookingData?.status === 'Cancelled' ? 'text-red-700' : 'text-blue-700'} ms-1 font-bold`}>
                                 {bookingData?.status}
                             </span>
                         </p>
                         {
                             bookingData?.status === 'Booked' && (
+
                                 <div className="flex justify-center w-full">
-                                    <CancelConfirm id={id!} onConfirm={cancelBooking} >
+                                    <Confirm id={id!} onConfirm={stayedBooking} action="change the status" >
                                         <Button
-                                            className="w-52 bg-red-600 hover:bg-red-400 text-md"
+                                            className="w-52 bg-green-600 hover:bg-green-400 text-md"
                                             size={'lg'}
                                         >
-                                            Cancel
+                                            Stayed
                                         </Button>
-                                    </CancelConfirm>
+                                    </Confirm>
                                 </div>
                             )
                         }
-                        {
-                            bookingData?.status === 'Stayed' && (
-                                <div className="flex justify-center w-full">
-                                    <WriteReview />
-                                </div>
-                            )
-                        }
-
                     </div>
 
                 </div>

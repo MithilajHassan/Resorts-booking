@@ -10,6 +10,7 @@ import ListRoomsPage from '../pages/resortSide/ListRoomsPage';
 import AddRoomPage from '../pages/resortSide/AddRoomPage';
 import EditRoomPage from '../pages/resortSide/EditRoomPage';
 import BookingsPage from '../pages/resortSide/BookingsPage';
+import BookingDetailsPage from '../pages/resortSide/BookingDetailsPage';
 
 const ResortRoutes = () => {
     return (
@@ -24,6 +25,7 @@ const ResortRoutes = () => {
                 <Route path='/rooms/add' element={<AddRoomPage />} />
                 <Route path='/rooms/update/:id' element={<EditRoomPage />} />
                 <Route path='/bookings' element={<BookingsPage />} />
+                <Route path="/bookings/:id" element={<BookingDetailsPage />} />
 
 
             </Route>
