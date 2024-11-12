@@ -82,3 +82,13 @@ export interface IBooking {
     status?: string;
     transactionId?: string;
 }
+
+export interface IReview {
+    _id?: string;
+    bookingId: string;
+    userId: string;
+    resortId: string;
+    reviewText: string;
+    rating: number; 
+    reviewDate?: Date;
+}

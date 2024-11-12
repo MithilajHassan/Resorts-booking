@@ -1,24 +1,40 @@
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog";
-import { Button } from "../../components/ui/button";
-import { Label } from "../../components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import StarRatings from 'react-star-ratings';
-import { Textarea } from "../../components/ui/textarea";
+import { Textarea } from "../ui/textarea";
 import { ChangeEvent, useState } from "react";
+import { useCreateReviewMutation } from "../../slices/userApiSlice";
+import { toast, ToastContainer } from "react-toastify";
 
-export default function WriteReview() {
+interface Props {
+    userId:string
+    resortId:string;
+    bookingId:string;
+}
+
+export default function WriteReview({userId,resortId,bookingId}:Props) {
     const [rating, setRating] = useState<number>(2)
     const [review, setReview] = useState<string>('')
     const [errMsg, setErrMsg] = useState<string>('')
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [createReview] = useCreateReviewMutation()
 
-    const submitHanlder = () => {
+    const submitHanlder = async () => {
         const regex = /^[a-zA-Z0-9\s,.'-]{10,}$/;
         if (!regex.test(review)) {
             setErrMsg('Please write review with at least 10 characters.');
         } else {
             setErrMsg('')
-            console.log(rating, review)
-            setIsOpen(true)
+            await createReview({
+                userId ,
+                resortId,
+                bookingId,
+                reviewText:review,
+                rating,
+            })
+            setIsOpen(false)
+            toast('Successful')
         }
     }
 
@@ -27,6 +43,7 @@ export default function WriteReview() {
             <DialogTrigger asChild>
                 <Button className="bg-white hover:bg-blue-700 text-blue-700 hover:text-white border border-blue-800">Write review</Button>
             </DialogTrigger>
+            <ToastContainer  />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Add your review</DialogTitle>

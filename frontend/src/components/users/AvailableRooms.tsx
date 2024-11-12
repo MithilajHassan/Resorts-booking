@@ -38,8 +38,8 @@ const AvailableRooms = () => {
     }
 
     return (
-        <div className="w-full mb-16 p-4 mx-auto">
-            <h2 className="text-2xl font-bold mb-4">Available Rooms</h2>
+        <div className="w-full mb-12 p-4 mx-auto">
+            <h2 className="text-xl font-bold mb-4 text-center">Available Rooms</h2>
             <div className="border-2 border-gray-400 rounded-sm w-4/5 mx-auto">
                 <Table className='w-full'>
                     <TableHeader className='bg-blue-100 text-black h-12 border-b-2 border-gray-400'>
@@ -73,7 +73,7 @@ const AvailableRooms = () => {
                             ))
                         ) : (
                             <TableRow className='border-b-2 border-gray-400'>
-                                <TableCell colSpan={3} className="text-center text-gray-600  font-bold">
+                                <TableCell colSpan={4} className="text-center text-blue-800 text-lg  font-bold">
                                     No rooms available.
                                 </TableCell>
                             </TableRow>

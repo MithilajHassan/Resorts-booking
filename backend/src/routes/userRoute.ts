@@ -2,6 +2,7 @@ import { Router } from "express"
 import userController from "../controllers/userController"
 import { userProtect, userUnProtect } from "../middleware/auth"
 import bookingController from "../controllers/bookingController"
+import reviewController from "../controllers/reviewController"
 
 const userRouter = Router()
 
@@ -21,6 +22,12 @@ userRouter.post('/checkout', userProtect, bookingController.createBooking)
 userRouter.patch('/paymentstatus',userProtect, bookingController.setPaymentStatus)
 userRouter.get('/bookings/:userId', userProtect, bookingController.getBookingsByUserId)
 userRouter.patch('/bookings/:id', userProtect, bookingController.updateBookingStatus)
+
+userRouter.post('/reviews', userUnProtect, reviewController.createReview)
+userRouter.get('/reviews/:id', userUnProtect, reviewController.getReviewsByResortId)
+
+
+
 
 
 

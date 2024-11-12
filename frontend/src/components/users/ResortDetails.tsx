@@ -1,14 +1,16 @@
-import { useResortDetailsQuery } from "../../slices/userApiSlice"
-import { useParams } from "react-router-dom"
 import { FaMapMarkerAlt, FaWindowClose } from "react-icons/fa"
 import { Card, CardContent } from "../ui/card"
 import { Button } from "../ui/button"
 import { useState } from "react"
 import MapComponent from "../common/Map"
+import { IResort } from "@/types/types"
 
-function ResortDetails() {
-  const { id } = useParams()
-  const { data: resort } = useResortDetailsQuery(id!)
+interface Props {
+  resort:IResort
+}
+
+function ResortDetails({resort}:Props) {
+  
   const [showMap, setShowMap] = useState<boolean>(false);
 
 

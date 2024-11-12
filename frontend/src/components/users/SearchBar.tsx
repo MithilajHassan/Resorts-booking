@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import React, { FormEvent, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAvailableRooms } from '../../slices/availableRoomsSlice'
 import { setSearchParams } from '../../slices/searchSlice';
 import { Input } from '../ui/input';
@@ -9,8 +9,10 @@ import MyDatePicker from './DatePicker';
 import { useSearchRoomsMutation } from "../../slices/userApiSlice";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../store";
 
 const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
+    const { search } = useSelector((state:RootState)=>state)
     const [place, setPlace] = useState('');
     const [guestCount, setGuestCount] = useState('');
     const [checkIn, setCheckIn] = useState('');
@@ -19,6 +21,15 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [searchRoom] = useSearchRoomsMutation()
+
+    useEffect(()=>{
+        if(search.place || search.checkIn || search.guestCount){
+            setPlace(search.place)
+            setGuestCount(String(search.guestCount))
+            setCheckIn(search.checkIn)
+            setCheckOut(search.checkOut)
+        }
+    },[])
 
     const submitHandler = async (e: FormEvent) => {
         e.preventDefault()

@@ -9,7 +9,7 @@ import { useEditBookingStatusMutation } from "../../slices/userApiSlice"
 import CancelConfirm from "../../components/common/CancelConfirm"
 import { updateOneBooking } from "../../slices/bookingSlice"
 import { Button } from "../../components/ui/button"
-import WriteReview from "./WriteReview"
+import WriteReview from "../../components/users/WriteReview"
 
 
 export default function BookingDetailsPage() {
@@ -67,7 +67,7 @@ export default function BookingDetailsPage() {
                         {
                             bookingData?.status === 'Stayed' && (
                                 <div className="flex justify-center w-full">
-                                    <WriteReview />
+                                    <WriteReview userId={bookingData.userId} bookingId={bookingData._id!} resortId={typeof bookingData.resortId !== 'string'? bookingData.resortId._id!:bookingData.resortId} />
                                 </div>
                             )
                         }

@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 
 
-interface IReview extends Document {
+export interface IReview extends Document {
   bookingId: Schema.Types.ObjectId;
   userId: Schema.Types.ObjectId;
   resortId: Schema.Types.ObjectId;

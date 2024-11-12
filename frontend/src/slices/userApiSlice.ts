@@ -1,4 +1,4 @@
-import { IBooking, IResort, IRoom, IUser } from '../types/types'
+import { IBooking, IResort, IReview, IRoom, IUser } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
@@ -45,11 +45,11 @@ export const authApi = createApi({
             })
         }),
 
-        updateUser: builder.mutation<{id:string,name:string,email:string,phone:number,avatar?:string},{id:string,name:string,phone:number,avatar?:string}>({
-            query: ({ id,name,phone,avatar }) => ({
+        updateUser: builder.mutation<{ id: string, name: string, email: string, phone: number, avatar?: string }, { id: string, name: string, phone: number, avatar?: string }>({
+            query: ({ id, name, phone, avatar }) => ({
                 url: `/user/update/${id}`,
                 method: 'PATCH',
-                body:{ name,phone,avatar }
+                body: { name, phone, avatar }
             })
         }),
 
@@ -106,52 +106,67 @@ export const authApi = createApi({
             })
         }),
 
-        createBooking: builder.mutation<{orderId:string, amount:string|number, bookingId:string}, IBooking>({
+        createBooking: builder.mutation<{ orderId: string, amount: string | number, bookingId: string }, IBooking>({
             query: (data) => ({
                 url: '/user/checkout',
                 method: 'POST',
                 body: data
             })
         }),
-        setPaymentStatus: builder.mutation<{success:boolean}, {bookingId:string,status:boolean}>({
+        setPaymentStatus: builder.mutation<{ success: boolean }, { bookingId: string, status: boolean }>({
             query: (data) => ({
                 url: '/user/paymentstatus',
                 method: 'PATCH',
                 body: data
             })
         }),
-        listBookings: builder.query<{bookings:IBooking[]},string>({
-            query:(userId)=> `/user/bookings/${userId}`
+        listBookings: builder.query<{ bookings: IBooking[] }, string>({
+            query: (userId) => `/user/bookings/${userId}`
         }),
-        editBookingStatus: builder.mutation<{booking:IBooking},{id:string,status:string}>({
-            query:({id,status})=>({
-                url:`/user/bookings/${id}`,
-                method:'PATCH',
-                body:{ status:status }
-            }) 
-        })
+        editBookingStatus: builder.mutation<{ booking: IBooking }, { id: string, status: string }>({
+            query: ({ id, status }) => ({
+                url: `/user/bookings/${id}`,
+                method: 'PATCH',
+                body: { status: status }
+            })
+        }),
+
+        createReview: builder.mutation<{ review: IReview }, IReview>({
+            query: (data) => ({
+                url: `/user/reviews`,
+                method: 'POST',
+                body: data
+            })
+        }),
+
+        listReviews: builder.query<{ reviews: IReview[] }, string>({
+            query: (id) => `/user/reviews/${id}`
+        }),
+
     })
 })
 
 export const {
-        useSignupMutation,
-        useVerifyOtpMutation,
-        useResendOtpMutation,
-        useSigninMutation,
-        useSignoutUserMutation,
-        useSignoutResortAdminMutation,
-        useSignoutAdminMutation,
-        useListResortsQuery,
-        useResortDetailsQuery,
-        useGetUserQuery,
-        useSearchRoomsMutation,
-        useCreateBookingMutation,
-        useSetPaymentStatusMutation,
-        useListBookingsQuery,
-        useEditBookingStatusMutation,
-        useUpdateUserMutation,
+    useSignupMutation,
+    useVerifyOtpMutation,
+    useResendOtpMutation,
+    useSigninMutation,
+    useSignoutUserMutation,
+    useSignoutResortAdminMutation,
+    useSignoutAdminMutation,
+    useListResortsQuery,
+    useResortDetailsQuery,
+    useGetUserQuery,
+    useSearchRoomsMutation,
+    useCreateBookingMutation,
+    useSetPaymentStatusMutation,
+    useListBookingsQuery,
+    useEditBookingStatusMutation,
+    useUpdateUserMutation,
+    useCreateReviewMutation,
+    useListReviewsQuery,
 
-        // useGetGoogleLoginUrlMutation,
-        // useGoogleCallbackMutation,
+    // useGetGoogleLoginUrlMutation,
+    // useGoogleCallbackMutation,
 
-    } = authApi
+} = authApi
