@@ -8,6 +8,7 @@ import availableRsortReducer from './slices/availableRoomsSlice'
 import searchReducer from "./slices/searchSlice"
 import checkoutReducer from "./slices/checkoutSlice"
 import bookingReducer from "./slices/bookingSlice";
+import reviewReducer from "./slices/reviewSlice";
 import { adminApi } from "./slices/adminApiSlice";
 import { resortAdminApi } from './slices/resortAdminApiSlice';
 
@@ -22,6 +23,7 @@ const store = configureStore({
         availableRsorts:availableRsortReducer,
         checkout:checkoutReducer,
         bookings:bookingReducer,
+        reviews:reviewReducer,
         
         
         [authApi.reducerPath]:authApi.reducer,

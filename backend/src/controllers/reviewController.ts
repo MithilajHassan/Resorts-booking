@@ -46,7 +46,7 @@ class ReviewController {
                 res.status(404).json({ message: 'No reviews found' });
                 return;
             }
-            res.status(200).json(reviews);
+            res.status(200).json({reviews});
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message });

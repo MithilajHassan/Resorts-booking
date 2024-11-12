@@ -86,7 +86,7 @@ export interface IBooking {
 export interface IReview {
     _id?: string;
     bookingId: string;
-    userId: string;
+    userId: string|{_id:string,name:string,avatar:string};
     resortId: string;
     reviewText: string;
     rating: number; 
