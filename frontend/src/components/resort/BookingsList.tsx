@@ -14,26 +14,26 @@ export default function BookingsList() {
     const { data, error: err, isError } = useListBookingsQuery(resortAdmin?._id!)
     const { bookings } = useSelector((state: RootState) => state.bookings)
     const dispatch = useDispatch<AppDispatch>()
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     useEffect(() => {
-        if (isError) {
-            if (isApiError(err)) {
-                if (err.status == 401) {
-                    dispatch(clearResortAdminAuth())
-                    navigate('/resort/signin')
-                } else {
-                    console.log(err.data.message || 'Unknown error occurred')
-                }
-            } else {
-                console.log(err)
-            }
-        } else {
-            dispatch(setBookings(data?.bookings!))
+        // if (isError) {
+        //     if (isApiError(err)) {
+        //         if (err.status == 401) {
+        //             dispatch(clearResortAdminAuth())
+        //             navigate('/resort/signin')
+        //         } else {
+        //             console.log(err.data.message || 'Unknown error occurred')
+        //         }
+        //     } else {
+        //         console.log(err)
+        //     }
+        // } 
+        if (data && bookings === null) {
+            dispatch(setBookings(data.bookings));
         }
-    }, [data])
+    }, [data, bookings, dispatch])
     
-
     return (
         <div className="w-4/6 h-fit border-2 rounded-md" >
             <ToastContainer />
@@ -51,7 +51,7 @@ export default function BookingsList() {
                 <TableBody>
                     {bookings?.length! > 0 ? (
                         bookings!.map((booking) => (
-                            <TableRow className="h-10" >
+                            <TableRow className="h-10" key={booking._id} >
                                 <TableCell className="">{booking.guestName}</TableCell>
                                 <TableCell className="">{typeof booking.roomId != 'string' && booking.roomId.name}</TableCell>
                                 <TableCell className="">{new Date(booking.checkInDate).toDateString()}</TableCell>

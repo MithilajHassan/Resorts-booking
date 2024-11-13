@@ -92,3 +92,10 @@ export interface IReview {
     rating: number; 
     reviewDate?: Date;
 }
+
+export interface IWishlist {
+    _id?:string,
+    userId: string;
+    resortId: IResort | string;
+    createdAt?: Date;
+  }

@@ -43,9 +43,11 @@ export default function GuestForm() {
                 guestName: checkoutDetails?.guestName,
                 email: checkoutDetails?.guestEmail,
                 phone: checkoutDetails.guestPhone ? String(checkoutDetails?.guestPhone) : '',
-            })
+            })            
         }
     }, [checkoutDetails])
+    
+
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -58,8 +60,8 @@ export default function GuestForm() {
                 guestEmail: values.email,
                 guestPhone: Number(values.phone),
                 guestCount: checkoutDetails?.guestCount!,
-                checkInDate: checkoutDetails?.checkInDate!,
-                checkOutDate: checkoutDetails?.checkOutDate!,
+                checkInDate: checkoutDetails?.checkInDate!,  // new Date("2024-10-21") 
+                checkOutDate: checkoutDetails?.checkOutDate!,  //new Date("2024-10-22"),
                 checkInTime: checkoutDetails?.checkInTime!,
                 checkOutTime: checkoutDetails?.checkOutTime!,
                 totalPrice: checkoutDetails?.totalPrice!,

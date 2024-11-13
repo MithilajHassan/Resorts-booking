@@ -3,6 +3,7 @@ import userController from "../controllers/userController"
 import { userProtect, userUnProtect } from "../middleware/auth"
 import bookingController from "../controllers/bookingController"
 import reviewController from "../controllers/reviewController"
+import wishlistController from "../controllers/wishlistController"
 
 const userRouter = Router()
 
@@ -25,6 +26,10 @@ userRouter.patch('/bookings/:id', userProtect, bookingController.updateBookingSt
 
 userRouter.post('/reviews', userUnProtect, reviewController.createReview)
 userRouter.get('/reviews/:id', userUnProtect, reviewController.getReviewsByResortId)
+
+userRouter.get('/wishlist/:userId', userProtect, wishlistController.getUserWishlist);
+userRouter.post('/wishlist', userProtect, wishlistController.createWishlist);
+userRouter.delete('/wishlist', userProtect, wishlistController.deleteWishlist);
 
 
 

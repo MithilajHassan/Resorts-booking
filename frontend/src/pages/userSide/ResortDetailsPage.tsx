@@ -2,7 +2,7 @@ import UserHeader from '../../components/users/UserHeader'
 import ResortDetails from '../../components/users/ResortDetails'
 import SearchBar from '../../components/users/SearchBar'
 import AvailableRooms from '../../components/users/AvailableRooms'
-import ListReviews from '../../components/users/listReviews'
+import ListReviews from '../../components/users/ListReviews'
 import { useParams } from 'react-router-dom'
 import { useResortDetailsQuery } from '../../slices/userApiSlice'
 const ResortDetailsPage = () => {

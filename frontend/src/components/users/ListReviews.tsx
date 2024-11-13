@@ -29,7 +29,6 @@ export default function ListReviews({ id }: Props) {
       dispatch(setReviews(data.reviews))
       
     }
-    console.log(data?.reviews);
   },[data,dispatch])
 
 
@@ -37,7 +36,7 @@ export default function ListReviews({ id }: Props) {
     <div className="w-full mb-5 p-4 mx-auto">
       <h2 className="text-xl font-bold mb-4 text-center">Guests Reviews</h2>
       <div className="flex justify-center mx-auto">
-      {reviews.length  ? (
+      {reviews.length && reviews[0].resortId == id ? (
           <Carousel
             opts={{
               align: "start",
@@ -48,8 +47,8 @@ export default function ListReviews({ id }: Props) {
             <CarouselContent>
               {reviews!.map((review) => (
                 <CarouselItem key={review._id} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
-                    <Card>
+                  <div className="p-1 h-full">
+                    <Card className="h-full">
                       <CardContent className="flex flex-col items-center justify-center p-3">
                         {typeof review.userId !== 'string' &&
                           <div className="flex items-center w-full py-2 gap-3">

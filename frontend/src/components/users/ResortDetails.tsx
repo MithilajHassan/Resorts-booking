@@ -1,23 +1,89 @@
-import { FaMapMarkerAlt, FaWindowClose } from "react-icons/fa"
+import { FaHeart, FaMapMarkerAlt, FaRegHeart, FaWindowClose } from "react-icons/fa"
 import { Card, CardContent } from "../ui/card"
 import { Button } from "../ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import MapComponent from "../common/Map"
-import { IResort } from "@/types/types"
+import { IResort } from "../../types/types"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "@/store"
+import { useCreateWishlistMutation, useDeleteWishlistMutation } from "../../slices/userApiSlice"
+import { addToWishlist, deleteWishlist } from "../../slices/wishlistSlice"
+import { isApiError } from "../../utils/errorHandling"
+import { toast } from "react-toastify"
 
 interface Props {
-  resort:IResort
+  resort: IResort
 }
 
-function ResortDetails({resort}:Props) {
-  
+function ResortDetails({ resort }: Props) {
+  const { userInfo } = useSelector((state: RootState) => state.auth)
+  const { wishlist } = useSelector((state: RootState) => state.wishlist)
   const [showMap, setShowMap] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>()
+  const [createWishlist] = useCreateWishlistMutation()
+  const [deleteWishlistApi] = useDeleteWishlistMutation()
+  const [favId, setFavId] = useState<string|null>(null)
+
+  useEffect(() => {
+    if (!resort || !resort._id) return
+    const exist = wishlist.find((item) =>{ 
+      if(item?._id){
+        return typeof item.resortId !== 'string' && item.resortId._id === resort._id
+      }
+    })
+    if (exist) {
+      setFavId(exist._id!)
+    }else{
+      setFavId(null)
+    }
+  }, [wishlist,resort])
+
+  const handleAddWishlist = async () => {
+    try {
+      const newWish = await createWishlist({
+        userId: userInfo?._id!,
+        resortId: resort._id!,
+      }).unwrap()
+      if (newWish?._id) {
+        dispatch(addToWishlist(newWish))
+        toast('This added to your wishlist')
+      
+      }
+    } catch (err) {
+      if (isApiError(err)) {
+        if (err.status == 409) {
+          toast(<div className="text-green-800">{err.data.message}</div>)
+        } else {
+          console.log('Api erorr : ' + err)
+        }
+      } else {
+        console.log('error: ' + err)
+        toast('Internal server error')
+      }
+    }
+  }
+
+  const handleDeleteWishlist = async (id:string) => {
+    try {
+      const res = await deleteWishlistApi({
+        id:id,
+      }).unwrap()
+      if (res?.success) {
+        dispatch(deleteWishlist(id))  
+        toast(<div className="text-green-800">{res.message}</div>) 
+        //'This deleted from your wishlist'
+      }
+    } catch (err) { 
+        console.log('error: ' + err)
+        toast(<div className="text-red-700">'Internal server error'</div>)
+    }
+  }
 
 
   return (
     <section className="bg-white p-6 mt-20">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
 
+      <div className="max-w-7xl mx-auto flex flex-col items-center">
         {showMap && <div className="fixed z-10 top-20 border-2 border-black rounded bg-white ">
           <div className="flex justify-between z-50">
             <span className="my-auto ms-1 text-blue-800 font-semibold font-serif">Street Map</span>
@@ -62,7 +128,19 @@ function ResortDetails({resort}:Props) {
           </div>
 
 
-          <div className="w-1/3 pl-4 flex flex-col items-center">
+          <div className="w-1/3 pl-4 flex flex-col items-center pt-1">
+            <div className="w-full flex justify-end h-20">
+              <div>
+                { favId ?
+                  (<FaHeart onClick={()=>handleDeleteWishlist(favId)} 
+                    className="text-3xl text-red-600 transform transition-transform duration-300 hover:scale-125 cursor-pointer" 
+                  />):
+                  (<FaRegHeart onClick={handleAddWishlist}
+                     className="text-3xl text-blue-700 transform transition-transform duration-300 hover:scale-125 cursor-pointer" 
+                  />)
+                }
+              </div>
+            </div>
 
             <div className="relative mb-6 flex justify-center items-center">
               <img

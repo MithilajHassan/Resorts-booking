@@ -34,7 +34,7 @@ function UserNav() {
     return (
         <nav className="bg-blue-800 h-16 flex fixed w-full top-0 z-10">
             <div className="flex items-center mx-4 sm:mx-8 lg:mx-14">
-                <p className="text-white font-bold italic font-serif text-xl sm:text-2xl">RESORTS</p>
+                <Link to={'/'}><p className="text-white font-bold italic font-serif text-xl sm:text-2xl">RESORTS</p></Link>
             </div>
             {userInfo ? (
                 <>
@@ -51,10 +51,10 @@ function UserNav() {
                                 <FaBook />
                                 <span>Bookings</span>
                             </li></Link>
-                            <li className="flex items-center gap-2 hover:scale-110 transition-transform hover:text-black">
+                            <Link to={'/wishlist'} ><li className="flex items-center gap-2 hover:scale-110 transition-transform hover:text-black">
                                 <FaHeart />
                                 <span>Wishlist</span>
-                            </li>
+                            </li></Link>
                             <HoverCard>
                                 <HoverCardTrigger asChild>
                                     <Link to={'/myprofile'}>

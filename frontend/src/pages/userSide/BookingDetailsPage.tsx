@@ -21,8 +21,6 @@ export default function BookingDetailsPage() {
 
     const cancelBooking = async () => {
         const res = await editBookingStatus({ id: id!, status: 'Cancelled' }).unwrap()
-        console.log(res.booking);
-
         dispatch(updateOneBooking(res.booking))
     }
 

@@ -1,14 +1,15 @@
 import Bill from "../../components/users/checkout/Bill"
 import BookingDetails from "../../components/users/checkout/BookingDetails"
-import UserHeader from "../../components/users/UserHeader"
+import ResrotHeader from "../../components/resort/Header"
 import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "@/store"
+import { AppDispatch, RootState } from "@/store"
 import { useParams } from "react-router-dom"
 import GuestDetails from "../../components/users/GuestDetails"
-import { useEditBookingStatusMutation } from "../../slices/userApiSlice"
-import { updateOneBooking } from "../../slices/bookingSlice"
+import { useEditBookingStatusMutation } from "../../slices/resortAdminApiSlice"
+import { updateABookingStatus } from "../../slices/bookingSlice"
 import { Button } from "../../components/ui/button"
 import Confirm from "../../components/common/Confirm"
+import { useEffect } from "react"
 
 
 export default function BookingDetailsPage() {
@@ -16,20 +17,20 @@ export default function BookingDetailsPage() {
     const { id } = useParams()
     const bookingData = bookings?.find((value) => value._id == id)
     const [editBookingStatus] = useEditBookingStatusMutation()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
 
     const stayedBooking = async () => {
         const res = await editBookingStatus({ id: id!, status: 'Stayed' }).unwrap()
-        dispatch(updateOneBooking(res.booking))
+        dispatch(updateABookingStatus(res.booking))
     }
-    const bookedBooking = async () => {
-        const res = await editBookingStatus({ id: id!, status: 'Booked' }).unwrap()
-        dispatch(updateOneBooking(res.booking))
-    }
+    // const bookedBooking = async () => {
+    //     const res = await editBookingStatus({ id: id!, status: 'Booked' }).unwrap()
+    //     dispatch(updateOneBooking(res.booking))
+    // }
 
     return (
         <>
-            <UserHeader />
+            <ResrotHeader />
             <div className="flex flex-col space-y-2 p-4 mt-16">
 
                 <div className="flex flex-col md:space-x-4 md:flex-row md:space-y-0 space-y-4 p-6">
@@ -55,7 +56,7 @@ export default function BookingDetailsPage() {
                             bookingData?.status === 'Booked' && (
 
                                 <div className="flex justify-center w-full">
-                                    <Confirm id={id!} onConfirm={stayedBooking} action="change the status" >
+                                    <Confirm key={bookingData._id} id={id!} onConfirm={stayedBooking} action="change the status" >
                                         <Button
                                             className="w-52 bg-green-600 hover:bg-green-400 text-md"
                                             size={'lg'}

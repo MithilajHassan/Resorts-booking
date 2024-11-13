@@ -24,6 +24,7 @@ resortAdminRouter.put('/rooms/:id', resortProtect, resortAdminController.editRoo
 resortAdminRouter.patch('/rooms/:id/delete', resortProtect, resortAdminController.deleteRoom)
 
 resortAdminRouter.get('/bookings/:resortId', resortProtect, bookingController.getBookingsByResortId)
+resortAdminRouter.patch('/bookings/:id', resortProtect, bookingController.updateBookingStatus)
 
 
 

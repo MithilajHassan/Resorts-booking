@@ -1,4 +1,4 @@
-import { IBooking, IResort, IReview, IRoom, IUser } from '../types/types'
+import { IBooking, IResort, IReview, IRoom, IWishlist } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
@@ -138,10 +138,28 @@ export const authApi = createApi({
                 body: data
             })
         }),
-
         listReviews: builder.query<{ reviews: IReview[] }, string>({
             query: (id) => `/user/reviews/${id}`
         }),
+
+
+        listWishlist: builder.query<{ wishlist: IWishlist[] }, string>({
+            query: (userId) => `/user/wishlist/${userId}`,
+        }),
+        createWishlist: builder.mutation<IWishlist, IWishlist>({
+            query:(data)=>({
+                url:`/user/wishlist`,
+                method:'POST',
+                body:data
+            })
+        }),
+        deleteWishlist: builder.mutation<{message:string,success:boolean}, {id:string}>({
+            query:(data)=>({
+                url:`/user/wishlist`,
+                method:'DELETE',
+                body:data
+            })
+        })
 
     })
 })
@@ -165,6 +183,9 @@ export const {
     useUpdateUserMutation,
     useCreateReviewMutation,
     useListReviewsQuery,
+    useListWishlistQuery,
+    useCreateWishlistMutation,
+    useDeleteWishlistMutation,
 
     // useGetGoogleLoginUrlMutation,
     // useGoogleCallbackMutation,
