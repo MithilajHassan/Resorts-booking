@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { CategoryDetails, FacilityDetails, IUser } from "../types/types"
+import { CategoryDetails, FacilityDetails, IBanner, IUser } from "../types/types"
 
 export const adminApi = createApi({
     reducerPath: 'adminApi',
@@ -118,6 +118,26 @@ export const adminApi = createApi({
             })
         }),
 
+
+        //--------------------- Banner Management---------------------//
+
+        listBanners: builder.query<IBanner[], void>({
+            query: () => '/admin/banners',
+        }),
+        createBanner: builder.mutation<IBanner, IBanner>({
+            query: (bannerData) => ({
+                url: '/admin/banners',
+                method: 'POST',
+                body: bannerData,
+            }),
+        }),
+        deleteBanner: builder.mutation<{message:string},string>({
+            query: (bannerId) => ({
+                url: `/admin/banners/${bannerId}`,
+                method: 'DELETE',
+            }),
+        }),
+
     })
 })
 
@@ -136,6 +156,9 @@ export const {
     useListUsersQuery,
     useManageBlockUnblockUserMutation,
     useManageBlockUnblockResortMutation,
+    useListBannersQuery,
+    useCreateBannerMutation,
+    useDeleteBannerMutation,
 
 
 

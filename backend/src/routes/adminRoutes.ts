@@ -1,6 +1,7 @@
 import { Router } from "express"
 import adminController from "../controllers/adminController"
 import { adminProtect } from "../middleware/auth"
+import bannerController from "../controllers/bannerController"
 
 
 const adminRouter = Router()
@@ -30,6 +31,11 @@ adminRouter.patch('/resorts/:id/manage-block', adminProtect, adminController.man
 adminRouter.get('/users', adminProtect, adminController.listUsers)
 adminRouter.patch('/users/:id/manage-block', adminProtect, adminController.manageUserBlock)
 
+//---------------------- Banner Management -----------------------------------//
+
+adminRouter.get('/banners', adminProtect, bannerController.getAllBanners)
+adminRouter.post('/banners', adminProtect, bannerController.createBanner)
+adminRouter.delete('/banners/:id', adminProtect, bannerController.deleteBannerById)
 
 
 

@@ -1,15 +1,15 @@
 import { FaUsers } from "react-icons/fa"
-import { GiBlockHouse } from "react-icons/gi"
-import Sidebar, { SidebarItem } from '../../components/common/Sidebar'
-import { MdOutlineCategory, MdOutlineDashboard } from "react-icons/md"
-import AdminHeader from "../../components/admin/AdminHeader"
 import { FaBox } from "react-icons/fa6"
 import { Link } from "react-router-dom"
-import FacilityManagement from "../../components/admin/FacilityManagement"
+import { MdOutlineCategory, MdOutlineDashboard } from "react-icons/md"
+import { GiBlockHouse } from "react-icons/gi"
+import Sidebar, { SidebarItem } from '../../components/common/Sidebar'
+import AdminHeader from "../../components/admin/AdminHeader"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store"
+import BannersList from "../../components/admin/BannersList"
 
-const AdminFacility = () => {
+export default function BannersPage() {
     const { adminInfo } = useSelector((state: RootState) => state.auth)
     return (
         <>
@@ -20,15 +20,13 @@ const AdminFacility = () => {
                     <Link to={'/admin/users'}><SidebarItem icon={<FaUsers />} text="Users" /></Link>
                     <Link to={'/admin/resorts'}><SidebarItem icon={<GiBlockHouse />} text="Resorts" /></Link>
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
-                    <SidebarItem icon={<FaBox />} text="Facilities" active={true} />
-                    <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" /></Link>
+                    <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
+                    <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" active={true} /></Link>
                 </Sidebar>
 
-                <FacilityManagement />
+                <BannersList />
 
             </div>
         </>
     )
 }
-
-export default AdminFacility

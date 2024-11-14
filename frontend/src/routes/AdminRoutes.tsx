@@ -7,6 +7,7 @@ import AdminFacility from '../pages/adminSide/AdminFacility';
 import AdminResortsList from '../pages/adminSide/ResortsList';
 import UsersListPage from '../pages/adminSide/UsersListPage';
 import NotFound from "../components/common/404";
+import BannersPage from "../pages/adminSide/BannersPage";
 
 const AdminRoutes = () => {
     return (
@@ -19,6 +20,7 @@ const AdminRoutes = () => {
                 <Route path='/facilities' element={<AdminFacility />} />
                 <Route path='/resorts' element={<AdminResortsList />} />
                 <Route path='/users' element={<UsersListPage />} />
+                <Route path='/banners' element={<BannersPage />} />
 
 
             </Route>

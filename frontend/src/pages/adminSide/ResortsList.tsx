@@ -22,6 +22,7 @@ const AdminResortsList = () => {
                     <SidebarItem icon={<GiBlockHouse />} text="Resorts" active={true} />
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
                     <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
+                    <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" /></Link>
                 </Sidebar>
 
                 <ResortsList />

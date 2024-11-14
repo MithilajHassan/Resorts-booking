@@ -116,7 +116,7 @@ function FacilityManagement() {
                     </form>
                 </div>
             </Form>
-            <div className="w-7/12 border border-2 rounded-md mx-auto my-5">
+            <div className="w-7/12 border-2 rounded-md mx-auto my-5">
                 <Table className="w-full">
                     <TableHeader className="bg-blue-100 text-black h-12">
                         <TableRow>

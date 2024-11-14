@@ -1,44 +1,44 @@
 import { Location } from "@/components/common/LocationSelecting";
 
 export type CategoryDetails = {
-    _id:string;
-    name:string;
-    isDelete:boolean;
+    _id: string;
+    name: string;
+    isDelete: boolean;
 }
 
 export type FacilityDetails = {
     _id: string;
     facilityName: string;
-    isDelete:boolean;
+    isDelete: boolean;
 }
 
 export interface IResort {
-    _id?:string;
-    resortName:string;
-    email:string;
-    password?:string;
-    address:string;
-    city:string;
-    phone:string;
-    description:string;
-    categories:string[] | CategoryDetails[];
-    facilities:string[] | FacilityDetails[];
-    images:string[];
-    isVerify?:boolean;
-    isBlock?:boolean;
-    location:Location
+    _id?: string;
+    resortName: string;
+    email: string;
+    password?: string;
+    address: string;
+    city: string;
+    phone: string;
+    description: string;
+    categories: string[] | CategoryDetails[];
+    facilities: string[] | FacilityDetails[];
+    images: string[];
+    isVerify?: boolean;
+    isBlock?: boolean;
+    location: Location
 }
 
-export interface IUser{
-    _id:string
-    name:string,
-    email:string,
-    phone?:number,
-    password:string,
-    walletBalance:number,
-    avatar?:string,
-    role:string,
-    isBlock:boolean
+export interface IUser {
+    _id: string
+    name: string,
+    email: string,
+    phone?: number,
+    password: string,
+    walletBalance: number,
+    avatar?: string,
+    role: string,
+    isBlock: boolean
 }
 
 
@@ -51,8 +51,8 @@ export interface ApiError {
 }
 
 export interface IRoom {
-    _id?:string;
-    resortId: string; 
+    _id?: string;
+    resortId: string;
     name: string;
     numberOfGuests: number;
     totalRooms: number;
@@ -86,16 +86,26 @@ export interface IBooking {
 export interface IReview {
     _id?: string;
     bookingId: string;
-    userId: string|{_id:string,name:string,avatar:string};
+    userId: string | { _id: string, name: string, avatar: string };
     resortId: string;
     reviewText: string;
-    rating: number; 
+    rating: number;
     reviewDate?: Date;
 }
 
 export interface IWishlist {
-    _id?:string,
+    _id?: string,
     userId: string;
     resortId: IResort | string;
     createdAt?: Date;
-  }
+}
+
+export interface IBanner {
+    _id?: string,
+    title: string;
+    imageUrl: string;
+    description: string;
+    active?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+}

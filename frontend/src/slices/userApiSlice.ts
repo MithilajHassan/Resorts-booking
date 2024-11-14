@@ -1,4 +1,4 @@
-import { IBooking, IResort, IReview, IRoom, IWishlist } from '../types/types'
+import { IBanner, IBooking, IResort, IReview, IRoom, IWishlist } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
@@ -159,7 +159,13 @@ export const authApi = createApi({
                 method:'DELETE',
                 body:data
             })
-        })
+        }),
+
+        //--------------------- Banner Management---------------------//
+
+        listBanners: builder.query<IBanner[], void>({
+            query: () => '/user/banners',
+        }),
 
     })
 })
@@ -186,6 +192,7 @@ export const {
     useListWishlistQuery,
     useCreateWishlistMutation,
     useDeleteWishlistMutation,
+    useListBannersQuery,
 
     // useGetGoogleLoginUrlMutation,
     // useGoogleCallbackMutation,

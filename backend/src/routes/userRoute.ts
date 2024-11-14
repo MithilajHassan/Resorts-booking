@@ -4,6 +4,7 @@ import { userProtect, userUnProtect } from "../middleware/auth"
 import bookingController from "../controllers/bookingController"
 import reviewController from "../controllers/reviewController"
 import wishlistController from "../controllers/wishlistController"
+import bannerController from "../controllers/bannerController"
 
 const userRouter = Router()
 
@@ -31,6 +32,8 @@ userRouter.get('/wishlist/:userId', userProtect, wishlistController.getUserWishl
 userRouter.post('/wishlist', userProtect, wishlistController.createWishlist);
 userRouter.delete('/wishlist', userProtect, wishlistController.deleteWishlist);
 
+
+userRouter.get('/banners', userUnProtect, bannerController.getAllBanners)
 
 
 

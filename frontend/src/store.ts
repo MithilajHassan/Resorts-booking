@@ -10,6 +10,7 @@ import checkoutReducer from "./slices/checkoutSlice"
 import bookingReducer from "./slices/bookingSlice";
 import reviewReducer from "./slices/reviewSlice";
 import wishlistReducer from "./slices/wishlistSlice";
+import bannerReducer from "./slices/bannerSlice";
 import { adminApi } from "./slices/adminApiSlice";
 import { resortAdminApi } from './slices/resortAdminApiSlice';
 
@@ -26,6 +27,7 @@ const store = configureStore({
         bookings:bookingReducer,
         reviews:reviewReducer,
         wishlist:wishlistReducer,
+        banners:bannerReducer,
         
         
         [authApi.reducerPath]:authApi.reducer,

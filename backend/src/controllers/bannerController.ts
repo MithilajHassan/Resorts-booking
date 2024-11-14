@@ -5,19 +5,19 @@ import bannerServices from "../services/bannerServices";
 class BannerController {
     async createBanner(req: Request, res: Response): Promise<Response> {
         try {
-            const banner = await bannerServices.createBanner(req.body);
-            return res.status(201).json(banner);
+            const banner = await bannerServices.createBanner(req.body)
+            return res.status(201).json(banner)
         } catch (error) {
-            return res.status(500).json({ message: 'Error creating banner', error });
+            return res.status(500).json({ message: 'Error creating banner', error })
         }
     }
 
     async getAllBanners(req: Request, res: Response): Promise<Response> {
         try {
-            const banners = await bannerServices.getAllBanners();
-            return res.status(200).json(banners);
+            const banners = await bannerServices.getAllBanners()
+            return res.status(200).json(banners)
         } catch (error) {
-            return res.status(500).json({ message: 'Error retrieving banners', error });
+            return res.status(500).json({ message: 'Error in banners', error })
         }
     }
 
@@ -28,10 +28,10 @@ class BannerController {
             if (banner) {
                 return res.status(200).json(banner);
             } else {
-                return res.status(404).json({ message: 'Banner not found' });
+                return res.status(404).json({ message: 'Banner not found' })
             }
         } catch (error) {
-            return res.status(500).json({ message: 'Error retrieving banner', error });
+            return res.status(500).json({ message: 'Error retrieving banner', error })
         }
     }
 
@@ -40,14 +40,14 @@ class BannerController {
             const { id } = req.params;
             const banner = await bannerServices.deleteBannerById(id);
             if (banner) {
-                return res.status(200).json({ message: 'Banner deleted successfully' });
+                return res.status(200).json({ message: 'Banner deleted successfully' })
             } else {
-                return res.status(404).json({ message: 'Banner not found' });
+                return res.status(404).json({ message: 'Banner not found' })
             }
         } catch (error) {
-            return res.status(500).json({ message: 'Error deleting banner', error });
+            return res.status(500).json({ message: 'Error deleting banner', error })
         }
     }
 }
 
-export default new BannerController();
+export default new BannerController()

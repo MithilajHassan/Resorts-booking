@@ -231,7 +231,7 @@ export default function ResortDataTable() {
         </div>
 
         {/* Table */}
-        <div className="rounded-md border border-2 w-full overflow-x-auto">
+        <div className="rounded-md border-2 w-full overflow-x-auto">
           <Table className='min-w-full'>
             <TableHeader className='bg-blue-100 h-12'>
               {table.getHeaderGroups().map((headerGroup) => (
