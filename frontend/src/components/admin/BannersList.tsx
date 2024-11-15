@@ -3,7 +3,7 @@ import BannerForm from "./BannerForm";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { useDeleteBannerMutation, useListBannersQuery } from "../../slices/adminApiSlice";
+import { useDeleteBannerMutation, useEditBannerMutation, useListBannersQuery } from "../../slices/adminApiSlice";
 import { deleteOneBanner, SetBanner } from "../../slices/bannerSlice";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
@@ -18,6 +18,7 @@ export default function BannersList() {
     const { banners } = useSelector((state: RootState) => state.banners)
     const dispatch = useDispatch()
     const [deleteBanner] = useDeleteBannerMutation()
+    const [editBanner] = useEditBannerMutation()
 
     useEffect(() => {
         if (data && banners.length === 0) {
@@ -26,7 +27,7 @@ export default function BannersList() {
     }, [data])
 
     const handleEdit = (id:string)=>{
-
+        
     }
     const handleDelete = async (id:string)=>{
         const res = await deleteBanner(id).unwrap()

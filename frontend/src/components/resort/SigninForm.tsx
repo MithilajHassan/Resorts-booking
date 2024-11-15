@@ -3,7 +3,7 @@ import { setResortAdmin } from "../../slices/authSlice"
 import { FormEvent, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
-import { useResortSigninMutation } from "../../slices/resortAdminApiSlice"
+import { useResortSigninMutation } from "../../slices/authApiSlice"
 
 
 const SigninForm = ()=>{

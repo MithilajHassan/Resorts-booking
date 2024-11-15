@@ -16,6 +16,10 @@ class BannerService {
         return bannerRepository.getBannerById(id);
     }
 
+    async editBanner(id:string,BannerData:IBanner): Promise<IBanner | null> {
+        return bannerRepository.editBanner(id,BannerData)
+    }
+
     async deleteBannerById(id: string): Promise<IBanner | null> {
         return bannerRepository.deleteBannerById(id);
     }

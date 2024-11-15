@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { Textarea } from "../ui/textarea";
 import { isApiError } from "../../utils/errorHandling";
 import { RootState } from "../../store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MapSelector, { Location } from "../common/LocationSelecting";
 
 const formSchema = z.object({
@@ -36,6 +36,8 @@ const formSchema = z.object({
 
 export default function ResortEditForm() {
     const { resortAdmin } = useSelector((state: RootState) => state.auth);
+    // const { resort } = useSelector((state: RootState) => state.myResort)
+    // const dispatch = useDispatch()
     const { data: facilitiesOptions = [] } = useListFacilitiesQuery();
     const { data: categoriesOptions = [] } = useListCategoriesQuery();
     const { data: resortData, isLoading } = useGetMyResortQuery(resortAdmin?._id!);

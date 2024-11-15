@@ -1,4 +1,4 @@
-import { useGetUserQuery } from "../../../slices/userApiSlice"
+import { useGetUserQuery } from "../../../slices/authApiSlice"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setCredentials } from "../../../slices/authSlice"

@@ -1,5 +1,5 @@
 import { isApiError } from "../../utils/errorHandling"
-import { useSignupMutation, useVerifyOtpMutation, useResendOtpMutation } from "../../slices/userApiSlice"
+import { useSignupMutation, useVerifyOtpMutation, useResendOtpMutation } from "../../slices/authApiSlice"
 import { FormEvent, useEffect, useState } from "react"
 import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from "react-router-dom"

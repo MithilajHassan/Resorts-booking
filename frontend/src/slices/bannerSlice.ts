@@ -19,11 +19,10 @@ const bannersSlice = createSlice({
         addBanner: (state, action: PayloadAction<IBanner>) => {
             state.banners.push(action.payload);
         },
-        editBanner: (state, action) => {
-            const { id, updatedBanner } = action.payload;
-            const index = state.banners.findIndex((banner) => banner._id === id);
+        editBanner: (state, action: PayloadAction<IBanner>) => {
+            const index = state.banners.findIndex((banner) => banner._id === action.payload._id);
             if (index !== -1) {
-                state.banners[index] = { ...state.banners[index], ...updatedBanner };
+                state.banners[index] = { ...state.banners[index], ...action.payload };
             }
         },
         deleteOneBanner: (state, action) => {

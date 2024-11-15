@@ -1,5 +1,5 @@
 import { AppDispatch } from "../../store"
-import { useSigninMutation } from "../../slices/userApiSlice"
+import { useSigninMutation } from "../../slices/authApiSlice"
 import { setAdminAuth, setCredentials } from "../../slices/authSlice"
 import { FormEvent, useEffect, useState } from "react"
 import { FcGoogle } from "react-icons/fc"

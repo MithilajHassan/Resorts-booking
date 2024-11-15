@@ -32,9 +32,9 @@ adminRouter.get('/users', adminProtect, adminController.listUsers)
 adminRouter.patch('/users/:id/manage-block', adminProtect, adminController.manageUserBlock)
 
 //---------------------- Banner Management -----------------------------------//
-
 adminRouter.get('/banners', adminProtect, bannerController.getAllBanners)
 adminRouter.post('/banners', adminProtect, bannerController.createBanner)
+adminRouter.put('/banners/:id', adminProtect, bannerController.editBanner)
 adminRouter.delete('/banners/:id', adminProtect, bannerController.deleteBannerById)
 
 

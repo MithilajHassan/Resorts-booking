@@ -6,25 +6,6 @@ export const resortAdminApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
     tagTypes: ['Resort', 'Rooms'],
     endpoints: (builder) => ({
-        registerResort: builder.mutation({
-            query: (resortData: IResort) => ({
-                url: '/resort/register',
-                method: 'POST',
-                body: resortData,
-            }),
-        }),
-
-        resortSignin: builder.mutation({
-            query: (data: { email: string, password: string }) => ({
-                url: `/resort/signin`,
-                method: 'POST',
-                body: data
-            })
-        }),
-
-        // verifyAdmin:builder.query<IUser , void>({
-        //     query:()=> `/admin/verifyadmin` 
-        // }),
 
         listCategories: builder.query<CategoryDetails[], void>({
             query: () => ({
@@ -110,8 +91,7 @@ export const resortAdminApi = createApi({
 })
 
 export const {
-    useRegisterResortMutation,
-    useResortSigninMutation,
+    
     useListCategoriesQuery,
     useListFacilitiesQuery,
     useGetMyResortQuery,

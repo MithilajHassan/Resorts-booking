@@ -5,7 +5,7 @@ import { FaCircleUser } from "react-icons/fa6"
 import {HoverCard, HoverCardContent, HoverCardTrigger,  } from "../ui/hover-card"
 import { useNavigate } from "react-router-dom"
 import { TbLogout } from "react-icons/tb"
-import { useSignoutResortAdminMutation } from "../../slices/userApiSlice"
+import { useSignoutResortAdminMutation } from "../../slices/authApiSlice"
 
 function ReosrtAdminNav(){
     const dispatch = useDispatch<AppDispatch>()

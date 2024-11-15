@@ -1,14 +1,24 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent } from "../ui/card";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { RootState } from "../../store";
 import { useGetMyResortQuery } from "../../slices/resortAdminApiSlice";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { setMyResort } from "../../slices/myResortSlice";
 
 export default function Dashboard() {
     const { resortAdmin } = useSelector((state: RootState) => state.auth)
-    const { data: resort } = useGetMyResortQuery(resortAdmin?._id!)
+    const { data } = useGetMyResortQuery(resortAdmin?._id!)
+    const { resort } = useSelector((state: RootState) => state.myResort)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        if(data && resort == null){
+            dispatch(setMyResort(data))
+        }
+    }, [data])
+
 
     return (
         <section className="flex justify-center bg-white p-6 mt-12 ml-24 w-full">
@@ -21,7 +31,7 @@ export default function Dashboard() {
                                     <h1 className="text-xl font-bold mb-4">{resort.resortName}</h1>
                                     <p className="flex items-center text-gray-600 text-md">
                                         <FaMapMarkerAlt className="mr-2 text-red-500" />
-                                        {resort?.address}, India
+                                        {resort.address}, India
                                     </p>
                                 </div>
                             </div>
@@ -44,7 +54,7 @@ export default function Dashboard() {
 
                         <div>
                             <p className="text-black text-md w-full">{resort?.description}</p>
-                            <div className="mt-4 flex justify-center items-center flex-col mt-4 w-full">
+                            <div className="mt-4 flex justify-center items-center flex-col w-full">
 
                                 <Card className="mb-2 w-3/5">
                                     <CardContent className="p-4">

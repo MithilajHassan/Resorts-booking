@@ -35,6 +35,20 @@ class BannerController {
         }
     }
 
+    async editBanner(req: Request, res: Response): Promise<Response> {
+        try {
+            const { id } = req.params;
+            const banner = await bannerServices.editBanner(id,req.body)
+            if (banner) {
+                return res.status(200).json(banner);
+            } else {
+                return res.status(404).json({ message: 'Banner not found' })
+            }
+        } catch (error) {
+            return res.status(500).json({ message: 'Error Editing banner', error })
+        }
+    }
+
     async deleteBannerById(req: Request, res: Response): Promise<Response> {
         try {
             const { id } = req.params;

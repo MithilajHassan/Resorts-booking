@@ -4,7 +4,7 @@ import { FaCircleUser } from "react-icons/fa6"
 import { TbLogout } from "react-icons/tb"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card"
 import { Link, useNavigate } from "react-router-dom";
-import { useSignoutUserMutation } from "../../slices/userApiSlice"
+import { useSignoutUserMutation } from "../../slices/authApiSlice"
 import { useDispatch, useSelector } from "react-redux"
 import { clearUserAuth } from "../../slices/authSlice"
 import { AppDispatch, RootState } from "../../store"

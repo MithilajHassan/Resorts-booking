@@ -131,6 +131,13 @@ export const adminApi = createApi({
                 body: bannerData,
             }),
         }),
+        editBanner: builder.mutation<IBanner,IBanner>({
+            query: (data) => ({
+                url: `/admin/banners/${data._id}`,
+                method: 'PUT',
+                body:data
+            }),
+        }),
         deleteBanner: builder.mutation<{message:string},string>({
             query: (bannerId) => ({
                 url: `/admin/banners/${bannerId}`,
@@ -158,6 +165,7 @@ export const {
     useManageBlockUnblockResortMutation,
     useListBannersQuery,
     useCreateBannerMutation,
+    useEditBannerMutation,
     useDeleteBannerMutation,
 
 
