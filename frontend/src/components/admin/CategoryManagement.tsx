@@ -27,7 +27,7 @@ function CategoryManagement() {
     const dispatch = useDispatch()
     const categories = useSelector((state: RootState) => state.categories.categories)
 
-    const { data: fetchedCategories, error } = useListCategoriesQuery(undefined)
+    const { data: fetchedCategories } = useListCategoriesQuery(undefined)
     const [deleteCategory] = useDeleteCategoryMutation()
     const [updateCategory] = useUpdateCategoryMutation()
     const [addCategory] = useAddCategoryMutation()
@@ -42,8 +42,6 @@ function CategoryManagement() {
     useEffect(() => {
         if (fetchedCategories) {
             dispatch(setCategories(fetchedCategories))
-        }else{
-            console.log(error)
         }
     }, [fetchedCategories])
 

@@ -31,7 +31,7 @@ export default new class ResortRepository {
         return await Resort.findByIdAndUpdate(id, { $set: { isBlock: status } })
     }
     async editResort(resortData: IResort, id: string): Promise<IResort | null> {
-        return await Resort.findByIdAndUpdate(id, { $set: resortData }, { new: true })
+        return await Resort.findByIdAndUpdate(id, { $set: resortData }, { new: true }).populate('categories').populate('facilities')
     }
 
     async findResortsByCity(city: string): Promise<IResort[] | null> {

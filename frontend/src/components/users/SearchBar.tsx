@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../../store";
 
 const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
-    const { search } = useSelector((state:RootState)=>state)
+    const { search } = useSelector((state:RootState)=>state.search)
     const [place, setPlace] = useState('');
     const [guestCount, setGuestCount] = useState('');
     const [checkIn, setCheckIn] = useState('');
@@ -71,7 +71,7 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
     return (
         <div className="bg-blue-300 ">
             <ToastContainer />
-            <form onSubmit={submitHandler} className="flex justify-center items-center p-2 space-x-1 sm:space-y-0 sm:space-x-2 mb-4">
+            <form onSubmit={submitHandler} className="flex justify-center items-center relative p-2 space-x-1 sm:space-y-0 sm:space-x-2 mb-4">
                 <Input
                     type="text"
                     className="bg-white w-full sm:w-auto"
@@ -106,16 +106,17 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
                         value={checkOut ? format(checkOut, "PP") : "Check-out"}
                         onClick={() => setShowDatePicker(!showDatePicker)}
                         readOnly
-                    />
+                    /> 
+                    </div>
                     {showDatePicker && (
-                        <div className="absolute z-6 t-32 shadow-lg rounded-lg bg-white p-2" style={{ top: '110px' }}>
+                        <div className="absolute z-10 shadow-lg rounded-lg bg-white p-2" style={{ top: '60px' }}>
                             <MyDatePicker
                                 setCheckIn={handleSetCheckIn}
                                 setCheckOut={handleSetCheckOut}
                             />
                         </div>
                     )}
-                </div>
+               
 
 
                 <Button className="bg-blue-700 hover:bg-blue-500">

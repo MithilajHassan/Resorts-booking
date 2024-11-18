@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const resortAdminApi = createApi({
     reducerPath: 'resortAdminApi',
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-    tagTypes: ['Resort', 'Rooms'],
+    tagTypes: [ 'Rooms'],
     endpoints: (builder) => ({
 
         listCategories: builder.query<CategoryDetails[], void>({
@@ -22,17 +22,15 @@ export const resortAdminApi = createApi({
         getMyResort: builder.query<IResort, string>({
             query: (id: string) => ({
                 url: `/resort/myresort/${id}`
-            }),
-            providesTags: ['Resort']
+            })
         }),
 
-        editResort: builder.mutation({
-            query: (data: { resortData: IResort, id: string }) => ({
+        editResort: builder.mutation<{success:Boolean,data:IResort},{ resortData: IResort, id: string }>({
+            query: (data) => ({
                 url: `/resort/myresort/${data.id}`,
                 method: 'PUT',
                 body: data.resortData
             }),
-            invalidatesTags: ['Resort']
         }),
 
 

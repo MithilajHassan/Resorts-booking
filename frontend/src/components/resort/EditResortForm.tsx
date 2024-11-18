@@ -9,13 +9,14 @@ import { FormEvent, useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
 import { firebaseStore } from "../../config/firebaseConfig";
 import { Checkbox } from "../ui/checkbox";
-import { useListCategoriesQuery, useListFacilitiesQuery, useGetMyResortQuery, useEditResortMutation } from "../../slices/resortAdminApiSlice";
+import { useListCategoriesQuery, useListFacilitiesQuery, useEditResortMutation } from "../../slices/resortAdminApiSlice";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "../ui/textarea";
 import { isApiError } from "../../utils/errorHandling";
 import { RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import MapSelector, { Location } from "../common/LocationSelecting";
+import { editMyResort } from "../../slices/myResortSlice";
 
 const formSchema = z.object({
     resortName: z.string().min(3, { message: "Resort name is required" })
@@ -35,18 +36,16 @@ const formSchema = z.object({
 });
 
 export default function ResortEditForm() {
-    const { resortAdmin } = useSelector((state: RootState) => state.auth);
-    // const { resort } = useSelector((state: RootState) => state.myResort)
-    // const dispatch = useDispatch()
     const { data: facilitiesOptions = [] } = useListFacilitiesQuery();
     const { data: categoriesOptions = [] } = useListCategoriesQuery();
-    const { data: resortData, isLoading } = useGetMyResortQuery(resortAdmin?._id!);
-    const [updateResort] = useEditResortMutation();
+    const { resort } = useSelector((state: RootState) => state.myResort)
+    const [updateResort, { isLoading }] = useEditResortMutation();
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const [newImages, setNewImages] = useState<File[]>([]);
     const [location, setLocation] = useState<Location | null>(null)
-    const [showMap,setShowMap] = useState<boolean>(false);
+    const [showMap, setShowMap] = useState<boolean>(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -64,28 +63,28 @@ export default function ResortEditForm() {
     });
 
     useEffect(() => {
-        if (resortData) {
+        if (resort) {
 
             form.reset({
-                resortName: resortData.resortName,
-                email: resortData.email,
-                address: resortData.address,
-                city: resortData.city,
-                phone: resortData.phone,
-                description: resortData.description,
-                categories: resortData.categories.map((category) => typeof category === 'string' ? category : category._id),
-                facilities: resortData.facilities.map((facility) => typeof facility === 'string' ? facility : facility._id),
-                images: resortData.images,
+                resortName: resort.resortName,
+                email: resort.email,
+                address: resort.address,
+                city: resort.city,
+                phone: resort.phone,
+                description: resort.description,
+                categories: resort.categories.map((category) => typeof category === 'string' ? category : category._id),
+                facilities: resort.facilities.map((facility) => typeof facility === 'string' ? facility : facility._id),
+                images: resort.images,
             });
-            setImagePreviews(resortData.images);
-            if(resortData.location){
-                setLocation(resortData.location)
+            setImagePreviews(resort.images);
+            if (resort.location) {
+                setLocation(resort.location)
             }
         }
-    }, [resortData]);
+    }, [resort]);
 
-    const handleLocationSelect = (mark:Location) => {
-        setLocation(mark)        
+    const handleLocationSelect = (mark: Location) => {
+        setLocation(mark)
         setShowMap(false)
         toast(<div className="text-green-600 text-sm">Location selected.</div>)
     }
@@ -93,7 +92,7 @@ export default function ResortEditForm() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
 
-            if(location == null){
+            if (location == null) {
                 toast(<div className="text-red-600 text-sm">Please select location</div>)
                 return
             }
@@ -122,11 +121,12 @@ export default function ResortEditForm() {
                     images: uploadedImageLinks,
                     location
                 },
-                id:resortAdmin?._id!
+                id: resort?._id!
             }).unwrap();
 
             if (result.success) {
                 toast(<div className="text-green-500">Resort updated successfully!</div>);
+                dispatch(editMyResort(result.data))
                 navigate(`/resort/myresort`);
             }
         } catch (err) {
@@ -311,7 +311,7 @@ export default function ResortEditForm() {
 
                         <FormItem>
                             <FormLabel>Location</FormLabel>
-                            <button type="button" className="bg-indigo-50 py-1.5 text-sm font-semibold border rounded-md w-full" onClick={(e:FormEvent)=>setShowMap(true)} >Change Your location</button>
+                            <button type="button" className="bg-indigo-50 py-1.5 text-sm font-semibold border rounded-md w-full" onClick={(e: FormEvent) => setShowMap(true)} >Change Your location</button>
                         </FormItem>
 
                         <Button type="submit" className="bg-blue-600 hover:bg-blue-500 w-full">EDIT</Button>

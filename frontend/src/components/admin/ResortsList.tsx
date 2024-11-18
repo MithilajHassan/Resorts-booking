@@ -161,18 +161,20 @@ export default function ResortDataTable() {
       header: 'Actions',
       cell: ({ row }) => (
         <div>
-          {row.original.isVerify == false ? (<button
-            onClick={() => acceptResortHandler(row.original._id!)}
-            className="text-white hover:bg-green-400 bg-green-600 rounded-sm p-1"
-          >
-            Accept
-          </button>) :
-            (<button
+          {row.original.isVerify == false ? (<>
+            <button
+              onClick={() => acceptResortHandler(row.original._id!)}
+              className="text-white hover:bg-green-400 bg-green-600 rounded-sm p-1 mr-1"
+            >
+              Accept
+            </button>
+            <button
               onClick={() => rejectResortHandler(row.original._id!)}
               className="text-white bg-red-600 hover:bg-red-400  rounded-sm p-1"
             >
               Reject
-            </button>)}
+            </button>
+          </>): <span className='font-semibold'>Responded</span>}
           <button
             onClick={() => handleBlockUnblock(row.original._id!, !row.original.isBlock)}
             className={`px-3 py-1 text-sm rounded ms-2 ${row.original.isBlock
@@ -230,7 +232,6 @@ export default function ResortDataTable() {
           </div>
         </div>
 
-        {/* Table */}
         <div className="rounded-md border-2 w-full overflow-x-auto">
           <Table className='min-w-full'>
             <TableHeader className='bg-blue-100 h-12'>

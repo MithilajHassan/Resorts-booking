@@ -49,7 +49,6 @@ export const authApi = createApi({
             query: () => ({
                 url: '/user/verifyuser',
                 method: 'GET',
-                credentials: 'include'
             })
         }),
 

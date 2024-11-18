@@ -15,14 +15,24 @@ function MyDatePicker({ setCheckIn, setCheckOut }: MyDatePickerProps) {
 
 
   const handleSelect = (selectedRange: DateRange | undefined) => {
-    setRange(selectedRange)
     if (selectedRange?.from) {
-      setCheckIn(selectedRange.from)
-    }
-    if (selectedRange?.to) {
-      setCheckOut(selectedRange.to)
-    }
-  };
+      const fromDate = selectedRange.from;
+      let toDate = selectedRange.to;
+
+      if (toDate && fromDate) {
+        const minToDate = new Date(fromDate);
+        minToDate.setDate(minToDate.getDate() + 1)
+
+        if (toDate < minToDate) {
+          toDate = minToDate;
+        }
+      }
+
+      setRange({ from: fromDate, to: toDate });
+      setCheckIn(fromDate);
+      setCheckOut(toDate);
+    } 
+  }
 
   return (
     <div className="">

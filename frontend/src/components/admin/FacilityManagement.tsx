@@ -26,7 +26,7 @@ function FacilityManagement() {
     const dispatch = useDispatch()
     const facilities = useSelector((state: RootState) => state.facilities.facilities)
 
-    const { data: fetchedfacilities, error } = useListFacilitiesQuery(undefined)
+    const { data: fetchedfacilities } = useListFacilitiesQuery(undefined)
     const [deleteFacility] = useDeleteFacilityMutation()
     const [updateFacility] = useUpdateFacilityMutation()
     const [addFacility] = useAddFacilityMutation()
@@ -42,8 +42,6 @@ function FacilityManagement() {
     useEffect(() => {
         if (fetchedfacilities) {
             dispatch(setFacilities(fetchedfacilities))
-        }else{
-            console.log(error)
         }
     }, [fetchedfacilities])
 

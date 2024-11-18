@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Button } from '../ui/button';
-import { 
-    Dialog, 
-    DialogTrigger, 
-    DialogContent, 
-    DialogHeader, 
-    DialogFooter, 
-    DialogTitle, 
-    DialogDescription 
+import {
+    Dialog,
+    DialogTrigger,
+    DialogContent,
+    DialogHeader,
+    DialogFooter,
+    DialogTitle,
+    DialogDescription
 } from '../ui/dialog';
 import { MdDelete } from 'react-icons/md';
 
@@ -31,11 +31,13 @@ const DeletConfirm: React.FC<ConfirmDialogProps> = ({ id, onConfirm }) => {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <MdDelete
+                <button
                     onClick={() => setIsOpen(true)}
-                    style={{ fontSize: '1.3rem' }}
                     className="text-red-600 hover:text-red-400 cursor-pointer"
-                />
+                    style={{ fontSize: '1.3rem' }}
+                >
+                    <MdDelete />
+                </button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

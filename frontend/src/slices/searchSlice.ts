@@ -1,28 +1,30 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface SearchState {
+interface SearchElements {
   place: string;
   guestCount: number | null;
   checkIn: string;
   checkOut: string;
 }
+interface SearchState {
+  search: SearchElements
+}
 
 const initialState: SearchState = {
-  place: '',
-  guestCount: null,
-  checkIn: '',
-  checkOut: '',
+  search: {
+    place: '',
+    guestCount: null,
+    checkIn: '',
+    checkOut: '',
+  }
 };
 
 const searchSlice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    setSearchParams: (state, action: PayloadAction<SearchState>) => {
-      state.place = action.payload.place;
-      state.guestCount = action.payload.guestCount;
-      state.checkIn = action.payload.checkIn;
-      state.checkOut = action.payload.checkOut;
+    setSearchParams: (state, action: PayloadAction<SearchElements>) => {
+      state.search = action.payload
     },
   },
 });

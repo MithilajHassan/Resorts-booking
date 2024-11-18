@@ -1,4 +1,5 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
+import Autoplay from "embla-carousel-autoplay"
 import { Card, CardContent } from "../../ui/card"
 import {
     Carousel,
@@ -26,9 +27,17 @@ export default function BannerSection({ }: Props) {
         }
     }, [data])
 
+    const plugin = useRef(
+        Autoplay({ delay: 2000 })
+    )
+
     return (
         <div className="w-full px-14">
-            <Carousel className="w-full ">
+            <Carousel className="w-full "
+                plugins={[plugin.current]}
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.reset}
+            >
                 <CarouselContent>
                     {banners.map((banner, index) => (
                         <CarouselItem key={index}>
@@ -38,7 +47,7 @@ export default function BannerSection({ }: Props) {
                                     backgroundImage: `url(${banner.imageUrl})`,
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
-                                    height: '300px', 
+                                    height: '300px',
                                 }}
                             >
                                 <Card className="w-full h-full bg-black bg-opacity-0 rounded-none">

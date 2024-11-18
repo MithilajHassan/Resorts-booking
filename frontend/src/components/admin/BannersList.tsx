@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useDeleteBannerMutation, useEditBannerMutation, useListBannersQuery } from "../../slices/adminApiSlice";
 import { deleteOneBanner, SetBanner } from "../../slices/bannerSlice";
-import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import DeletConfirm from "../common/DeleteConfirm";
 import { MdEdit } from "react-icons/md";

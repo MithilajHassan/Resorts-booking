@@ -15,6 +15,9 @@ import reviewReducer from "./slices/reviewSlice";
 import wishlistReducer from "./slices/wishlistSlice";
 import myResortReducer from "./slices/myResortSlice"
 import bannerReducer from "./slices/bannerSlice";
+import adminApiErrorMiddleware from "./middlewares/adminApiErrorMiddleware";
+import resortApiErrorMiddleware from "./middlewares/resortApiErrorMiddleware";
+import userApiErrorMiddleware from "./middlewares/userApiErrorMiddleware";
 
 
 const store = configureStore({
@@ -41,9 +44,9 @@ const store = configureStore({
     },
     middleware:(getDefaultMiddleware)=> getDefaultMiddleware()
     .concat(authApi.middleware)
-    .concat(adminApi.middleware)
-    .concat(resortAdminApi.middleware)
-    .concat(userApi.middleware),
+    .concat(adminApi.middleware,adminApiErrorMiddleware)
+    .concat(resortAdminApi.middleware,resortApiErrorMiddleware)
+    .concat(userApi.middleware,userApiErrorMiddleware),
     devTools:true
 })
 
