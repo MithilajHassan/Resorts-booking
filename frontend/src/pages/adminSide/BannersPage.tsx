@@ -8,6 +8,7 @@ import AdminHeader from "../../components/admin/AdminHeader"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store"
 import BannersList from "../../components/admin/BannersList"
+import { HiMiniRectangleStack } from "react-icons/hi2"
 
 export default function BannersPage() {
     const { adminInfo } = useSelector((state: RootState) => state.auth)
@@ -21,7 +22,7 @@ export default function BannersPage() {
                     <Link to={'/admin/resorts'}><SidebarItem icon={<GiBlockHouse />} text="Resorts" /></Link>
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
                     <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
-                    <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" active={true} /></Link>
+                    <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" active={true} /></Link>
                 </Sidebar>
 
                 <BannersList />

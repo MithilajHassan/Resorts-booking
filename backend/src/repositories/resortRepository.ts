@@ -17,8 +17,8 @@ export default new class ResortRepository {
     async findAll(): Promise<IResort[] | []> {
         return await Resort.find()
     }
-    async findVerifiedResorts(): Promise<IResort[] | []> {
-        return await Resort.find({ isVerify: true, isBlock: false })
+    async findVerifiedResort(id: string): Promise<IResort | null> {
+        return await Resort.findOne({ _id: id, isVerify: true, isBlock: false })
     }
 
     async accept(id: unknown): Promise<IResort | null> {
@@ -34,9 +34,13 @@ export default new class ResortRepository {
         return await Resort.findByIdAndUpdate(id, { $set: resortData }, { new: true }).populate('categories').populate('facilities')
     }
 
-    async findResortsByCity(city: string): Promise<IResort[] | null> {
-        return Resort.find({
-            city: { $regex: city, $options: "i" },
+    async findResortsByCity(place: string): Promise<IResort[] | null> {
+        return await Resort.find({
+            $or: [
+                { city: { $regex: place, $options: "i" } },
+                { resortName: { $regex: place, $options: "i" } }
+            ]
+            ,
             isBlock: false,
             isVerify: true
         })

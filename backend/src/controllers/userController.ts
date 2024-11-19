@@ -106,14 +106,15 @@ class UserController {
 
     async verifyUser(req: CustomRequest, res: Response) {
         try {
-            const { _id, name, email, avatar, isBlock } = req.user!
+            const { _id, name, email, avatar, phone, isBlock } = req.user!
 
             res.status(200).json({
                 _id,
                 name,
                 email,
                 avatar,
-                isBlock
+                phone,
+                isBlock,
             })
         } catch (err) {
             if (err instanceof CustomError) {
@@ -127,7 +128,6 @@ class UserController {
 
     async signout(req: Request, res: Response) {
         try {
-
             res.cookie('userAccessT', '', {
                 httpOnly: true,
                 expires: new Date(0),
@@ -136,7 +136,6 @@ class UserController {
                 httpOnly: true,
                 expires: new Date(0),
             })
-
 
             res.status(200).json({ message: "You are signed out", success: true })
         } catch (err) {
@@ -149,9 +148,9 @@ class UserController {
         }
     }
 
-    async findResorts(req: Request, res: Response) {
+    async trendResorts(req: Request, res: Response) {
         try {
-            const resorts = await userServices.findResorts()
+            const resorts = await userServices.findTrendResorts()
             res.status(200).json(resorts)
         } catch (error) {
             res.status(500).json({ message: 'Failed to get resorts', error })

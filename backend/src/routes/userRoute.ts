@@ -16,7 +16,7 @@ userRouter.post('/signout', userController.signout)
 
 userRouter.get('/verifyuser', userProtect, userController.verifyUser)
 userRouter.patch('/update/:id', userProtect, userController.updateUser)
-userRouter.get('/resorts', userUnProtect, userController.findResorts)
+userRouter.get('/resorts', userUnProtect, userController.trendResorts)
 userRouter.get('/resorts/:id', userUnProtect, userController.resortDetails)
 userRouter.post('/search-resort', userUnProtect, userController.searchRooms)
 

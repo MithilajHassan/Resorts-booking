@@ -9,7 +9,7 @@ import { setCheckout } from '../../slices/checkoutSlice'
 
 const AvailableRooms = () => {
     const { availableRooms } = useSelector((state: RootState) => state.availableRsorts)
-    const { checkIn, checkOut, guestCount } = useSelector((state: RootState) => state.search)
+    const { checkIn, checkOut, guestCount } = useSelector((state: RootState) => state.search.search)
     const { userInfo } = useSelector((state:RootState)=> state.auth)
     const { id } = useParams()
     const dispatch = useDispatch<AppDispatch>()

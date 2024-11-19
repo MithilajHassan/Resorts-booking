@@ -32,11 +32,11 @@ export default function BannerSection({ }: Props) {
     )
 
     return (
-        <div className="w-full px-14">
+        <div className="w-full px-2">
             <Carousel className="w-full "
                 plugins={[plugin.current]}
-                onMouseEnter={plugin.current.stop}
-                onMouseLeave={plugin.current.reset}
+                onMouseOver={plugin.current.stop}
+                onMouseOut={plugin.current.reset}
             >
                 <CarouselContent>
                     {banners.map((banner, index) => (
@@ -60,8 +60,8 @@ export default function BannerSection({ }: Props) {
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious className="left-3" />
+                <CarouselNext className="right-3" />
             </Carousel>
         </div>
     )

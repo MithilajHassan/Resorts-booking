@@ -14,6 +14,25 @@ export default new class BookingRepository {
         return await Booking.find({userId:id}).populate('resortId').populate('roomId')
     }
 
+    async findMostBookings():Promise<{_id:string,count:number}[]>{
+        return await Booking.aggregate<{_id:string,count:number}>([
+            {
+              $group: {
+                _id: "$resortId",
+                count: { $sum: 1 }
+              }
+            },
+            {
+              $sort: {
+                count: -1
+              }
+            },
+            {
+              $limit: 5
+            }
+          ])
+    }
+
     async findByResortId(id: string): Promise<IBooking[] | null> {
         return await Booking.find({resortId:id}).populate('userId').populate('roomId').populate('resortId')
     }

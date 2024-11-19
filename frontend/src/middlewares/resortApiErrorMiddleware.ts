@@ -9,7 +9,7 @@ interface MetaArgType {
 
 const resortApiErrorMiddleware: Middleware = ({dispatch}) => next => action =>{
     if(isRejectedWithValue(action) && (action.meta.arg as MetaArgType)?.endpointName in resortAdminApi.endpoints){
-        if((action.payload as ApiError)?.status){
+        if((action.payload as ApiError)?.status == 401){
             dispatch(clearResortAdminAuth())
         }
     }

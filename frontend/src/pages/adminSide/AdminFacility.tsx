@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 import FacilityManagement from "../../components/admin/FacilityManagement"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store"
+import { HiMiniRectangleStack } from "react-icons/hi2"
 
 const AdminFacility = () => {
     const { adminInfo } = useSelector((state: RootState) => state.auth)
@@ -21,7 +22,7 @@ const AdminFacility = () => {
                     <Link to={'/admin/resorts'}><SidebarItem icon={<GiBlockHouse />} text="Resorts" /></Link>
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
                     <SidebarItem icon={<FaBox />} text="Facilities" active={true} />
-                    <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" /></Link>
+                    <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
                 </Sidebar>
 
                 <FacilityManagement />

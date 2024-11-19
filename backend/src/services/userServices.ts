@@ -7,6 +7,7 @@ import { Response } from 'express'
 import resortRepository from '../repositories/resortRepository'
 import { IResort } from '../models/resortModel'
 import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper'
+import bookingRepository from '../repositories/bookingRepository'
 
 class UserServices {
     async handleUserSignup(email: string) {
@@ -94,8 +95,16 @@ class UserServices {
         }
     }
 
-    async findResorts(): Promise<IResort[]> {
-        return await resortRepository.findVerifiedResorts()
+    async findTrendResorts(): Promise<IResort[]> {
+        const mostBookings = await bookingRepository.findMostBookings()
+        const resorts:IResort[] = []
+        for(let x of mostBookings){
+            let resort = await resortRepository.findVerifiedResort(x._id)
+            if(resort != null){
+                resorts.push(resort)
+            }
+        }
+        return resorts
     }
     async resortDetails(id: string): Promise<IResort | null> {
         return await resortRepository.findResortById(id)

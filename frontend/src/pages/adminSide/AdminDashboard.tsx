@@ -7,6 +7,7 @@ import { FaBox } from "react-icons/fa6"
 import { Link } from "react-router-dom"
 import { RootState } from "../../store"
 import { useSelector } from "react-redux"
+import { HiMiniRectangleStack } from "react-icons/hi2"
 
 const AdminDashboard = () => {
     const { adminInfo } = useSelector((state: RootState) => state.auth)
@@ -20,7 +21,7 @@ const AdminDashboard = () => {
                     <Link to={'/admin/resorts'}><SidebarItem icon={<GiBlockHouse />} text="Resorts" /></Link>
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
                     <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
-                    <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" /></Link>
+                    <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
                 </Sidebar>
 
                 <p className="ml-72 text-2xl mt-72">Admin Dashboard</p>

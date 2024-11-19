@@ -8,6 +8,7 @@ import AdminHeader from "../../components/admin/AdminHeader"
 import CategoryManagement from "../../components/admin/CategoryManagement"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store"
+import { HiMiniRectangleStack } from "react-icons/hi2";
 
 
 const AdminCategory = () => {
@@ -22,7 +23,7 @@ const AdminCategory = () => {
                     <Link to={'/admin/resorts'}><SidebarItem icon={<GiBlockHouse />} text="Resorts" /></Link>
                     <SidebarItem icon={<MdOutlineCategory />} text="Categories" active={true} />
                     <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
-                    <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" /></Link>
+                    <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
                 </Sidebar>
 
                 <CategoryManagement />

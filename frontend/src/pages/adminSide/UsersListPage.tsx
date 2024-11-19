@@ -8,6 +8,7 @@ import { GiBlockHouse } from "react-icons/gi"
 import Sidebar, { SidebarItem } from '../../components/common/Sidebar'
 import AdminHeader from "../../components/admin/AdminHeader"
 import UsersList from "../../components/admin/UsersList"
+import { HiMiniRectangleStack } from "react-icons/hi2"
 
 
 const UsersListPage = ()=>{
@@ -22,7 +23,7 @@ const UsersListPage = ()=>{
                 <Link to={'/admin/resorts'}><SidebarItem icon={<GiBlockHouse/>} text="Resorts" /></Link>
                 <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory/>} text="Categories" /></Link>
                 <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
-                <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" /></Link>
+                <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
             </Sidebar>
 
             <UsersList/>

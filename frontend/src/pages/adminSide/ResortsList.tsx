@@ -8,6 +8,7 @@ import AdminHeader from "../../components/admin/AdminHeader"
 import ResortsList from "../../components/admin/ResortsList"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store"
+import { HiMiniRectangleStack } from "react-icons/hi2"
 
 
 const AdminResortsList = () => {
@@ -22,7 +23,7 @@ const AdminResortsList = () => {
                     <SidebarItem icon={<GiBlockHouse />} text="Resorts" active={true} />
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
                     <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
-                    <Link to={'/admin/banners'}><SidebarItem icon={<FaBox />} text="Banners" /></Link>
+                    <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
                 </Sidebar>
 
                 <ResortsList />
