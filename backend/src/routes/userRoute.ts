@@ -15,7 +15,9 @@ userRouter.post('/signin', userController.signin)
 userRouter.post('/signout', userController.signout)
 
 userRouter.get('/verifyuser', userProtect, userController.verifyUser)
+userRouter.patch('/updatepassword/:id', userProtect, userController.updateUserPassword)
 userRouter.patch('/update/:id', userProtect, userController.updateUser)
+
 userRouter.get('/resorts', userUnProtect, userController.trendResorts)
 userRouter.get('/resorts/:id', userUnProtect, userController.resortDetails)
 userRouter.post('/search-resort', userUnProtect, userController.searchRooms)
@@ -31,7 +33,6 @@ userRouter.get('/reviews/:id', userUnProtect, reviewController.getReviewsByResor
 userRouter.get('/wishlist/:userId', userProtect, wishlistController.getUserWishlist);
 userRouter.post('/wishlist', userProtect, wishlistController.createWishlist);
 userRouter.delete('/wishlist', userProtect, wishlistController.deleteWishlist);
-
 
 userRouter.get('/banners', userUnProtect, bannerController.getAllBanners)
 

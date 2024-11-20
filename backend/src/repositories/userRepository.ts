@@ -10,7 +10,11 @@ class UserRepository {
     }
     
     async updateUser(id: string, data: Partial<IUser>): Promise<IUser | null> {
-        return await User.findByIdAndUpdate(id, { $set: data },{ new: true, runValidators: true })
+        return await User.findByIdAndUpdate(id, { $set: data },{ new: true})
+    }
+    
+    async updatePassword(id: string, password:string): Promise<IUser | null> {
+        return await User.findByIdAndUpdate(id, { $set: {password} },{ new: true })
     }
     
     async findByEmail(email:string):Promise<IUser | null>{

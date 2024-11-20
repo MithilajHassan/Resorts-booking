@@ -53,6 +53,8 @@ const UserProfile = () => {
         >
           Edit Profile
         </button></Link>
+
+        <Link to={'/myprofile/update/password'} className='text-blue-900 mt-3 underline hover:text-blue-700'>Change Password?</Link>
       </div>
     </div>
   )

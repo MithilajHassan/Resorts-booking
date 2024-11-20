@@ -13,6 +13,7 @@ import BookingsPage from "../pages/userSide/BookingsPage";
 import BookingDetailsPage from "../pages/userSide/BookingDetailsPage";
 import UserProfileEditPage from "../pages/userSide/UserProfileEditPage";
 import WishlistPage from "../pages/userSide/WishlistPage";
+import PasswordChangingPage from "../pages/userSide/PasswordChangingPage";
 
 const UserRoutes = () => {
     return (
@@ -26,6 +27,7 @@ const UserRoutes = () => {
             <Route path="" element={<UserPrivateRoutes/>} >
                 <Route path='/myprofile' element={<UserProfilePage />} />
                 <Route path='/myprofile/update' element={<UserProfileEditPage />} />
+                <Route path='/myprofile/update/password' element={<PasswordChangingPage />} />
                 <Route path='/checkout' element={<Checkout />} />
                 <Route path="/booking-success" element={<BookingSuccessPage />} />
                 <Route path="/bookings" element={<BookingsPage />} />

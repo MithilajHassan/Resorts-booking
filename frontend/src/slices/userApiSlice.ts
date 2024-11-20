@@ -14,6 +14,14 @@ export const userApi = createApi({
             })
         }),    
 
+        updatePassword: builder.mutation<{ success: string },{ id: string, currPassword: string, newPassword: string }>({
+            query: ({ id, currPassword, newPassword }) => ({
+                url: `/user/updatepassword/${id}`,
+                method: 'PATCH',
+                body: { currPassword, newPassword }
+            })
+        }),         
+
         listResorts: builder.query<IResort[], void>({
             query: () => '/user/resorts',
         }),
@@ -103,6 +111,7 @@ export const {
     useListBookingsQuery,
     useEditBookingStatusMutation,
     useUpdateUserMutation,
+    useUpdatePasswordMutation,
     useCreateReviewMutation,
     useListReviewsQuery,
     useListWishlistQuery,

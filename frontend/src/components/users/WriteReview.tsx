@@ -6,14 +6,15 @@ import { Textarea } from "../ui/textarea";
 import { ChangeEvent, useState } from "react";
 import { useCreateReviewMutation } from "../../slices/userApiSlice";
 import { toast, ToastContainer } from "react-toastify";
+import { ApiError } from "@/types/types";
 
 interface Props {
-    userId:string
-    resortId:string;
-    bookingId:string;
+    userId: string
+    resortId: string;
+    bookingId: string;
 }
 
-export default function WriteReview({userId,resortId,bookingId}:Props) {
+export default function WriteReview({ userId, resortId, bookingId }: Props) {
     const [rating, setRating] = useState<number>(2)
     const [review, setReview] = useState<string>('')
     const [errMsg, setErrMsg] = useState<string>('')
@@ -21,20 +22,26 @@ export default function WriteReview({userId,resortId,bookingId}:Props) {
     const [createReview] = useCreateReviewMutation()
 
     const submitHanlder = async () => {
-        const regex = /^[a-zA-Z0-9\s,.'-]{10,}$/;
-        if (!regex.test(review)) {
-            setErrMsg('Please write review with at least 10 characters.');
-        } else {
-            setErrMsg('')
-            await createReview({
-                userId ,
-                resortId,
-                bookingId,
-                reviewText:review,
-                rating,
-            })
-            setIsOpen(false)
-            toast('Successful')
+        try {
+            const regex = /^[a-zA-Z0-9\s,.'-]{10,}$/;
+            if (!regex.test(review)) {
+                setErrMsg('Please write review with at least 10 characters.');
+            } else {
+                setErrMsg('')
+                await createReview({
+                    userId,
+                    resortId,
+                    bookingId,
+                    reviewText: review,
+                    rating,
+                }).unwrap()
+                setIsOpen(false)
+                toast('Successful')
+            }
+        } catch (err) {
+            if((err as ApiError).status == 409){
+                toast((err as ApiError).data.message)
+            }
         }
     }
 
@@ -43,7 +50,7 @@ export default function WriteReview({userId,resortId,bookingId}:Props) {
             <DialogTrigger asChild>
                 <Button className="bg-white hover:bg-blue-700 text-blue-700 hover:text-white border border-blue-800">Write review</Button>
             </DialogTrigger>
-            <ToastContainer  />
+            <ToastContainer />
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Add your review</DialogTitle>
@@ -60,7 +67,7 @@ export default function WriteReview({userId,resortId,bookingId}:Props) {
                             changeRating={(newRating: number) => setRating(newRating)}
                             numberOfStars={5}
                             name="rating"
-                            starDimension="35px"  
+                            starDimension="35px"
                             starSpacing="5px"
                         />
                     </div>

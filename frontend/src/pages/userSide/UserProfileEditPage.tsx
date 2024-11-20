@@ -1,5 +1,5 @@
 import UserHeader from '../../components/users/UserHeader'
-import EditUserProfile from '../../components/users/editUserProfile';
+import EditUserProfile from '../../components/users/EditUserProfile';
 
 const UserProfileEditPage = () => {
 

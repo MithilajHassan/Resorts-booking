@@ -24,6 +24,16 @@ class UserServices {
         return await userRepository.updateUser(id, data);
     }
 
+    async updatePassword(id: string, currPassword: string, newPassword: string): Promise<IUser | null> {
+        const user = await userRepository.findById(id)
+        if(!(await bcrypt.compare(currPassword,user?.password!))){
+            throw new CustomError('Current password is wrong',400)
+        }
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(newPassword,salt)
+        return await userRepository.updatePassword(id, hashedPassword);
+    }
+
     async verifyOtpAndCreate(otp: string, userData: Partial<IUser>): Promise<IUser> {
         const savedOtp = await otpServices.findOtp(userData.email!)
         if (!savedOtp) {
@@ -37,7 +47,7 @@ class UserServices {
         return await userRepository.create(userData)
     }
 
-    async findUserByI(id: string): Promise<IUser | null> {
+    async findUserById(id: string): Promise<IUser | null> {
         return await userRepository.findById(id)
     }
 
@@ -47,7 +57,7 @@ class UserServices {
             throw new CustomError('Invalid Email', 401)
         }
 
-        if (user?.password && await bcrypt.compare(password, user?.password)) {
+        if (user?.password && await bcrypt.compare(password, user?.password) ) { 
             if (user.isBlock) {
                 throw new CustomError('Your account is blocked', 403)
             } else {

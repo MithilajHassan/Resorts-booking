@@ -83,17 +83,17 @@ class UserController {
     async updateUser(req: Request, res: Response) {
         const { id } = req.params;
         const { name, phone, avatar } = req.body;
-    
+
         try {
-          const updatedUser = await userServices.updateUser(id, { name, phone, avatar });
+            const updatedUser = await userServices.updateUser(id, { name, phone, avatar });
             res.status(200).json({
-                id:updatedUser?._id,
-                name:updatedUser?.name,
-                email:updatedUser?.email,
-                phone:updatedUser?.phone,
-                avatar:updatedUser?.avatar
+                id: updatedUser?._id,
+                name: updatedUser?.name,
+                email: updatedUser?.email,
+                phone: updatedUser?.phone,
+                avatar: updatedUser?.avatar
             });
-         
+
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
@@ -102,7 +102,23 @@ class UserController {
                 res.status(500).json({ message: 'Internal Server Error' })
             }
         }
-      }
+    }
+    async updateUserPassword(req: Request, res: Response) {
+        const { id } = req.params
+        const { currPassword, newPassword } = req.body;
+
+        try {
+            await userServices.updatePassword(id, currPassword, newPassword);
+            res.status(200).json({success:true});
+        } catch (err) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
 
     async verifyUser(req: CustomRequest, res: Response) {
         try {
@@ -170,7 +186,7 @@ class UserController {
     async searchRooms(req: Request, res: Response) {
         try {
             const { place, guestCount, checkIn, checkOut } = req.body;
-            
+
 
             if (!place || !guestCount || !checkIn || !checkOut) {
                 return res.status(400).json({ error: "Missing required search parameters" });
