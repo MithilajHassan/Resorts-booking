@@ -9,6 +9,7 @@ import FacilityManagement from "../../components/admin/FacilityManagement"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store"
 import { HiMiniRectangleStack } from "react-icons/hi2"
+import { BiSolidCoupon } from "react-icons/bi"
 
 const AdminFacility = () => {
     const { adminInfo } = useSelector((state: RootState) => state.auth)
@@ -23,6 +24,7 @@ const AdminFacility = () => {
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
                     <SidebarItem icon={<FaBox />} text="Facilities" active={true} />
                     <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
+                    <Link to={'/admin/coupons'}><SidebarItem icon={<BiSolidCoupon />} text="Coupons" /></Link>
                 </Sidebar>
 
                 <FacilityManagement />

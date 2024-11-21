@@ -9,6 +9,7 @@ import Sidebar, { SidebarItem } from '../../components/common/Sidebar'
 import AdminHeader from "../../components/admin/AdminHeader"
 import UsersList from "../../components/admin/UsersList"
 import { HiMiniRectangleStack } from "react-icons/hi2"
+import { BiSolidCoupon } from "react-icons/bi"
 
 
 const UsersListPage = ()=>{
@@ -24,6 +25,7 @@ const UsersListPage = ()=>{
                 <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory/>} text="Categories" /></Link>
                 <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
                 <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
+                <Link to={'/admin/coupons'}><SidebarItem icon={<BiSolidCoupon />} text="Coupons" /></Link>
             </Sidebar>
 
             <UsersList/>

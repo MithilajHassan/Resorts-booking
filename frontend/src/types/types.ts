@@ -109,3 +109,14 @@ export interface IBanner {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export interface ICoupon {
+    _id?: string;
+    code: string;
+    minBooking: number;
+    discount: number;
+    limit: number;
+    createdAt?: Date;
+    expireAt: Date;
+    isDeleted?: boolean;
+}

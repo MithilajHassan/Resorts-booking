@@ -15,6 +15,7 @@ import reviewReducer from "./slices/reviewSlice";
 import wishlistReducer from "./slices/wishlistSlice";
 import myResortReducer from "./slices/myResortSlice"
 import bannerReducer from "./slices/bannerSlice";
+import couponReducer from "./slices/couponSlice";
 import adminApiErrorMiddleware from "./middlewares/adminApiErrorMiddleware";
 import resortApiErrorMiddleware from "./middlewares/resortApiErrorMiddleware";
 import userApiErrorMiddleware from "./middlewares/userApiErrorMiddleware";
@@ -34,7 +35,7 @@ const store = configureStore({
         wishlist:wishlistReducer,
         banners:bannerReducer,
         myResort:myResortReducer,
-        
+        coupons:couponReducer,
         
         
         [authApi.reducerPath]:authApi.reducer,

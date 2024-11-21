@@ -2,6 +2,7 @@ import { Router } from "express"
 import adminController from "../controllers/adminController"
 import { adminProtect } from "../middleware/auth"
 import bannerController from "../controllers/bannerController"
+import couponController from "../controllers/couponController"
 
 
 const adminRouter = Router()
@@ -36,6 +37,12 @@ adminRouter.get('/banners', adminProtect, bannerController.getAllBanners)
 adminRouter.post('/banners', adminProtect, bannerController.createBanner)
 adminRouter.put('/banners/:id', adminProtect, bannerController.editBanner)
 adminRouter.delete('/banners/:id', adminProtect, bannerController.deleteBannerById)
+
+//------------------------- Coupon Management --------------------------------//
+adminRouter.get('/coupons', adminProtect, couponController.getAllCoupons)
+adminRouter.post('/coupons', adminProtect, couponController.createCoupon)
+adminRouter.put('/coupons/:id', adminProtect, couponController.updateCoupon)
+adminRouter.delete('/coupons/:id', adminProtect, couponController.deleteCoupon)
 
 
 

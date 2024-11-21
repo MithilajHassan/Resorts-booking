@@ -9,6 +9,7 @@ import ResortsList from "../../components/admin/ResortsList"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store"
 import { HiMiniRectangleStack } from "react-icons/hi2"
+import { BiSolidCoupon } from "react-icons/bi"
 
 
 const AdminResortsList = () => {
@@ -24,6 +25,7 @@ const AdminResortsList = () => {
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
                     <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
                     <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
+                    <Link to={'/admin/coupons'}><SidebarItem icon={<BiSolidCoupon />} text="Coupons" /></Link>
                 </Sidebar>
 
                 <ResortsList />

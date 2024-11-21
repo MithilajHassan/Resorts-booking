@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 import { RootState } from "../../store"
 import { useSelector } from "react-redux"
 import { HiMiniRectangleStack } from "react-icons/hi2"
+import { BiSolidCoupon } from "react-icons/bi"
 
 const AdminDashboard = () => {
     const { adminInfo } = useSelector((state: RootState) => state.auth)
@@ -22,6 +23,7 @@ const AdminDashboard = () => {
                     <Link to={'/admin/categories'}><SidebarItem icon={<MdOutlineCategory />} text="Categories" /></Link>
                     <Link to={'/admin/facilities'}><SidebarItem icon={<FaBox />} text="Facilities" /></Link>
                     <Link to={'/admin/banners'}><SidebarItem icon={<HiMiniRectangleStack />} text="Banners" /></Link>
+                    <Link to={'/admin/coupons'}><SidebarItem icon={<BiSolidCoupon />} text="Coupons" /></Link>
                 </Sidebar>
 
                 <p className="ml-72 text-2xl mt-72">Admin Dashboard</p>

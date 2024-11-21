@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { CategoryDetails, FacilityDetails, IBanner, IUser } from "../types/types"
+import { CategoryDetails, FacilityDetails, IBanner, ICoupon, IUser } from "../types/types"
 
 export const adminApi = createApi({
     reducerPath: 'adminApi',
@@ -145,6 +145,27 @@ export const adminApi = createApi({
             }),
         }),
 
+        //--------------------- Coupon Management---------------------//
+        listCoupons: builder.mutation<{success:boolean, data:ICoupon[]}, void>({
+            query: () => ({
+                url: '/admin/coupons',
+                method: 'GET',
+            }),
+        }),
+        createCoupon: builder.mutation<{success:boolean, data:ICoupon}, ICoupon>({
+            query: (couponData) => ({
+                url: '/admin/coupons',
+                method: 'POST',
+                body: couponData,
+            }),
+        }),
+        deleteCoupon: builder.mutation<{success:boolean, message:string},string>({
+            query: (id) => ({
+                url: `/admin/coupons/${id}`,
+                method: 'DELETE',
+            }),
+        }),
+
     })
 })
 
@@ -167,6 +188,9 @@ export const {
     useCreateBannerMutation,
     useEditBannerMutation,
     useDeleteBannerMutation,
+    useListCouponsMutation,
+    useCreateCouponMutation,
+    useDeleteCouponMutation,
 
 
 
