@@ -16,6 +16,7 @@ export interface IBooking extends Document {
     paymentMethod: string;
     paymentStatus?: boolean;
     status?: string;
+    discount?: number;
     transactionId?: string;
 }
 
@@ -36,6 +37,7 @@ const BookingSchema = new Schema<IBooking>(
         paymentMethod: { type: String, required: true },
         paymentStatus: { type: Boolean, default: false },
         status: { type: String, enum:['Cancelled','Booked','Stayed'], default: 'Booked'},
+        discount: { type: Number, required: false },
         transactionId: { type: String },
     },
     { timestamps: true }

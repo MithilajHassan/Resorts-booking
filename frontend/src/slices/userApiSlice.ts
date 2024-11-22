@@ -1,4 +1,4 @@
-import { IBanner, IBooking, IResort, IReview, IRoom, IWishlist } from '../types/types'
+import { IBanner, IBooking, ICoupon, IResort, IReview, IRoom, IWishlist } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const userApi = createApi({
@@ -99,6 +99,13 @@ export const userApi = createApi({
             query: () => '/user/banners',
         }),
 
+        listCoupons: builder.mutation<{success:Boolean,data:ICoupon[]}, {price:number}>({
+            query: ({price}) =>({
+                url:`/user/coupons?price=${price}`,
+                method:'GET'
+            }) 
+        }),
+
     })
 })
 
@@ -118,6 +125,7 @@ export const {
     useCreateWishlistMutation,
     useDeleteWishlistMutation,
     useListBannersQuery,
+    useListCouponsMutation,
 
     
 

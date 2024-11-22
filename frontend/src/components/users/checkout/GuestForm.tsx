@@ -60,12 +60,13 @@ export default function GuestForm() {
                 guestEmail: values.email,
                 guestPhone: Number(values.phone),
                 guestCount: checkoutDetails?.guestCount!,
-                checkInDate: checkoutDetails?.checkInDate!,  // new Date("2024-10-21") 
-                checkOutDate: checkoutDetails?.checkOutDate!,  //new Date("2024-10-22"),
+                checkInDate: checkoutDetails?.checkInDate!,   
+                checkOutDate: checkoutDetails?.checkOutDate!,  
                 checkInTime: checkoutDetails?.checkInTime!,
                 checkOutTime: checkoutDetails?.checkOutTime!,
                 totalPrice: checkoutDetails?.totalPrice!,
                 paymentMethod: checkoutDetails?.paymentMethod!,
+                discount: checkoutDetails?.discount
             }).unwrap()
             const options: RazorpayOrderOptions = {
                 key: process.env.REACT_APP_RAZORPAY_KEY_ID!,

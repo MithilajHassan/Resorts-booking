@@ -5,6 +5,7 @@ import bookingController from "../controllers/bookingController"
 import reviewController from "../controllers/reviewController"
 import wishlistController from "../controllers/wishlistController"
 import bannerController from "../controllers/bannerController"
+import couponController from "../controllers/couponController"
 
 const userRouter = Router()
 
@@ -35,6 +36,8 @@ userRouter.post('/wishlist', userProtect, wishlistController.createWishlist);
 userRouter.delete('/wishlist', userProtect, wishlistController.deleteWishlist);
 
 userRouter.get('/banners', userUnProtect, bannerController.getAllBanners)
+
+userRouter.get('/coupons', userProtect, couponController.getAvailableCoupons)
 
 
 

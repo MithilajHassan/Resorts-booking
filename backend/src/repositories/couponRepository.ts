@@ -17,7 +17,7 @@ class CouponRepository {
     }
 
     async findAll(filter: FilterQuery<ICoupon>={}): Promise<ICoupon[]> {
-        return await Coupon.find();
+        return await Coupon.find(filter);
     }
 
     async update(id: string, updateData: UpdateQuery<ICoupon>): Promise<ICoupon | null> {
@@ -25,7 +25,7 @@ class CouponRepository {
     }
 
     async delete(id: string): Promise<ICoupon | null> {
-        return await Coupon.findByIdAndDelete(id);
+        return await Coupon.findByIdAndUpdate(id,{isDeleted:true});
     }
 }
 

@@ -13,7 +13,6 @@ class CouponService {
         return await couponRepository.create(data);
     }
 
-
     async getCouponById(id: string): Promise<ICoupon | null> {
         const coupon = await couponRepository.findById(id);
         if (!coupon) {
@@ -22,23 +21,24 @@ class CouponService {
         return coupon
     }
 
-
     async getAllCoupons(): Promise<ICoupon[]> {
-        return await couponRepository.findAll();
+        return await couponRepository.findAll({isDeleted:false});
     }
 
-
     async updateCoupon(id: string, updateData: Partial<ICoupon>): Promise<ICoupon | null> {
-
+        const existingCoupon = await couponRepository.findOne({ code: updateData.code });
+        if (existingCoupon && id != existingCoupon._id) {
+            throw new CustomError('Coupon code already exists',409)
+        }
         return await couponRepository.update(id, updateData);
     }
 
     async deleteCoupon(id: string): Promise<ICoupon | null> {
-        const coupon = await couponRepository.findById(id);
-        if (!coupon) {
-            throw new Error('Coupon not found');
-        }
         return await couponRepository.delete(id);
+    }
+
+    async getAvailableCoupons(price:number): Promise<ICoupon[]> {
+        return await couponRepository.findAll({minBooking:{$lte:price}});
     }
 }
 

@@ -62,6 +62,21 @@ class CouponController {
             res.status(400).json({ success: false, message: error.message });
         }
     }
+
+    async getAvailableCoupons(req: Request, res: Response): Promise<void> {
+        try {
+            const coupons = await couponServices.getAvailableCoupons(Number(req.query.price))
+            res.status(200).json({ success: true, data: coupons });
+        } catch (err:any) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
+                console.log(err.message)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+
 }
 
 export default new CouponController();

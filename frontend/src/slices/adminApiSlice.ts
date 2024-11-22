@@ -162,7 +162,7 @@ export const adminApi = createApi({
         deleteCoupon: builder.mutation<{success:boolean, message:string},string>({
             query: (id) => ({
                 url: `/admin/coupons/${id}`,
-                method: 'DELETE',
+                method: 'PATCH',
             }),
         }),
 

@@ -33,6 +33,7 @@ const AvailableRooms = () => {
             checkOutDate:new Date(checkOut),
             paymentMethod:'upi',
             totalPrice:price+200,
+            discount:0,
         }))
         navigate('/checkout')
     }

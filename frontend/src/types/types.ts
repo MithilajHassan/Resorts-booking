@@ -80,6 +80,7 @@ export interface IBooking {
     paymentMethod?: string;
     paymentStatus?: boolean;
     status?: string;
+    discount?: number;
     transactionId?: string;
 }
 

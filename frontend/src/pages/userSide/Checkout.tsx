@@ -4,6 +4,7 @@ import UserHeader from "../../components/users/UserHeader"
 import GuestForm from "../../components/users/checkout/GuestForm"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store"
+import CouponSection from "../../components/users/checkout/CouponSection"
 
 
 export default function Checkout() {
@@ -26,8 +27,8 @@ export default function Checkout() {
 
                     <GuestForm />
 
-                    <div className="w-80">
-
+                    <div className="w-80 ">
+                        <CouponSection price={checkoutDetails?.totalPrice!} />
                     </div>
 
                 </div>

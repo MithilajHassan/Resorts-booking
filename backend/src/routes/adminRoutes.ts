@@ -42,7 +42,7 @@ adminRouter.delete('/banners/:id', adminProtect, bannerController.deleteBannerBy
 adminRouter.get('/coupons', adminProtect, couponController.getAllCoupons)
 adminRouter.post('/coupons', adminProtect, couponController.createCoupon)
 adminRouter.put('/coupons/:id', adminProtect, couponController.updateCoupon)
-adminRouter.delete('/coupons/:id', adminProtect, couponController.deleteCoupon)
+adminRouter.patch('/coupons/:id', adminProtect, couponController.deleteCoupon)
 
 
 
