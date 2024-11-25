@@ -17,6 +17,7 @@ export default function ChangePasswordForm({ }: Props) {
     const [currPassword, setCurrPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [showPasswords, setShowPasswords] = useState<boolean>(false)
     const [errMsg, setErrMsg] = useState('')
     const [updatePassword, { isLoading }] = useUpdatePasswordMutation()
     const navigate = useNavigate()
@@ -62,7 +63,7 @@ export default function ChangePasswordForm({ }: Props) {
                 <div className="flex flex-col">
                     <label htmlFor="currPassword" className="text-gray-700">Current Password</label>
                     <Input
-                        type="password"
+                        type={showPasswords ? "text" : "password"}
                         value={currPassword}
                         onChange={(e) => setCurrPassword(e.target.value)}
                         placeholder="Enter your current password"
@@ -74,7 +75,7 @@ export default function ChangePasswordForm({ }: Props) {
                 <div className="flex flex-col">
                     <label htmlFor="newPassword" className="text-gray-700">New Password</label>
                     <Input
-                        type="password"
+                        type={showPasswords ? "text" : "password"}
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="Enter your new password"
@@ -86,13 +87,21 @@ export default function ChangePasswordForm({ }: Props) {
                 <div className="flex flex-col">
                     <label htmlFor="confirmPassword" className="text-gray-700">Confirm Password</label>
                     <Input
-                        type="password"
+                        type={showPasswords ? "text" : "password"}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Enter your new password again"
                         className="bg-indigo-50"
                         required={true}
                     />
+                </div>
+                <div className="flex items-center gap-2">
+                    <input
+                        type="checkbox"
+                        onChange={() => setShowPasswords((v)=>!v)}
+                        className="bg-indigo-50 size-4"
+                    />
+                    <label htmlFor="confirmPassword" className="text-gray-700">Show Passwords</label>
                 </div>
 
                 <button type="submit" className="p-1.5 bg-blue-700 rounded-md text-white">Update</button>

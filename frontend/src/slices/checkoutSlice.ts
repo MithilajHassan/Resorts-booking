@@ -16,6 +16,9 @@ const bookingSlice = createSlice({
         setCheckout:(state,action: PayloadAction<IBooking>) => {
             state.checkoutDetails = action.payload
         },
+        // editCheckout:(state,action: PayloadAction<IBooking>) => {
+        //     state.checkoutDetails = {...state.checkoutDetails,...action.payload}
+        // },
         clearCheckout:(state) => {
             state.checkoutDetails = null
         }

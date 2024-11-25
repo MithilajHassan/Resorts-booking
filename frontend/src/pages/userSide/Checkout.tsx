@@ -28,7 +28,7 @@ export default function Checkout() {
                     <GuestForm />
 
                     <div className="w-80 ">
-                        <CouponSection price={checkoutDetails?.totalPrice!} />
+                        <CouponSection checkoutDetails={checkoutDetails!} />
                     </div>
 
                 </div>

@@ -4,7 +4,7 @@ import { IBooking, IResort, IRoom } from "@/types/types"
 type Props = {
   checkoutDetails: IBooking;
   resort: IResort;
-  room:IRoom
+  room: IRoom
 }
 
 export default function BookingDetails({ checkoutDetails, resort, room }: Props) {
@@ -12,10 +12,9 @@ export default function BookingDetails({ checkoutDetails, resort, room }: Props)
   const checkInDate = checkoutDetails?.checkInDate ? new Date(checkoutDetails.checkInDate) : null;
   const checkOutDate = checkoutDetails?.checkOutDate ? new Date(checkoutDetails.checkOutDate) : null;
 
-  const nightsCount = checkInDate && checkOutDate 
-    ? Math.round(Math.abs(checkInDate.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24)) 
+  const nightsCount = checkInDate && checkOutDate
+    ? Math.round(Math.abs(checkInDate.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24))
     : 0;
-  // const nightsCount = Math.round(Math.abs(checkoutDetails?.checkInDate.getTime()! - checkoutDetails?.checkOutDate!.getTime()!) / (1000 * 60 * 60 * 21))
 
   return (
     <div className="w-full lg:w-4/5 space-y-4 shadow-md pb-4">
@@ -24,7 +23,7 @@ export default function BookingDetails({ checkoutDetails, resort, room }: Props)
         <h2 className="text-xl font-semibold mx-8">Your booking details</h2>
       </div>
 
-      <div className="flex px-4 mx-4 flex-wrap">
+      <div className="flex px-4 mx-4">
         <div>
           <img src={resort.images[0]} alt="resort" className="rounded-md w-36 md:w-56 md:h-36" />
         </div>
@@ -38,10 +37,14 @@ export default function BookingDetails({ checkoutDetails, resort, room }: Props)
           </div>
 
           <h2 className="text-xl font-bold">{resort.resortName}</h2>
-          <div className="flex items-center text-gray-600 text-md">
+          <p className="flex items-center text-gray-600 text-md">
+            <FaMapMarkerAlt className="mr-2 text-red-500" />
+            {resort?.address}
+          </p>
+          {/* <div className="flex items-center text-gray-600 text-md text-wrap">
             <FaMapMarkerAlt className="mr-1 text-red-500" />
-            <p className="">{resort.address}</p>
-          </div>
+            <p className="break-words">{resort.address}</p>
+          </div> */}
           <p className="px-2 bg-green-500 w-fit font-semibold">
             4.3
           </p>
