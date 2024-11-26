@@ -38,6 +38,8 @@ userRouter.delete('/wishlist', userProtect, wishlistController.deleteWishlist);
 userRouter.get('/banners', userUnProtect, bannerController.getAllBanners)
 
 userRouter.get('/coupons', userProtect, couponController.getAvailableCoupons)
+userRouter.post('/coupons', userProtect, couponController.applyCoupon)
+
 
 
 

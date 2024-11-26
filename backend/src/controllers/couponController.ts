@@ -67,11 +67,24 @@ class CouponController {
         try {
             const coupons = await couponServices.getAvailableCoupons(Number(req.query.price))
             res.status(200).json({ success: true, data: coupons });
-        } catch (err:any) {
+        } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
             } else {
-                console.log(err.message)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+
+    async applyCoupon(req: Request, res: Response): Promise<void> {
+        try {
+            const { userId, couponId }:{userId:string,couponId:string} = req.body
+            await couponServices.applyCoupon(userId,couponId)
+            res.status(200).json({ success: true});
+        } catch (err) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
                 res.status(500).json({ message: 'Internal Server Error' })
             }
         }

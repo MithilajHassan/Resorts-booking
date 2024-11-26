@@ -19,7 +19,6 @@ const formSchema = z.object({
     code: z.string().min(10, "Code at least 10 characters"),
     discount: z.string().regex(/^(100|[1-9]?\d)$/, 'Discount percentage must be between 0 and 100'),
     minBooking: z.string().regex(/^[1-9][0-9]{2,}$/, 'Minimun booking price must be a number greater than 99'),
-    limit: z.string().regex(/^[1-9]\d*$/, 'Total coupons count in number').min(1, 'At least 1 coupon is required'),
     expiry: z.string().refine(date=> new Date(date) > new Date(),{
         message:"Expiry Date should be in the future"
     })
@@ -35,7 +34,6 @@ export default function CouponForm({ setGetForm }: Props) {
             code: '',
             discount: '',
             minBooking: '',
-            limit: '',
             expiry:'',
         }
     })
@@ -46,7 +44,6 @@ export default function CouponForm({ setGetForm }: Props) {
                 code:values.code,
                 discount:Number(values.discount),
                 minBooking:Number(values.minBooking),
-                limit:Number(values.limit),
                 expireAt:new Date(values.expiry)
             }).unwrap()
             if(res.success){
@@ -54,7 +51,6 @@ export default function CouponForm({ setGetForm }: Props) {
                     code:values.code,
                 discount:Number(values.discount),
                 minBooking:Number(values.minBooking),
-                limit:Number(values.limit),
                 expireAt:new Date(values.expiry)
                 }))
                 setGetForm(false)
@@ -117,19 +113,6 @@ export default function CouponForm({ setGetForm }: Props) {
                             )}
                         />
 
-                        <FormField
-                            control={form.control}
-                            name="limit"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Limit</FormLabel>
-                                    <FormControl>
-                                        <Input className="bg-indigo-50" placeholder="Enter the limit" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
 
                         <FormField
                             control={form.control}

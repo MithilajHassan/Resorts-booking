@@ -99,10 +99,19 @@ export const userApi = createApi({
             query: () => '/user/banners',
         }),
 
+
         listCoupons: builder.mutation<{success:Boolean,data:ICoupon[]}, {price:number}>({
             query: ({price}) =>({
                 url:`/user/coupons?price=${price}`,
                 method:'GET'
+            }) 
+        }),
+
+        applyCoupon: builder.mutation<{success:Boolean}, {userId:string,mcouponId:string}>({
+            query: (data) =>({
+                url:`/user/coupons`,
+                method:'POST',
+                body:data
             }) 
         }),
 
@@ -126,6 +135,7 @@ export const {
     useDeleteWishlistMutation,
     useListBannersQuery,
     useListCouponsMutation,
+    useApplyCouponMutation,
 
     
 
