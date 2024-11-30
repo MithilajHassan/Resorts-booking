@@ -16,6 +16,10 @@ class UserRepository {
     async updatePassword(id: string, password:string): Promise<IUser | null> {
         return await User.findByIdAndUpdate(id, { $set: {password} },{ new: true })
     }
+
+    async updateUserWallet(id: string, price:number){
+        return await User.findByIdAndUpdate(id, { walletBalance: price },{ new: true })
+    }
     
     async findByEmail(email:string):Promise<IUser | null>{
         return await User.findOne({email})

@@ -14,6 +14,7 @@ import BookingDetailsPage from "../pages/userSide/BookingDetailsPage";
 import UserProfileEditPage from "../pages/userSide/UserProfileEditPage";
 import WishlistPage from "../pages/userSide/WishlistPage";
 import PasswordChangingPage from "../pages/userSide/PasswordChangingPage";
+import WalletPage from "../pages/userSide/WalletPage";
 
 const UserRoutes = () => {
     return (
@@ -33,6 +34,8 @@ const UserRoutes = () => {
                 <Route path="/bookings" element={<BookingsPage />} />
                 <Route path="/bookings/:id" element={<BookingDetailsPage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
+                <Route path="/wallet" element={<WalletPage />} />
+
             </Route>
 
             <Route path='*' element={<NotFound baseRoute="/" />} />

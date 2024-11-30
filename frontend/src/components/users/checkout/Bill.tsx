@@ -27,7 +27,7 @@ export default function Bill({ checkoutDetails, room }: Props) {
 
                 <div className="flex justify-between text-md font-medium text-green-700">
                     <span>Discount</span>
-                    <span>-₹{Math.floor(room.normalPrice * room.offerPercentage /100)}</span>
+                    <span>-₹{Math.floor(room.normalPrice * room.offerPercentage /100)+checkoutDetails.discount!}</span>
                 </div>
             </div>
             <div className="px-4 ">

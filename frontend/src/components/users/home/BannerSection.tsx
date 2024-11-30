@@ -50,7 +50,7 @@ export default function BannerSection({ }: Props) {
                                     height: '300px',
                                 }}
                             >
-                                <Card className="w-full h-full bg-black bg-opacity-0 rounded-none">
+                                <Card className="bg-white bg-opacity-50 border-0 rounded-none">
                                     <CardContent className="flex flex-col items-center justify-center p-6 text-Black text-center">
                                         <h2 className="text-3xl font-semibold mb-2">{banner.title}</h2>
                                         <p className="font-semibold">{banner.description}</p>

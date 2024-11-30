@@ -120,3 +120,11 @@ export interface ICoupon {
     expireAt: Date;
     isDeleted?: boolean;
 }
+
+export interface IWalletHistory{
+    id?: string,
+    userId: string,
+    amount: number;
+    type: 'Deposit' | 'Purchase' | 'Refund';
+    createdAt?: Date;
+}

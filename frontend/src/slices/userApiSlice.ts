@@ -107,7 +107,7 @@ export const userApi = createApi({
             }) 
         }),
 
-        applyCoupon: builder.mutation<{success:Boolean}, {userId:string,mcouponId:string}>({
+        applyCoupon: builder.mutation<{success:Boolean}, {userId:string,couponId:string}>({
             query: (data) =>({
                 url:`/user/coupons`,
                 method:'POST',

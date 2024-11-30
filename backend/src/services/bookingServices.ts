@@ -1,27 +1,30 @@
 import BookingRepository from './../repositories/bookingRepository';
 import { IBooking } from './../models/bookingModel';
 import Razorpay from 'razorpay';
+import User from '../models/userModel';
+import userRepository from '../repositories/userRepository';
+import walletHistoryRepository from '../repositories/walletHistoryRepository';
 
 
 class BookingService {
-    async createBooking(bookingData: IBooking): Promise<{orderId:string, amount:string|number, bookingId:string}> {
+    async createBooking(bookingData: IBooking): Promise<{ orderId: string, amount: string | number, bookingId: string }> {
         const razorpay = new Razorpay({
-            key_id:process.env.RAZORPAY_KEY_ID!,
-            key_secret:process.env.RAZORPAY_SECRET 
+            key_id: process.env.RAZORPAY_KEY_ID!,
+            key_secret: process.env.RAZORPAY_SECRET
         })
         const booking = await BookingRepository.createBooking(bookingData)
         const response = await razorpay.orders.create({
-            amount:booking.totalPrice * 100,
-            currency:'INR',
-            receipt:booking._id as string,
-            payment_capture:true
+            amount: booking.totalPrice * 100,
+            currency: 'INR',
+            receipt: booking._id as string,
+            payment_capture: true
         })
-        
-        return {orderId:response.id,amount:response.amount,bookingId:booking._id as string}
+
+        return { orderId: response.id, amount: response.amount, bookingId: booking._id as string }
     }
 
-    async setPaymentStatus(id:string, status:boolean): Promise<IBooking | null> {
-        return await BookingRepository.setPaymentStatus(id,status)
+    async setPaymentStatus(id: string, status: boolean): Promise<IBooking | null> {
+        return await BookingRepository.setPaymentStatus(id, status)
     }
 
     async getBookingById(id: string): Promise<IBooking | null> {
@@ -41,7 +44,18 @@ class BookingService {
     }
 
     async updateBookingStatus(id: string, status: string): Promise<IBooking | null> {
-        return await BookingRepository.editBookingStatus(id, status );
+        const booking = await BookingRepository.editBookingStatus(id, status);
+        if (status == 'Cancelled') {
+            await Promise.all([
+                userRepository.updateUserWallet(String(booking?.userId!) , booking?.totalPrice!),
+                walletHistoryRepository.create({
+                    userId: booking?.userId!,
+                    amount: booking?.totalPrice!,
+                    type: 'Refund',
+                }),
+            ])
+        }
+        return booking
     }
 }
 
