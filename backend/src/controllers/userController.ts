@@ -109,7 +109,7 @@ class UserController {
 
         try {
             await userServices.updatePassword(id, currPassword, newPassword);
-            res.status(200).json({success:true});
+            res.status(200).json({ success: true });
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
@@ -212,6 +212,16 @@ class UserController {
             return res.status(500).json({ error: "Internal Server Error" });
         }
     }
+
+    async walletDetails(req: CustomRequest, res: Response) {
+        try {
+            const histories = await userServices.walletDetails(req.user?._id as string)
+            res.status(200).json({ balance: req.user?.walletBalance, histories })
+        } catch (err) {
+            res.status(500).json({ message: 'Internal Server Error' })
+        }
+    }
+
 
 }
 

@@ -1,17 +1,22 @@
 import { Request, Response } from 'express';
 import BookingService from './../services/bookingServices';
 import { IBooking } from './../models/bookingModel';
+import { CustomRequest } from '../middleware/auth';
+import CustomError from '../errors/customError';
 
 class BookingController {
 
-    async createBooking(req: Request, res: Response): Promise<void> {
+    async createBooking(req: CustomRequest, res: Response): Promise<void> {
         try {
             const bookingData: IBooking = req.body;
-            const payment = await BookingService.createBooking(bookingData);
-
+            const payment = await BookingService.createBooking(bookingData, req.user?.walletBalance!);
             res.status(201).json(payment)
-        } catch (error) {
-            res.status(500).json({ message: 'Error creating booking', error });
+        } catch (err) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
+                res.status(500).json({ message: 'Error creating booking', err });
+            }
         }
     }
 

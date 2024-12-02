@@ -4,10 +4,12 @@ import ProfileSidebar from '../../components/users/ProfileSidebar'
 import UserHeader from '../../components/users/UserHeader'
 import WalletCard from '../../components/users/WalletCard'
 import WalletHistory from '../../components/users/WalletHistory'
+import { useGetWalletQuery } from '../../slices/userApiSlice'
 
 
 
 export default function WalletPage() {
+    const { data } = useGetWalletQuery()
     return (
         <>
             <UserHeader />
@@ -23,10 +25,10 @@ export default function WalletPage() {
                 <div className="flex flex-grow">
                     <div className="w-full">
                         <div className='w-full flex justify-center my-12'>
-                            <WalletCard />
+                            <WalletCard  balance={data?.balance!} />
                         </div>
                         <div className='w-full flex'>
-                            <WalletHistory  />
+                            <WalletHistory histories={data?.histories} />
                         </div>
                     </div>
                 </div>

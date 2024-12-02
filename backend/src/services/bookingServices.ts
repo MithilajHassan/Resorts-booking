@@ -4,23 +4,30 @@ import Razorpay from 'razorpay';
 import User from '../models/userModel';
 import userRepository from '../repositories/userRepository';
 import walletHistoryRepository from '../repositories/walletHistoryRepository';
+import CustomError from '../errors/customError';
 
 
 class BookingService {
-    async createBooking(bookingData: IBooking): Promise<{ orderId: string, amount: string | number, bookingId: string }> {
-        const razorpay = new Razorpay({
-            key_id: process.env.RAZORPAY_KEY_ID!,
-            key_secret: process.env.RAZORPAY_SECRET
-        })
+    async createBooking(bookingData: IBooking, walletBalance: number): Promise<{ orderId?: string, amount?: string | number, bookingId: string }> {
+        if(walletBalance < bookingData.totalPrice){
+            throw new CustomError('Insufficient wallet balance',400)
+        }
         const booking = await BookingRepository.createBooking(bookingData)
-        const response = await razorpay.orders.create({
-            amount: booking.totalPrice * 100,
-            currency: 'INR',
-            receipt: booking._id as string,
-            payment_capture: true
-        })
-
-        return { orderId: response.id, amount: response.amount, bookingId: booking._id as string }
+        if (bookingData.paymentMethod == 'upi') {
+            const razorpay = new Razorpay({
+                key_id: process.env.RAZORPAY_KEY_ID!,
+                key_secret: process.env.RAZORPAY_SECRET
+            })
+            const response = await razorpay.orders.create({
+                amount: booking.totalPrice * 100,
+                currency: 'INR',
+                receipt: booking._id as string,
+                payment_capture: true
+            })
+            return { orderId: response.id, amount: response.amount, bookingId: booking._id as string }
+        }
+        userRepository.updateUser(String(booking.userId),{walletBalance:walletBalance-booking.totalPrice})
+        return { bookingId: booking._id as string }
     }
 
     async setPaymentStatus(id: string, status: boolean): Promise<IBooking | null> {
@@ -47,7 +54,7 @@ class BookingService {
         const booking = await BookingRepository.editBookingStatus(id, status);
         if (status == 'Cancelled') {
             await Promise.all([
-                userRepository.updateUserWallet(String(booking?.userId!) , booking?.totalPrice!),
+                userRepository.updateUserWallet(String(booking?.userId!), booking?.totalPrice!),
                 walletHistoryRepository.create({
                     userId: booking?.userId!,
                     amount: booking?.totalPrice!,

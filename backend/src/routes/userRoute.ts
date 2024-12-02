@@ -40,6 +40,8 @@ userRouter.get('/banners', userUnProtect, bannerController.getAllBanners)
 userRouter.get('/coupons', userProtect, couponController.getAvailableCoupons)
 userRouter.post('/coupons', userProtect, couponController.applyCoupon)
 
+userRouter.get('/wallet', userProtect, userController.walletDetails)
+
 
 
 

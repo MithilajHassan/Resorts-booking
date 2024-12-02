@@ -8,6 +8,8 @@ import resortRepository from '../repositories/resortRepository'
 import { IResort } from '../models/resortModel'
 import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper'
 import bookingRepository from '../repositories/bookingRepository'
+import { IWalletHistory } from '../models/walletHistoryModel'
+import walletHistoryRepository from '../repositories/walletHistoryRepository'
 
 class UserServices {
     async handleUserSignup(email: string) {
@@ -120,5 +122,10 @@ class UserServices {
         return await resortRepository.findResortById(id)
     }
 
+    async walletDetails(userId: string):Promise<IWalletHistory[] | []>{
+        return await walletHistoryRepository.findHistories(userId)
+    }
+
 }
+
 export default new UserServices()

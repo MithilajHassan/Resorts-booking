@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { RootState } from "@/store"
 import { useCreateBookingMutation, useSetPaymentStatusMutation } from "../../../slices/userApiSlice"
+import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
+import { Label } from "../../ui/label";
 
 const formSchema = z.object({
     guestName: z.string().min(3, { message: "Guest name is required" })
@@ -19,6 +21,7 @@ const formSchema = z.object({
         .regex(/^[A-Z\sa-z]+$/, { message: "Guest name should contain only letters" }),
     email: z.string().email({ message: "Invalid email address" }),
     phone: z.string().regex(/^[0-9]{10,}$/, { message: "Phone number must be 10 digits" }),
+    paymentMethod: z.enum(['upi', 'wallet'])
 })
 
 export default function GuestForm() {
@@ -33,7 +36,8 @@ export default function GuestForm() {
         defaultValues: {
             guestName: '',
             email: '',
-            phone: ''
+            phone: '',
+            paymentMethod: 'upi'
         }
     })
 
@@ -43,15 +47,14 @@ export default function GuestForm() {
                 guestName: checkoutDetails?.guestName,
                 email: checkoutDetails?.guestEmail,
                 phone: checkoutDetails.guestPhone ? String(checkoutDetails?.guestPhone) : '',
-            })            
+            })
         }
     }, [checkoutDetails])
-    
+
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-
             const res = await createBooking({
                 userId: checkoutDetails?.userId!,
                 resortId: checkoutDetails?.resortId!,
@@ -60,30 +63,34 @@ export default function GuestForm() {
                 guestEmail: values.email,
                 guestPhone: Number(values.phone),
                 guestCount: checkoutDetails?.guestCount!,
-                checkInDate: checkoutDetails?.checkInDate!,   
-                checkOutDate: checkoutDetails?.checkOutDate!,  
+                checkInDate: checkoutDetails?.checkInDate!,
+                checkOutDate: checkoutDetails?.checkOutDate!,
                 checkInTime: checkoutDetails?.checkInTime!,
                 checkOutTime: checkoutDetails?.checkOutTime!,
                 totalPrice: checkoutDetails?.totalPrice!,
-                paymentMethod: checkoutDetails?.paymentMethod!,
+                paymentMethod: values.paymentMethod,
                 discount: checkoutDetails?.discount
             }).unwrap()
-            const options: RazorpayOrderOptions = {
-                key: process.env.REACT_APP_RAZORPAY_KEY_ID!,
-                amount: Number(res.amount),
-                currency: 'INR',
-                name: 'Resort',
-                description: 'Booking Payment',
-                image: '/images/Logo.png',
-                order_id: res.orderId,
-                async handler(response) {
-                    await setPaymentStatus({bookingId:res.bookingId, status:true}).unwrap()
-                    navigate('/booking-success')
+            if (values.paymentMethod == 'upi') {
+                const options: RazorpayOrderOptions = {
+                    key: process.env.REACT_APP_RAZORPAY_KEY_ID!,
+                    amount: Number(res.amount),
+                    currency: 'INR',
+                    name: 'Resort',
+                    description: 'Booking Payment',
+                    image: '/images/Logo.png',
+                    order_id: res?.orderId!,
+                    async handler(response) {
+                        await setPaymentStatus({ bookingId: res.bookingId, status: true }).unwrap()
+                        navigate('/booking-success')
+                    }
                 }
-
+                const razorpayInstance = new Razorpay(options);
+                razorpayInstance.open()
+            }else{
+                await setPaymentStatus({ bookingId: res.bookingId, status: true }).unwrap()
+                navigate('/booking-success')
             }
-            const razorpayInstance = new Razorpay(options);
-            razorpayInstance.open()
         } catch (err) {
             if (isApiError(err)) {
                 toast(<div className="text-red-600">{err.data.message}</div>)
@@ -147,6 +154,30 @@ export default function GuestForm() {
                             </FormItem>
                         )}
                     />
+
+                    <FormField
+                        control={form.control}
+                        name="paymentMethod"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Payment Methode</FormLabel>
+                                <FormControl>
+                                    <RadioGroup onValueChange={field.onChange} defaultValue={field.value}>
+                                        <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="upi" id="r1" />
+                                            <Label htmlFor="r1">UPI</Label>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="wallet" id="r2" />
+                                            <Label htmlFor="r2">Wallet</Label>
+                                        </div>
+                                    </RadioGroup>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
 
                     <div className="flex justify-end w-full">
                         <Button className="w-52 bg-blue-700 hover:bg-blue-400 text-md" size={'lg'}>Proceed to pay</Button>

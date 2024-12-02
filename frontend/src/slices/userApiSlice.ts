@@ -1,4 +1,4 @@
-import { IBanner, IBooking, ICoupon, IResort, IReview, IRoom, IWishlist } from '../types/types'
+import { IBanner, IBooking, ICoupon, IResort, IReview, IRoom, IWalletHistory, IWishlist } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const userApi = createApi({
@@ -38,7 +38,7 @@ export const userApi = createApi({
             })
         }),
 
-        createBooking: builder.mutation<{ orderId: string, amount: string | number, bookingId: string }, IBooking>({
+        createBooking: builder.mutation<{ orderId?: string, amount?: string | number, bookingId: string }, IBooking>({
             query: (data) => ({
                 url: '/user/checkout',
                 method: 'POST',
@@ -115,6 +115,10 @@ export const userApi = createApi({
             }) 
         }),
 
+        getWallet: builder.query<{balance:number,histories:IWalletHistory[]},void>({
+            query:()=>`/user/wallet`,
+        })
+
     })
 })
 
@@ -136,7 +140,7 @@ export const {
     useListBannersQuery,
     useListCouponsMutation,
     useApplyCouponMutation,
+    useGetWalletQuery,
 
-    
 
 } = userApi
