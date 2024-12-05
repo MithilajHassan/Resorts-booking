@@ -17,7 +17,7 @@ const ConversationSchema: Schema = new Schema(
                 participantType: { type: String, enum: ['User', 'Resort'], required: true },
             },
         ],
-        messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+        messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message', default: [] }],
     },
     {
         timestamps: true,
@@ -25,6 +25,6 @@ const ConversationSchema: Schema = new Schema(
 );
 
 
-const ConversationModel = mongoose.model<IConversation>('Conversation', ConversationSchema);
+const Conversation = mongoose.model<IConversation>('Conversation', ConversationSchema);
 
-export default ConversationModel
+export default Conversation

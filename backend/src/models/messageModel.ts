@@ -25,6 +25,6 @@ const MessageSchema: Schema = new Schema(
     }
 );
 
-const MessageModel = model<IMessage>('Message', MessageSchema);
+const Message = model<IMessage>('Message', MessageSchema);
 
-export default MessageModel
+export default Message

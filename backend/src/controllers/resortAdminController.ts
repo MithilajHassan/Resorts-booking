@@ -203,8 +203,6 @@ class ResortAdminController {
 
             bookings.forEach((booking) => {
                 const bookingDay = new Date(booking._id).getDate()
-                console.log(bookingDay);
-                
                 chartData[bookingDay-1].count += booking.count as number
             });
 

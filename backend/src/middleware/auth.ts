@@ -3,10 +3,12 @@ import userRepository from '../repositories/userRepository';
 import resortRepository from '../repositories/resortRepository';
 import { IUser } from '../models/userModel';
 import { generateAccessToken, verifyAccessToken, verifyRefreshToken } from '../utils/jwtHelper';
+import { IResort } from '../models/resortModel';
 
 
 export interface CustomRequest extends Request {
     user?: Partial<IUser>;
+    resort?:Partial<IResort>;
 }
 
 export const adminProtect = async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -147,7 +149,7 @@ export const userUnProtect = async (req: CustomRequest, res: Response, next: Nex
 }
 
 
-export const resortProtect = async (req: Request, res: Response, next: NextFunction) => {
+export const resortProtect = async (req: CustomRequest, res: Response, next: NextFunction) => {
     let accessToken = req.cookies?.resortAccessT
     let refreshToken = req.cookies?.resortRefreshT
 
@@ -165,7 +167,7 @@ export const resortProtect = async (req: Request, res: Response, next: NextFunct
                 })
                 return res.status(401).json({ messsage: 'Your account is blocked', isBlocked: resort.isBlock })
             }
-
+            req.resort = resort 
             next()
         } catch (error) {
             res.status(401);
@@ -174,13 +176,13 @@ export const resortProtect = async (req: Request, res: Response, next: NextFunct
     }else if (refreshToken) {
         try {
             const decodedRefresh = verifyRefreshToken(refreshToken)
-            const user = await resortRepository.findResortById(decodedRefresh.id);
+            const resort = await resortRepository.findResortById(decodedRefresh.id);
 
-            if (!user) {
+            if (!resort) {
                 return res.status(401).json({ message: 'User not found' });
             }
 
-            const newAccessToken = generateAccessToken({ id: user._id as string });
+            const newAccessToken = generateAccessToken({ id: resort._id as string });
             res.cookie('resortAccessT', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',
@@ -188,7 +190,7 @@ export const resortProtect = async (req: Request, res: Response, next: NextFunct
                 maxAge: 15 * 60 * 1000,
             });
 
-            req.user = user
+            req.resort = resort
             next()
         } catch (err) {
             return res.status(403).json({ message: 'Invalid refresh token' });

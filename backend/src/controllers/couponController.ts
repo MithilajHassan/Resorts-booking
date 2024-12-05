@@ -35,7 +35,7 @@ class CouponController {
         try {
             const coupons = await couponServices.getAllCoupons();
             res.status(200).json({ success: true, data: coupons });
-        } catch (err:any) {
+        } catch (err: any) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
             } else {
@@ -57,7 +57,7 @@ class CouponController {
     async deleteCoupon(req: Request, res: Response): Promise<void> {
         try {
             await couponServices.deleteCoupon(req.params.id);
-            res.status(200).json({ success: true, message: 'Coupon deleted successfully'});
+            res.status(200).json({ success: true, message: 'Coupon deleted successfully' });
         } catch (error: any) {
             res.status(400).json({ success: false, message: error.message });
         }
@@ -78,9 +78,9 @@ class CouponController {
 
     async applyCoupon(req: Request, res: Response): Promise<void> {
         try {
-            const { userId, couponId }:{userId:string,couponId:string} = req.body
-            await couponServices.applyCoupon(userId,couponId)
-            res.status(200).json({ success: true});
+            const { userId, couponId }: { userId: string, couponId: string } = req.body
+            await couponServices.applyCoupon(userId, couponId)
+            res.status(200).json({ success: true });
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
