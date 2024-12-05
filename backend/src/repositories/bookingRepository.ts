@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongoose';
 import Booking, { IBooking } from './../models/bookingModel';
 
 export default new class BookingRepository {
@@ -37,8 +38,8 @@ export default new class BookingRepository {
         return await Booking.find({resortId:id}).populate('userId').populate('roomId').populate('resortId')
     }
 
-    async findAll(): Promise<IBooking[] | []> {
-        return await Booking.find()
+    async findAll(filter:FilterQuery<IBooking>={}): Promise<IBooking[] | []> {
+        return await Booking.find(filter)
     }
 
     async editBookingStatus(id: string , status: string): Promise<IBooking | null> {

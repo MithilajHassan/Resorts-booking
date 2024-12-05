@@ -26,6 +26,9 @@ resortAdminRouter.patch('/rooms/:id/delete', resortProtect, resortAdminControlle
 resortAdminRouter.get('/bookings/:resortId', resortProtect, bookingController.getBookingsByResortId)
 resortAdminRouter.patch('/bookings/:id', resortProtect, bookingController.updateBookingStatus)
 
+resortAdminRouter.get('/dashboard/:id', resortProtect, resortAdminController.getChartDetails)
+resortAdminRouter.get('/dashboard/tails/:id', resortProtect, resortAdminController.getTailsDetails)
+
 
 
 

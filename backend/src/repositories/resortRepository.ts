@@ -21,6 +21,10 @@ export default new class ResortRepository {
         return await Resort.findOne({ _id: id, isVerify: true, isBlock: false })
     }
 
+    async findAllVerifiedResorts(): Promise<IResort[] | []> {
+        return await Resort.find({isVerify: true})
+    }
+
     async accept(id: unknown): Promise<IResort | null> {
         return await Resort.findByIdAndUpdate(id, { $set: { isVerify: true } }, { new: true })
     }

@@ -1,7 +1,6 @@
 import BookingRepository from './../repositories/bookingRepository';
 import { IBooking } from './../models/bookingModel';
 import Razorpay from 'razorpay';
-import User from '../models/userModel';
 import userRepository from '../repositories/userRepository';
 import walletHistoryRepository from '../repositories/walletHistoryRepository';
 import CustomError from '../errors/customError';
@@ -9,7 +8,7 @@ import CustomError from '../errors/customError';
 
 class BookingService {
     async createBooking(bookingData: IBooking, walletBalance: number): Promise<{ orderId?: string, amount?: string | number, bookingId: string }> {
-        if(walletBalance < bookingData.totalPrice){
+        if(bookingData.paymentMethod == 'wallet' && walletBalance < bookingData.totalPrice){
             throw new CustomError('Insufficient wallet balance',400)
         }
         const booking = await BookingRepository.createBooking(bookingData)

@@ -9,6 +9,8 @@ import { RootState } from "../../store"
 import { useSelector } from "react-redux"
 import { HiMiniRectangleStack } from "react-icons/hi2"
 import { BiSolidCoupon } from "react-icons/bi"
+import AdminTails from "../../components/admin/AdminTails"
+import { ResortsChart } from "../../components/admin/ResortsChart"
 
 const AdminDashboard = () => {
     const { adminInfo } = useSelector((state: RootState) => state.auth)
@@ -26,7 +28,12 @@ const AdminDashboard = () => {
                     <Link to={'/admin/coupons'}><SidebarItem icon={<BiSolidCoupon />} text="Coupons" /></Link>
                 </Sidebar>
 
-                <p className="ml-72 text-2xl mt-72">Admin Dashboard</p>
+                <div className="flex flex-col items-center mt-20 w-full">
+                    <AdminTails />
+                    <div className="w-5/7 mt-5">
+                        <ResortsChart />
+                    </div>
+                </div>
                 
             </div>
         </>

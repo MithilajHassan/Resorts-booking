@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import ResortHeader from '../../components/resort/Header'
-import Dashboard from '../../components/resort/Dashboard'
 import Sidebar, { SidebarItem } from '../../components/common/Sidebar'
 import { MdOutlineBedroomParent, MdOutlineDashboard } from 'react-icons/md'
 import { GiBlockHouse } from 'react-icons/gi'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { FaBook } from 'react-icons/fa'
+import ResortTails from '../../components/resort/ResortTails'
+import BookingTrendsChart from '../../components/resort/BookingChart'
 
 const ResortDashboard = () => {
     const { resortAdmin } = useSelector((state: RootState) => state.auth)
@@ -21,7 +22,13 @@ const ResortDashboard = () => {
                     <Link to={'/resort/bookings'}><SidebarItem icon={<FaBook />} text="Bookings" /></Link>
                 </Sidebar>
 
-                <Dashboard />
+                <div className="flex flex-col items-center mt-20 w-full">
+                    <ResortTails />
+                    <div className="w-8/12 mt-5">
+                        <BookingTrendsChart />
+                    </div>
+                </div>
+
             </div>
         </>
     )

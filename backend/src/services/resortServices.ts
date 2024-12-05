@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import { Response } from 'express'
 import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper';
 import roomRepository from '../repositories/roomRepository';
+import bookingRepository from '../repositories/bookingRepository';
 
 export default new class ResortService {
 
@@ -81,6 +82,24 @@ export default new class ResortService {
         }
 
         return availableRooms;
+    }
+
+    async getTailsDetails(resortId:string):Promise<{rooms:number,stays:number,bookings:number,revenue:number}> {
+        const rooms = await roomRepository.findRoomsByResortId(resortId)
+        let totalBookings = 0
+        let stays = 0
+        let totalRevenue = 0
+        const bookings = await bookingRepository.findAll({resortId,status:{$ne:'Cancelled'}})
+        bookings.forEach((booking)=>{
+            
+            if(booking.status == 'Booked'){
+                totalBookings++
+            }else{
+                stays++
+                totalRevenue += booking.totalPrice
+            }
+        })
+        return {rooms:rooms.length,stays,bookings:totalBookings,revenue:totalRevenue}
     }
 
 }

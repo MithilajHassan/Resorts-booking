@@ -9,7 +9,7 @@ import { useEditBookingStatusMutation } from "../../slices/resortAdminApiSlice"
 import { updateABookingStatus } from "../../slices/bookingSlice"
 import { Button } from "../../components/ui/button"
 import Confirm from "../../components/common/Confirm"
-import { useEffect } from "react"
+
 
 
 export default function BookingDetailsPage() {
@@ -68,7 +68,6 @@ export default function BookingDetailsPage() {
                             )
                         }
                     </div>
-
                 </div>
             </div>
         </>

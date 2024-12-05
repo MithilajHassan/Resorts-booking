@@ -8,7 +8,7 @@ export default new class RoomRepository {
         return await newRoom.save()
     }
 
-    async findRoomsByResortId(resortId: string): Promise<IRoom[] | null> {
+    async findRoomsByResortId(resortId: string): Promise<IRoom[] | []> {
         return await Room.find({ resortId, isDeleted: false })
     }
 

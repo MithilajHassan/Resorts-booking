@@ -85,6 +85,20 @@ export const resortAdminApi = createApi({
             })
         }),
 
+
+        getChartDetails: builder.mutation<{day:number,count:number}[],{resortId:string}>({
+            query:({resortId})=>({
+                url:`/resort/dashboard/${resortId}`,
+                method:'GET'
+            })
+        }),
+        getTailsDetails: builder.mutation <{rooms:number,stays:number,bookings:number,revenue:number},{resortId:string}>({
+            query:({resortId})=>({
+                url:`/resort/dashboard/tails/${resortId}`,
+                method:'GET'
+            })
+        }),
+
     })
 })
 
@@ -102,6 +116,8 @@ export const {
     // useVerifyAdminQuery,
     useListBookingsQuery,
     useEditBookingStatusMutation,
+    useGetTailsDetailsMutation,
+    useGetChartDetailsMutation,
 
 
 

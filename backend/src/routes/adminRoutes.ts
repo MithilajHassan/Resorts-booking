@@ -45,6 +45,10 @@ adminRouter.put('/coupons/:id', adminProtect, couponController.updateCoupon)
 adminRouter.patch('/coupons/:id', adminProtect, couponController.deleteCoupon)
 
 
+adminRouter.get('/dashboard', adminProtect, adminController.getChartDetails)
+adminRouter.get('/dashboard/tails', adminProtect, adminController.getTailsDetails)
+
+
 
 
 export default adminRouter

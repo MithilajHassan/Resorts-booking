@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { CategoryDetails, FacilityDetails, IBanner, ICoupon, IUser } from "../types/types"
+import { boolean } from 'zod';
 
 export const adminApi = createApi({
     reducerPath: 'adminApi',
@@ -166,6 +167,19 @@ export const adminApi = createApi({
             }),
         }),
 
+        getChartDetails: builder.mutation <{resort:string,bookings:number}[],void>({
+            query:()=>({
+                url:`/admin/dashboard`,
+                method:'GET'
+            })
+        }),
+        getTailsDetails: builder.mutation <{users:number,resorts:number,bookings:number,revenue:number},void>({
+            query:()=>({
+                url:`/admin/dashboard/tails`,
+                method:'GET'
+            })
+        })
+
     })
 })
 
@@ -191,7 +205,8 @@ export const {
     useListCouponsMutation,
     useCreateCouponMutation,
     useDeleteCouponMutation,
-
+    useGetChartDetailsMutation,
+    useGetTailsDetailsMutation,
 
 
 } = adminApi

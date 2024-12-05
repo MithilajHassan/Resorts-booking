@@ -255,6 +255,24 @@ class AdminController {
     }
 
 
+    async getChartDetails(req: Request, res: Response) {
+        try {
+            const chartDetails = await adminServices.findTrendResorts()
+            res.status(200).json(chartDetails)
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to get details', error })
+        }
+    }
+
+    async getTailsDetails(req: Request, res: Response) {
+        try {
+            const tailsDetails = await adminServices.getTailsDetails()
+            res.status(200).json(tailsDetails)
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to get details', error })
+        }
+    }
+
 }
 
 export default new AdminController
