@@ -13,7 +13,7 @@ const ConversationSchema: Schema = new Schema(
     {
         participants: [
             {
-                participantId: { type: mongoose.Schema.Types.ObjectId, required: true },
+                participantId: { type: mongoose.Schema.Types.ObjectId, required: true, refPath: 'participants.participantType' },
                 participantType: { type: String, enum: ['User', 'Resort'], required: true },
             },
         ],

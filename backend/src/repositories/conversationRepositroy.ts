@@ -6,9 +6,12 @@ export default new class ConversationRepository {
         return conversation.save()
     }
 
-    async getConversationsByParticipants(participants: IConversation["participants"]): Promise<IConversation | null> {
+    async getConversationByParticipants(id1: string,id2: string): Promise<IConversation | null> {
         return Conversation.findOne({
-            participants:{$all:participants}
+            participants:{$all:[
+                { $elemMatch: { participantId: id1 } },
+                { $elemMatch: { participantId: id2 } }
+            ]}
         }).populate('messages')
     }
 
@@ -23,6 +26,6 @@ export default new class ConversationRepository {
     async getConversationsByParticipantId(participantId: string): Promise<IConversation[]> {
         return Conversation.find({
             participants: { $elemMatch: { participantId } },
-        });
+        }).populate('participants.participantId')
     }
 }

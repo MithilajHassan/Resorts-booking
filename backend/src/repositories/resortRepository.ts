@@ -15,27 +15,32 @@ export default new class ResortRepository {
     }
 
     async findAll(): Promise<IResort[] | []> {
-        return await Resort.find()
+        return await Resort.find().populate('categories').populate('facilities')
     }
+
     async findVerifiedResort(id: string): Promise<IResort | null> {
         return await Resort.findOne({ _id: id, isVerify: true, isBlock: false })
     }
 
     async findAllVerifiedResorts(): Promise<IResort[] | []> {
-        return await Resort.find({isVerify: true})
+        return await Resort.find({ isVerify: true })
     }
 
     async accept(id: unknown): Promise<IResort | null> {
         return await Resort.findByIdAndUpdate(id, { $set: { isVerify: true } }, { new: true })
+            .populate('categories').populate('facilities')
     }
     async reject(id: unknown): Promise<IResort | null> {
-        return await Resort.findByIdAndUpdate(id, { $set: { isVerify: false } }, { new: true })
+        return await Resort.findByIdAndUpdate(id, { $set: { isVerify: false, isRejected:true } }, { new: true })
+            .populate('categories').populate('facilities')
     }
     async manageResortBlock(id: string, status: boolean): Promise<IResort | null> {
-        return await Resort.findByIdAndUpdate(id, { $set: { isBlock: status } })
+        return await Resort.findByIdAndUpdate(id, { $set: { isBlock: status } }, { new: true })
+            .populate('categories').populate('facilities')
     }
     async editResort(resortData: IResort, id: string): Promise<IResort | null> {
-        return await Resort.findByIdAndUpdate(id, { $set: resortData }, { new: true }).populate('categories').populate('facilities')
+        return await Resort.findByIdAndUpdate(id, { $set: resortData }, { new: true })
+            .populate('categories').populate('facilities')
     }
 
     async findResortsByCity(place: string): Promise<IResort[] | null> {

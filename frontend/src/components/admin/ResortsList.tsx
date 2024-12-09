@@ -1,9 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
-  useAcceptResortMutation,
   useGetResortsQuery,
   useManageBlockUnblockResortMutation,
-  useRejectResortMutation
 } from '../../slices/adminApiSlice'
 import {
   ColumnDef,
@@ -22,86 +20,32 @@ import {
   TableHeader,
   TableRow,
 } from '../../components/ui/table'
-import { isApiError } from '../../utils/errorHandling';
+
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { IResort } from '../../types/types';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { editResort, SetResorts } from '../../slices/resortsSlice';
 
 
 
 
 export default function ResortDataTable() {
 
-  const { data: resorts = [] } = useGetResortsQuery(undefined)
-  const [acceptResort] = useAcceptResortMutation()
-  const [rejectResort] = useRejectResortMutation()
+  const { data } = useGetResortsQuery()
+  const { resorts } = useSelector((state: RootState) => state.resorts)
   const [manageResortBlock] = useManageBlockUnblockResortMutation()
   const [globalFilter, setGlobalFilter] = useState('')
   const [pageSize, setPageSize] = useState(10)
+  const dispatch = useDispatch<AppDispatch>()
 
-
-  const acceptResortHandler = async (id: string) => {
-    try {
-      const result = await Swal.fire({
-        title: 'Are you sure?',
-        text: 'Do you want to accept this resort?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, accept it!',
-        cancelButtonText: 'Cancel',
-      });
-
-      if (result.isConfirmed) {
-        const res = await acceptResort(id).unwrap()
-        if (res.success) {
-          toast(<div className='text-green-600'>The resort has been accepted.</div>)
-        }
-      }
-    } catch (err) {
-      if (isApiError(err)) {
-        toast(<div className="text-red-600">{err.data.message || "Internal Server Error"}</div>)
-      } else {
-        console.log('An unexpected error occurred:', err)
-      }
+  useEffect(() => {
+    if (data && resorts.length == 0) {
+      dispatch(SetResorts(data!))
     }
-  }
-
-  const rejectResortHandler = async (id: string) => {
-    try {
-      const result = await Swal.fire({
-        title: 'Reject Resort',
-        input: 'textarea',
-        inputLabel: 'Reason for rejection',
-        inputPlaceholder: 'Type your reason here...',
-        inputValidator: (value) => {
-          if (!value) {
-            return 'You need to provide a reason!';
-          }
-        },
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, reject it!',
-        cancelButtonText: 'Cancel',
-      });
-
-      if (result.isConfirmed && result.value) {
-        const reason: string = result.value
-        const res = await rejectResort({ resortId: id, reason }).unwrap()
-        if (res.success) {
-          toast(<div className='text-green-600'>The resort has been rejected.</div>)
-        }
-      }
-    } catch (err) {
-      if (isApiError(err)) {
-        toast(<div className="text-red-600">{err.data.message || "Internal Server Error"}</div>)
-      } else {
-        console.log('An unexpected error occurred:', err)
-      }
-    }
-  }
+  }, [data])
 
   const handleBlockUnblock = async (resortId: string, status: boolean) => {
     const action = status ? 'Block' : 'Unblock'
@@ -117,9 +61,9 @@ export default function ResortDataTable() {
 
     if (result.isConfirmed) {
       try {
-
         const response = await manageResortBlock({ id: resortId, status }).unwrap()
         if (response.success) {
+          dispatch(editResort(response.resort))
           toast(`The user has been ${action.toLowerCase()}ed successfully.`)
         }
       } catch (err) {
@@ -153,7 +97,7 @@ export default function ResortDataTable() {
           className={`${row.original.isVerify ? 'text-green-600 font-bold' : 'text-red-600 font-bold'
             }`}
         >
-          {row.original.isVerify ? 'Verified' : 'Unverified'}
+          {row.original.isVerify ? 'Verified' : row.original.isRejected ? 'Rejected' : 'Unverified'}
         </span>
       ),
     },
@@ -161,20 +105,9 @@ export default function ResortDataTable() {
       header: 'Actions',
       cell: ({ row }) => (
         <div>
-          {row.original.isVerify == false ? (<>
-            <button
-              onClick={() => acceptResortHandler(row.original._id!)}
-              className="text-white hover:bg-green-400 bg-green-600 rounded-sm p-1 mr-1"
-            >
-              Accept
-            </button>
-            <button
-              onClick={() => rejectResortHandler(row.original._id!)}
-              className="text-white bg-red-600 hover:bg-red-400  rounded-sm p-1"
-            >
-              Reject
-            </button>
-          </>): <span className='font-semibold'>Responded</span>}
+          <Link to={`/admin/resorts/${row.original._id!}`}><button
+            className={`px-3 py-1 text-sm rounded ms-2 text-white bg-blue-700 hover:bg-blue-700`}
+          >{row.original.isVerify || row.original.isRejected ? "View" : "Verify"}</button></Link>
           <button
             onClick={() => handleBlockUnblock(row.original._id!, !row.original.isBlock)}
             className={`px-3 py-1 text-sm rounded ms-2 ${row.original.isBlock
@@ -215,21 +148,7 @@ export default function ResortDataTable() {
             onChange={(e) => setGlobalFilter(e.target.value)}
             className="border p-2 rounded-md w-1/3"
           />
-          <div>
-            <label>Show </label>
-            <select
-              value={pageSize}
-              onChange={(e) => setPageSize(Number(e.target.value))}
-              className="border p-2 rounded-md"
-            >
-              {[10, 20, 30, 40, 50].map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </select>
-            <label> entries</label>
-          </div>
+
         </div>
 
         <div className="rounded-md border-2 w-full overflow-x-auto">

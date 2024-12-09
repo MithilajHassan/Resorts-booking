@@ -110,20 +110,20 @@ class AdminServices {
 
     async findTrendResorts() {
         const mostBookings = await bookingRepository.findMostBookings()
-        const chartDetails:{resort:string,bookings:number}[] = []
-        for(let x of mostBookings){
+        const chartDetails: { resort: string, bookings: number }[] = []
+        for (let x of mostBookings) {
             let resort = await resortRepository.findVerifiedResort(x._id)
-            if(resort != null){
-                chartDetails.push({resort:resort.resortName,bookings:x.count})
+            if (resort != null) {
+                chartDetails.push({ resort: resort.resortName, bookings: x.count })
             }
         }
         return chartDetails
     }
-    async getTailsDetails():Promise<{users:number,resorts:number,bookings:number,revenue:number}> {
+    async getTailsDetails(): Promise<{ users: number, resorts: number, bookings: number, revenue: number }> {
         const users = await userRepository.findAllUsers()
         const resorts = await resortRepository.findAllVerifiedResorts()
-        const bookings = await bookingRepository.findAll({status:{$ne:'Cancelled'}})
-        return {users:users.length,resorts:resorts.length,bookings:bookings.length,revenue:bookings.length*200}
+        const bookings = await bookingRepository.findAll({ status: { $ne: 'Cancelled' } })
+        return { users: users.length, resorts: resorts.length, bookings: bookings.length, revenue: bookings.length * 200 }
     }
 }
 

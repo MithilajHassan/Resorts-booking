@@ -3,6 +3,7 @@ import adminController from "../controllers/adminController"
 import { adminProtect } from "../middleware/auth"
 import bannerController from "../controllers/bannerController"
 import couponController from "../controllers/couponController"
+import resortAdminController from "../controllers/resortAdminController"
 
 
 const adminRouter = Router()
@@ -24,6 +25,7 @@ adminRouter.patch('/facilities/:id/soft-delete', adminProtect, adminController.d
 
 //---------------------- Resort Management -----------------------------------//
 adminRouter.get('/resorts', adminProtect, adminController.listResorts)
+adminRouter.get('/resortdetails/:id', adminProtect, resortAdminController.getMyResort)
 adminRouter.patch('/resorts/:id/accept', adminProtect, adminController.acceptResort)
 adminRouter.patch('/resorts/:id/reject', adminProtect, adminController.rejectResort)
 adminRouter.patch('/resorts/:id/manage-block', adminProtect, adminController.manageResortBlock)

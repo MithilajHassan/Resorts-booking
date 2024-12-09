@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { setMyResort } from "../../slices/myResortSlice";
 
-export default function Dashboard() {
+export default function MyResort() {
     const { resortAdmin } = useSelector((state: RootState) => state.auth)
     const { data } = useGetMyResortQuery(resortAdmin?._id!)
     const { resort } = useSelector((state: RootState) => state.myResort)

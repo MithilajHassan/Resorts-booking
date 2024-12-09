@@ -26,7 +26,8 @@ export interface IResort {
     images: string[];
     isVerify?: boolean;
     isBlock?: boolean;
-    location: Location
+    location: Location;
+    isRejected?:boolean;
 }
 
 export interface IUser {
@@ -115,6 +116,7 @@ export interface ICoupon {
     _id?: string;
     code: string;
     minBooking: number;
+    maxBooking: number;
     discount: number;
     createdAt?: Date;
     expireAt: Date;
@@ -127,4 +129,24 @@ export interface IWalletHistory{
     amount: number;
     type: 'Deposit' | 'Purchase' | 'Refund';
     createdAt?: Date;
+}
+
+
+export interface IMessage {
+    _id?: string;
+    senderId: string;
+    senderType: 'User' | 'Resort';
+    receiverId: string;
+    receiverType: 'User' | 'Resort';
+    message: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface IConversation {
+    _id?: string;
+    participants: Array<{ participantId: string | IUser | IResort; participantType: 'User' | 'Resort' }>;
+    messages: IMessage[] | string[];
+    createdAt?: Date;
+    updatedAt?: Date;
 }

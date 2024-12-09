@@ -17,7 +17,8 @@ export interface IResort extends Document {
     location:{
         lat: number;
         lng: number;
-    }
+    },
+    isRejected?:boolean
 }
 const resortSchema = new Schema<IResort>({
     resortName: { type: String, required: true },
@@ -35,7 +36,8 @@ const resortSchema = new Schema<IResort>({
     location: { 
         lat: { type: Number, required: true },
         lng: { type: Number, required: true }
-    }
+    },
+    isRejected: { type: Boolean, default: false }
     
 }, {
     timestamps: true

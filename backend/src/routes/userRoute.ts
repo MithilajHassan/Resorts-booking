@@ -6,6 +6,7 @@ import reviewController from "../controllers/reviewController"
 import wishlistController from "../controllers/wishlistController"
 import bannerController from "../controllers/bannerController"
 import couponController from "../controllers/couponController"
+import messageContoller from "../controllers/messageContoller"
 
 const userRouter = Router()
 
@@ -42,6 +43,9 @@ userRouter.post('/coupons', userProtect, couponController.applyCoupon)
 
 userRouter.get('/wallet', userProtect, userController.walletDetails)
 
+userRouter.get('/messages/receivers', userProtect, messageContoller.getReceivers)
+userRouter.get('/messages', userProtect, messageContoller.getMessages)
+userRouter.post('/messages', userProtect, messageContoller.sendMessage)
 
 
 

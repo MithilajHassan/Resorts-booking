@@ -15,6 +15,7 @@ import UserProfileEditPage from "../pages/userSide/UserProfileEditPage";
 import WishlistPage from "../pages/userSide/WishlistPage";
 import PasswordChangingPage from "../pages/userSide/PasswordChangingPage";
 import WalletPage from "../pages/userSide/WalletPage";
+import MessagePage from "../pages/userSide/MessagePage";
 
 const UserRoutes = () => {
     return (
@@ -35,6 +36,7 @@ const UserRoutes = () => {
                 <Route path="/bookings/:id" element={<BookingDetailsPage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/wallet" element={<WalletPage />} />
+                <Route path="/messages" element={<MessagePage />} />
 
             </Route>
 

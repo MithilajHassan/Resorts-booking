@@ -1,4 +1,4 @@
-import { IBanner, IBooking, ICoupon, IResort, IReview, IRoom, IWalletHistory, IWishlist } from '../types/types'
+import { IBanner, IBooking, IConversation, ICoupon, IResort, IReview, IRoom, IWalletHistory, IWishlist } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const userApi = createApi({
@@ -117,7 +117,16 @@ export const userApi = createApi({
 
         getWallet: builder.query<{balance:number,histories:IWalletHistory[]},void>({
             query:()=>`/user/wallet`,
-        })
+        }),
+
+        //--------------------- Message Management---------------------//
+
+        getReceivers: builder.mutation<IConversation[], void>({
+            query: () =>({
+                url:`/user/messages/receivers`,
+                method:'GET'
+            }) 
+        }),
 
     })
 })
@@ -141,6 +150,7 @@ export const {
     useListCouponsMutation,
     useApplyCouponMutation,
     useGetWalletQuery,
+    useGetReceiversMutation,
 
 
 } = userApi

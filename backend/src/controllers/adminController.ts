@@ -208,9 +208,9 @@ class AdminController {
             const { id } = req.params
             const { reason } = req.body
 
-            await adminServices.rejectResort(id, reason)
+            const resort = await adminServices.rejectResort(id, reason)
 
-            res.status(200).json({ success: true })
+            res.status(200).json({ success: true, resort })
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
@@ -225,8 +225,8 @@ class AdminController {
         try {
             const { id } = req.params
             const { status } = req.body
-            await adminServices.manageResortBlock(id, status)
-            res.status(200).json({ success: true })
+            const resort = await adminServices.manageResortBlock(id, status)
+            res.status(200).json({ success: true, resort })
         } catch (error) {
             res.status(500).json({ message: 'Failed to get Resort', error })
         }

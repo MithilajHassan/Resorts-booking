@@ -18,11 +18,18 @@ interface Props {
 const formSchema = z.object({
     code: z.string().min(10, "Code at least 10 characters"),
     discount: z.string().regex(/^(100|[1-9]?\d)$/, 'Discount percentage must be between 0 and 100'),
-    minBooking: z.string().regex(/^[1-9][0-9]{2,}$/, 'Minimun booking price must be a number greater than 99'),
-    expiry: z.string().refine(date=> new Date(date) > new Date(),{
-        message:"Expiry Date should be in the future"
+    minBooking: z.string().regex(/^[1-9][0-9]{2,}$/, 'Minimum booking price must be a number greater than 99'),
+    maxBooking: z.string().regex(/^[1-9][0-9]{2,}$/, 'Maximum booking price must be a number greater than minmum'),
+    expiry: z.string().refine(date => new Date(date) > new Date(), {
+        message: "Expiry Date should be in the future"
     })
-})
+}).refine(
+    (data) => parseFloat(data.maxBooking) > parseFloat(data.minBooking),
+    {
+      message: "Maximum booking price must be greater than minimum booking price",
+      path: ["maxBooking"], 
+    }
+  )
 
 export default function CouponForm({ setGetForm }: Props) {
 
@@ -34,33 +41,35 @@ export default function CouponForm({ setGetForm }: Props) {
             code: '',
             discount: '',
             minBooking: '',
-            expiry:'',
+            expiry: '',
         }
     })
 
-    const onSubmit = async (values:z.infer<typeof formSchema>) => {
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const res = await createCoupon({
-                code:values.code,
-                discount:Number(values.discount),
-                minBooking:Number(values.minBooking),
-                expireAt:new Date(values.expiry)
+                code: values.code,
+                discount: Number(values.discount),
+                minBooking: Number(values.minBooking),
+                maxBooking: Number(values.maxBooking),
+                expireAt: new Date(values.expiry)
             }).unwrap()
-            if(res.success){
+            if (res.success) {
                 dispatch(addCoupon({
-                    code:values.code,
-                discount:Number(values.discount),
-                minBooking:Number(values.minBooking),
-                expireAt:new Date(values.expiry)
+                    code: values.code,
+                    discount: Number(values.discount),
+                    minBooking: Number(values.minBooking),
+                    maxBooking: Number(values.maxBooking),
+                    expireAt: new Date(values.expiry)
                 }))
                 setGetForm(false)
             }
-                       
+
         } catch (err) {
-            if(isApiError(err)){
+            if (isApiError(err)) {
                 toast(err.data.message)
-            }else{
-                console.log(err)  
+            } else {
+                console.log(err)
             }
         }
     }
@@ -115,12 +124,26 @@ export default function CouponForm({ setGetForm }: Props) {
 
                         <FormField
                             control={form.control}
+                            name="maxBooking"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Maximum Booking Price</FormLabel>
+                                    <FormControl>
+                                        <Input className="bg-indigo-50" placeholder="Enter the maximun price" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
                             name="expiry"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Expiry Date</FormLabel>
                                     <FormControl>
-                                        <Input type="date" className="bg-indigo-50" {...field}  /> 
+                                        <Input type="date" className="bg-indigo-50" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

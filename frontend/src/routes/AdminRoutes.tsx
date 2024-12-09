@@ -9,6 +9,7 @@ import UsersListPage from '../pages/adminSide/UsersListPage';
 import NotFound from "../components/common/404";
 import BannersPage from "../pages/adminSide/BannersPage";
 import CouponListPage from "../pages/adminSide/CouponListPage";
+import ResortDetailsPage from "../pages/adminSide/ResortDetailsPage";
 
 const AdminRoutes = () => {
     return (
@@ -20,6 +21,8 @@ const AdminRoutes = () => {
                 <Route path='/categories' element={<AdminCategory />} />
                 <Route path='/facilities' element={<AdminFacility />} />
                 <Route path='/resorts' element={<AdminResortsList />} />
+                <Route path='/resorts/:id' element={<ResortDetailsPage />} />
+
                 <Route path='/users' element={<UsersListPage />} />
                 <Route path='/banners' element={<BannersPage />} />
                 <Route path='/coupons' element={<CouponListPage />} />

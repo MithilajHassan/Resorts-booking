@@ -1,3 +1,4 @@
+import { IConversation } from "../models/conversationModel";
 import { IMessage } from "../models/messageModel";
 import conversationRepositroy from "../repositories/conversationRepositroy";
 import messageRepository from "../repositories/messageRepository";
@@ -6,10 +7,7 @@ export default new class MessageServices {
 
     async sendMessage(messageData: IMessage): Promise<IMessage> {
 
-        let conversation = await conversationRepositroy.getConversationsByParticipants([
-            { participantId: messageData.senderId, participantType: messageData.senderType },
-            { participantId: messageData.receiverId, participantType: messageData.receiverType }
-        ])
+        let conversation = await conversationRepositroy.getConversationByParticipants(String(messageData.senderId), String(messageData.receiverId))
 
         if (!conversation) {
             conversation = await conversationRepositroy.createConversation([
@@ -24,6 +22,22 @@ export default new class MessageServices {
 
         return newMessage;
     }
+
+    async getMessages(senderId:string,receiverId:string): Promise<IConversation | null> {
+
+        let conversation = await conversationRepositroy.getConversationByParticipants(senderId, receiverId)
+
+        return conversation;
+    }
+
+    async getReceivers(participantId:string): Promise<IConversation[]> {
+
+        let conversation = await conversationRepositroy.getConversationsByParticipantId(participantId)
+
+        return conversation;
+    }
+
+
 
     
 }

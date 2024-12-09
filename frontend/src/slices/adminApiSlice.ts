@@ -1,11 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { CategoryDetails, FacilityDetails, IBanner, ICoupon, IUser } from "../types/types"
-import { boolean } from 'zod';
+import { CategoryDetails, FacilityDetails, IBanner, ICoupon, IResort, IUser } from "../types/types"
 
 export const adminApi = createApi({
     reducerPath: 'adminApi',
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-    tagTypes: ['Resorts'],
     endpoints: (builder) => ({
 
         //------------------------ Category Management-----------------------------//
@@ -74,35 +72,37 @@ export const adminApi = createApi({
 
         //------------------------- Resort Management -------------------------------//
 
-        getResorts: builder.query({
+        getResorts: builder.query<IResort[],void>({
             query: () => '/admin/resorts',
-            providesTags: ['Resorts'],
         }),
 
-        acceptResort: builder.mutation({
-            query: (resortId: string) => ({
+        getResortDetails: builder.query<IResort, string>({
+            query: (id: string) => ({
+                url: `/admin/resortdetails/${id}`
+            })
+        }),
+
+        acceptResort: builder.mutation<{success: boolean,resort:IResort},string>({
+            query: (resortId) => ({
                 url: `admin/resorts/${resortId}/accept`,
                 method: 'PATCH',
-            }),
-            invalidatesTags: ['Resorts']
+            })
         }),
 
-        rejectResort: builder.mutation({
-            query: (data: { resortId: string, reason: string }) => ({
+        rejectResort: builder.mutation<{success: boolean,resort:IResort},{ resortId: string, reason: string }>({
+            query: (data) => ({
                 url: `admin/resorts/${data.resortId}/reject`,
                 method: 'PATCH',
                 body: { reason: data.reason }
-            }),
-            invalidatesTags: ['Resorts']
+            })
         }),
 
-        manageBlockUnblockResort: builder.mutation({
-            query: (data: { id: string, status: boolean }) => ({
+        manageBlockUnblockResort: builder.mutation<{success: boolean,resort:IResort},{ id: string, status: boolean }>({
+            query: (data) => ({
                 url: `/admin/resorts/${data.id}/manage-block`,
                 method: "PATCH",
                 body: { status: data.status }
-            }),
-            invalidatesTags: ['Resorts']
+            })
         }),
 
         //--------------------------- User Management -----------------------------//
@@ -207,6 +207,7 @@ export const {
     useDeleteCouponMutation,
     useGetChartDetailsMutation,
     useGetTailsDetailsMutation,
+    useGetResortDetailsQuery,
 
 
 } = adminApi

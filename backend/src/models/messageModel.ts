@@ -14,9 +14,9 @@ export interface IMessage extends Document {
 
 const MessageSchema: Schema = new Schema(
     {
-        senderId: { type: mongoose.Schema.Types.ObjectId, required: true },
+        senderId: { type: mongoose.Schema.Types.ObjectId, required: true, refPath:'senderType' },
         senderType: { type: String, enum: ['User', 'Resort'], required: true },
-        receiverId: { type: mongoose.Schema.Types.ObjectId, required: true },
+        receiverId: { type: mongoose.Schema.Types.ObjectId, required: true, refPath:'receiverType' },
         receiverType: { type: String, enum: ['User', 'Resort'], required: true },
         message: { type: String, required: true },
     },
