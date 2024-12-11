@@ -146,7 +146,7 @@ export interface IMessage {
 export interface IConversation {
     _id?: string;
     participants: Array<{ participantId: string | IUser | IResort; participantType: 'User' | 'Resort' }>;
-    messages: IMessage[] | string[];
+    messages: IMessage[];
     createdAt?: Date;
     updatedAt?: Date;
 }

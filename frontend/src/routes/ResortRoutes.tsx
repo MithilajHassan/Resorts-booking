@@ -11,6 +11,7 @@ import AddRoomPage from '../pages/resortSide/AddRoomPage';
 import EditRoomPage from '../pages/resortSide/EditRoomPage';
 import BookingsPage from '../pages/resortSide/BookingsPage';
 import BookingDetailsPage from '../pages/resortSide/BookingDetailsPage';
+import MessagesPage from '../pages/resortSide/MessagesPage';
 
 const ResortRoutes = () => {
     return (
@@ -26,7 +27,7 @@ const ResortRoutes = () => {
                 <Route path='/rooms/update/:id' element={<EditRoomPage />} />
                 <Route path='/bookings' element={<BookingsPage />} />
                 <Route path="/bookings/:id" element={<BookingDetailsPage />} />
-
+                <Route path="/messages" element={<MessagesPage />} />
 
             </Route>
 

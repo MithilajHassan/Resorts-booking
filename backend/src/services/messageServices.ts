@@ -30,6 +30,13 @@ export default new class MessageServices {
         return conversation;
     }
 
+    async getConversationById(id:string): Promise<IConversation | null> {
+
+        let conversation = await conversationRepositroy.getConversationById(id)
+
+        return conversation;
+    }
+
     async getReceivers(participantId:string): Promise<IConversation[]> {
 
         let conversation = await conversationRepositroy.getConversationsByParticipantId(participantId)

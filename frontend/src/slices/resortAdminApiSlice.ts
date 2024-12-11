@@ -1,4 +1,4 @@
-import { CategoryDetails, FacilityDetails, IBooking, IResort, IRoom } from '../types/types'
+import { CategoryDetails, FacilityDetails, IBooking, IConversation, IMessage, IResort, IRoom } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const resortAdminApi = createApi({
@@ -99,6 +99,31 @@ export const resortAdminApi = createApi({
             })
         }),
 
+         //--------------------- Message Management---------------------//
+
+         sendMessage: builder.mutation<IMessage, IMessage>({
+            query: (data) =>({
+                url:`/resort/messages`,
+                method:'POST',
+                body:data
+            }) 
+        }),
+
+        getMessages: builder.mutation<IConversation, string>({
+            query: (id) =>({
+                url:`/resort/messages/${id}`,
+                method:'GET'
+            }) 
+        }),
+
+        getReceivers: builder.mutation<IConversation[], void>({
+            query: () =>({
+                url:`/resort/messages/receivers`,
+                method:'GET'
+            }) 
+        }),
+
+
     })
 })
 
@@ -118,6 +143,9 @@ export const {
     useEditBookingStatusMutation,
     useGetTailsDetailsMutation,
     useGetChartDetailsMutation,
+    useSendMessageMutation,
+    useGetReceiversMutation,
+    useGetMessagesMutation,
 
 
 

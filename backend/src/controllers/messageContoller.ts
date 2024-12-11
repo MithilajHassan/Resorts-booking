@@ -9,9 +9,9 @@ class MessageController {
 
     async sendMessage(req: Request, res: Response) {
         try {
-            const { messageData }: { messageData: IMessage } = req.body
+            const messageData : IMessage = req.body
             const message = await messageServices.sendMessage(messageData)
-            res.status(200).json({ message })
+            res.status(200).json(message)
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
@@ -24,9 +24,23 @@ class MessageController {
 
     async getMessages(req: CustomRequest, res: Response) {
         try {
-            let senderId = req.user?._id ? req.user._id : req.resort?._id
-            const conversation = await messageServices.getMessages(String(senderId),req.params.id)
-            res.status(200).json({ conversation })
+            let senderId = req.user?._id ? req.user._id : req.resort?._id           
+            const conversation = await messageServices.getMessages(String(senderId), req.params.id)
+            res.status(200).json(conversation)
+        } catch (err) {
+            if (err instanceof CustomError) {
+                res.status(err.statusCode).json({ message: err.message })
+            } else {
+                console.error(err)
+                res.status(500).json({ message: 'Internal Server Error' })
+            }
+        }
+    }
+
+    async getConversationById(req: CustomRequest, res: Response) {
+        try {          
+            const conversation = await messageServices.getConversationById(req.params.id)
+            res.status(200).json(conversation)
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
@@ -41,7 +55,7 @@ class MessageController {
         try {
             let senderId = req.user?._id ? req.user._id : req.resort?._id
             const conversation = await messageServices.getReceivers(String(senderId))
-            res.status(200).json({ conversation })
+            res.status(200).json(conversation)
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })

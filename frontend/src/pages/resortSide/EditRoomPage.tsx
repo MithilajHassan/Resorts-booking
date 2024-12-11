@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import EditRoom from '../../components/resort/EditRoom'
 import { FaBook } from 'react-icons/fa'
+import { FaMessage } from 'react-icons/fa6'
 
 
 function EditRoomPage() {
@@ -20,6 +21,7 @@ function EditRoomPage() {
                     <Link to={'/resort/myresort'}><SidebarItem icon={<GiBlockHouse />} text="My Resort" /></Link>
                     <SidebarItem icon={<MdOutlineBedroomParent />} text="Rooms" active={true} />
                     <Link to={'/resort/bookings'}><SidebarItem icon={<FaBook />} text="Bookings" /></Link>
+                    <Link to={'/resort/messages'}><SidebarItem icon={<FaMessage />} text="Messages" /></Link>
                 </Sidebar>
 
                 <EditRoom />

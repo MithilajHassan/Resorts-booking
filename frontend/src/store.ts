@@ -17,6 +17,7 @@ import myResortReducer from "./slices/myResortSlice"
 import bannerReducer from "./slices/bannerSlice";
 import couponReducer from "./slices/couponSlice";
 import resortsReducer from "./slices/resortsSlice"
+import conversationsReducer from "./slices/conversationsSlices"
 import adminApiErrorMiddleware from "./middlewares/adminApiErrorMiddleware";
 import resortApiErrorMiddleware from "./middlewares/resortApiErrorMiddleware";
 import userApiErrorMiddleware from "./middlewares/userApiErrorMiddleware";
@@ -38,6 +39,7 @@ const store = configureStore({
         myResort:myResortReducer,
         coupons:couponReducer,
         resorts:resortsReducer,
+        conversations:conversationsReducer,
         
         
         [authApi.reducerPath]:authApi.reducer,

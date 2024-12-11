@@ -3,6 +3,7 @@ import resortAdminController from "../controllers/resortAdminController"
 import adminController from "../controllers/adminController"
 import { resortProtect } from "../middleware/auth"
 import bookingController from "../controllers/bookingController"
+import messageContoller from "../controllers/messageContoller"
 
 
 const resortAdminRouter = Router()
@@ -28,6 +29,10 @@ resortAdminRouter.patch('/bookings/:id', resortProtect, bookingController.update
 
 resortAdminRouter.get('/dashboard/:id', resortProtect, resortAdminController.getChartDetails)
 resortAdminRouter.get('/dashboard/tails/:id', resortProtect, resortAdminController.getTailsDetails)
+
+resortAdminRouter.get('/messages/receivers', resortProtect, messageContoller.getReceivers)
+resortAdminRouter.get('/messages/:id', resortProtect, messageContoller.getMessages)
+resortAdminRouter.post('/messages', resortProtect, messageContoller.sendMessage)
 
 
 

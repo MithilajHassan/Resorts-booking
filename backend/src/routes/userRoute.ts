@@ -43,8 +43,8 @@ userRouter.post('/coupons', userProtect, couponController.applyCoupon)
 
 userRouter.get('/wallet', userProtect, userController.walletDetails)
 
-userRouter.get('/messages/receivers', userProtect, messageContoller.getReceivers)
-userRouter.get('/messages', userProtect, messageContoller.getMessages)
+// userRouter.get('/messages/receivers', userProtect, messageContoller.getReceivers)
+userRouter.get('/messages/:id', userProtect, messageContoller.getMessages)
 userRouter.post('/messages', userProtect, messageContoller.sendMessage)
 
 

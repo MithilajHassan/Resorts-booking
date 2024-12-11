@@ -15,6 +15,10 @@ export default new class ConversationRepository {
         }).populate('messages')
     }
 
+    async getConversationById(id: string): Promise<IConversation | null> {
+        return Conversation.findOne({_id:id}).populate('messages')
+    }
+
     async addMessageToConversation(conversationId: string, messageId: string): Promise<IConversation | null> {
         return Conversation.findByIdAndUpdate(
             conversationId,

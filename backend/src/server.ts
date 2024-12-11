@@ -10,10 +10,11 @@ import resortAdminRouter from './routes/resortAdminRoute'
 import adminRouter from './routes/adminRoutes'
 import userRepository from './repositories/userRepository'
 import { generateAccessToken, generateRefreshToken } from './utils/jwtHelper'
+import { app, server } from './socket/socket'
 
 dotenv.config()
 connectDB()
-const app = express()
+
 const port = process.env.PORT || 5000
 
 
@@ -70,6 +71,6 @@ app.use('/api/resort', resortAdminRouter)
 app.use('/api/admin', adminRouter)
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server started at : ${port}`)
 })

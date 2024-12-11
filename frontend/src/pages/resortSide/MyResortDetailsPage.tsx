@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import MyResort from '../../components/resort/MyResort'
 import { FaBook } from 'react-icons/fa'
+import { FaMessage } from 'react-icons/fa6'
 
 
 function AddResortDetails() {
@@ -20,6 +21,7 @@ function AddResortDetails() {
                     <SidebarItem icon={<GiBlockHouse />} text="My Resort" active={true} />
                     <Link to={'/resort/rooms'}><SidebarItem icon={<MdOutlineBedroomParent />} text="Rooms" /></Link>
                     <Link to={'/resort/bookings'}><SidebarItem icon={<FaBook />} text="Bookings" /></Link>
+                    <Link to={'/resort/messages'}><SidebarItem icon={<FaMessage />} text="Messages" /></Link>
                 </Sidebar>
 
                 <MyResort />

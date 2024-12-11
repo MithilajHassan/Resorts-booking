@@ -1,4 +1,4 @@
-import { IBanner, IBooking, IConversation, ICoupon, IResort, IReview, IRoom, IWalletHistory, IWishlist } from '../types/types'
+import { IBanner, IBooking, IConversation, ICoupon, IMessage, IResort, IReview, IRoom, IWalletHistory, IWishlist } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const userApi = createApi({
@@ -121,6 +121,21 @@ export const userApi = createApi({
 
         //--------------------- Message Management---------------------//
 
+        sendMessage: builder.mutation<IMessage, IMessage>({
+            query: (data) =>({
+                url:`/user/messages`,
+                method:'POST',
+                body:data
+            }) 
+        }),
+
+        getMessages: builder.mutation<IConversation, string>({
+            query: (id) =>({
+                url:`/user/messages/${id}`,
+                method:'GET'
+            }) 
+        }),
+
         getReceivers: builder.mutation<IConversation[], void>({
             query: () =>({
                 url:`/user/messages/receivers`,
@@ -150,7 +165,9 @@ export const {
     useListCouponsMutation,
     useApplyCouponMutation,
     useGetWalletQuery,
+    useSendMessageMutation,
     useGetReceiversMutation,
+    useGetMessagesMutation,
 
 
 } = userApi
