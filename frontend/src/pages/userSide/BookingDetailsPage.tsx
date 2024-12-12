@@ -54,7 +54,22 @@ export default function BookingDetailsPage() {
                 message: newMessageTxt,
             }).unwrap()
             if (res) {
-                // setConversation((state)=>state?.messages.push(res))
+                setConversation((prev) => {
+                    if (!prev) {
+                        // If prev is undefined, create a new conversation object
+                        return {
+                            messages: [res],
+                            _id: '', // Add other required fields with defaults if needed
+                            participants: [],
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                        };
+                    }
+                    return {
+                        ...prev, // Spread the existing conversation
+                        messages: [...(prev.messages || []), res], // Append the new message
+                    };
+                });
                 setNewMessageTxt('')
             }
         } catch (err) {

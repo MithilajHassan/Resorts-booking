@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { IResort, Resort } from '../models/resortModel'
 
 export default new class ResortRepository {
@@ -31,7 +32,7 @@ export default new class ResortRepository {
             .populate('categories').populate('facilities')
     }
     async reject(id: unknown): Promise<IResort | null> {
-        return await Resort.findByIdAndUpdate(id, { $set: { isVerify: false, isRejected:true } }, { new: true })
+        return await Resort.findByIdAndUpdate(id, { $set: { isVerify: false, isRejected: true } }, { new: true })
             .populate('categories').populate('facilities')
     }
     async manageResortBlock(id: string, status: boolean): Promise<IResort | null> {
@@ -43,16 +44,48 @@ export default new class ResortRepository {
             .populate('categories').populate('facilities')
     }
 
-    async findResortsByCity(place: string): Promise<IResort[] | null> {
-        return await Resort.find({
+    async findResortsByQuery({ place, categories, facilities, sortBy }
+        : {
+            place: string; categories?: string[]; facilities?: string[]; sortBy?: string;
+        }): Promise<IResort[] | null> {
+
+        const validCategories = categories ?categories.filter(id => mongoose.Types.ObjectId.isValid(id)):[]
+        const validFacilities = facilities ?facilities.filter(id => mongoose.Types.ObjectId.isValid(id)):[]
+
+        const query: any = {
+            isBlock: false,
+            isVerify: true,
             $or: [
                 { city: { $regex: place, $options: "i" } },
-                { resortName: { $regex: place, $options: "i" } }
-            ]
-            ,
-            isBlock: false,
-            isVerify: true
-        })
-    }
+                { resortName: { $regex: place, $options: "i" } },
+            ],
+        };
 
+        if (validCategories.length > 0) {
+            query.categories = { $in: validCategories };
+        }
+
+        if (validFacilities.length > 0) {
+            query.facilities = { $in: validFacilities };
+        }
+        let sort: any = {};
+
+        if (sortBy) {
+            switch (sortBy) {
+                case 'priceLowToHigh':
+                    sort = { price: 1 };
+                    break;
+                case 'priceHighToLow':
+                    sort = { price: -1 };
+                    break;
+                case 'name':
+                    sort = { resortName: 1 };
+                    break;
+                default:
+                    sort = {};
+            }
+        }
+
+        return await Resort.find(query).sort(sort);
+    }
 }

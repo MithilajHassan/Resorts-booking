@@ -14,6 +14,10 @@ export const io = new Server(server, {
 
 io.on("connection", (socket) => {
     console.log('socket connected : '+socket.id)
+    socket.on('sendMessage', (message) => {
+        // console.log('Message received:', message);
+        socket.broadcast.emit('receiveMessage', message);
+    });
     socket.on("disconnect", () => {
         console.log('socket disconnected : '+socket.id)
     })

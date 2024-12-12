@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useGetReceiversMutation, useGetMessagesMutation, useSendMessageMutation } from '../../slices/resortAdminApiSlice';
-import { setConversations } from '../../slices/conversationsSlices';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { IMessage } from '@/types/types';
+import { io, Socket } from 'socket.io-client'
 
-// interface Message {
-//     id: number;
-//     text: string;
-//     sender: 'user' | 'bot';
-// }
 
 const Chats: React.FC = () => {
     const { resortAdmin } = useSelector((state: RootState) => state.auth)
@@ -20,7 +15,31 @@ const Chats: React.FC = () => {
     const [getMessages] = useGetMessagesMutation()
     const [sendMessage] = useSendMessageMutation()
     const [active, setActive] = useState<string>('')
-    const dispatch = useDispatch<AppDispatch>()
+    // const dispatch = useDispatch<AppDispatch>()
+
+    const [socket, setSocket] = useState<Socket | null>(null);
+
+    useEffect(() => {
+        const newSocket = io('http://localhost:7000', {
+            query: { userId: resortAdmin?._id },
+        });
+
+        setSocket(newSocket);
+
+        newSocket.on('connect', () => {
+            console.log('Connected to socket:', newSocket.id);
+        });
+
+        newSocket.on('receiveMessage', (message: IMessage) => {
+            
+            setMessages((prevMessages) => [...prevMessages, message]);
+        });
+
+        return () => {
+            newSocket.disconnect();
+            setSocket(null)
+        };
+    }, [resortAdmin]);
 
     useEffect(() => {
         (async function () {
@@ -68,8 +87,9 @@ const Chats: React.FC = () => {
                 message: newMessageTxt,
             }).unwrap()
             if (res) {
-
-                setNewMessageTxt('')
+                setMessages((prevMessages) => [...prevMessages, res]);
+                setNewMessageTxt('');
+                socket?.emit('sendMessage', res);
             }
         } catch (err) {
             console.log(err);

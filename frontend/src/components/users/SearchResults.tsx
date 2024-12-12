@@ -8,8 +8,6 @@ import SortResorts from "./ResortSort";
 const SearchResults = () => {
   const { availableRooms } = useSelector((state: RootState) => state.availableRsorts)
 
-
-
   return (
     <div className="w-full sm:w-3/4 p-4 space-y-6">
       <SortResorts />

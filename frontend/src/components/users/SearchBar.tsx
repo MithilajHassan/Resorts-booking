@@ -10,6 +10,7 @@ import { useSearchRoomsMutation } from "../../slices/userApiSlice";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../store";
+import { isApiError } from "../../utils/errorHandling";
 
 const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
     const { search } = useSelector((state:RootState)=>state.search)
@@ -34,6 +35,13 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
     const submitHandler = async (e: FormEvent) => {
         e.preventDefault()
         try {
+            if(!checkIn){
+                toast('Please select dates')
+                return 
+            }else if(parseInt(guestCount) > 8){
+                toast("Guest count less than 8")
+                return
+            }
             dispatch(setSearchParams({
                 place,
                 guestCount: Number(guestCount),
@@ -53,8 +61,9 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
            
 
         } catch (err) {
-            console.log(err)
-            toast('Internal server error')
+            if(isApiError(err)){
+                toast(err.data.message)
+            }
         }
 
     }

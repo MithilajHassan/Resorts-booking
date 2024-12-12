@@ -7,6 +7,7 @@ import wishlistController from "../controllers/wishlistController"
 import bannerController from "../controllers/bannerController"
 import couponController from "../controllers/couponController"
 import messageContoller from "../controllers/messageContoller"
+import adminController from "../controllers/adminController"
 
 const userRouter = Router()
 
@@ -22,7 +23,10 @@ userRouter.patch('/update/:id', userProtect, userController.updateUser)
 
 userRouter.get('/resorts', userUnProtect, userController.trendResorts)
 userRouter.get('/resorts/:id', userUnProtect, userController.resortDetails)
-userRouter.post('/search-resort', userUnProtect, userController.searchRooms)
+userRouter.get('/search-resort', userUnProtect, userController.searchRooms)
+
+userRouter.get('/categories', adminController.listCategories)
+userRouter.get('/facilities', adminController.listFacilities)
 
 userRouter.post('/checkout', userProtect, bookingController.createBooking)
 userRouter.patch('/paymentstatus',userProtect, bookingController.setPaymentStatus)

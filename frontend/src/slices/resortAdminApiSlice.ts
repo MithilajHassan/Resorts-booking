@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const resortAdminApi = createApi({
     reducerPath: 'resortAdminApi',
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-    tagTypes: [ 'Rooms'],
+    tagTypes: ['Rooms'],
     endpoints: (builder) => ({
 
         listCategories: builder.query<CategoryDetails[], void>({
@@ -25,7 +25,7 @@ export const resortAdminApi = createApi({
             })
         }),
 
-        editResort: builder.mutation<{success:Boolean,data:IResort},{ resortData: IResort, id: string }>({
+        editResort: builder.mutation<{ success: Boolean, data: IResort }, { resortData: IResort, id: string }>({
             query: (data) => ({
                 url: `/resort/myresort/${data.id}`,
                 method: 'PUT',
@@ -86,41 +86,41 @@ export const resortAdminApi = createApi({
         }),
 
 
-        getChartDetails: builder.mutation<{day:number,count:number}[],{resortId:string}>({
-            query:({resortId})=>({
-                url:`/resort/dashboard/${resortId}`,
-                method:'GET'
+        getChartDetails: builder.mutation<{ day: number, count: number }[], { resortId: string }>({
+            query: ({ resortId }) => ({
+                url: `/resort/dashboard/${resortId}`,
+                method: 'GET'
             })
         }),
-        getTailsDetails: builder.mutation <{rooms:number,stays:number,bookings:number,revenue:number},{resortId:string}>({
-            query:({resortId})=>({
-                url:`/resort/dashboard/tails/${resortId}`,
-                method:'GET'
+        getTailsDetails: builder.mutation<{ rooms: number, stays: number, bookings: number, revenue: number }, { resortId: string }>({
+            query: ({ resortId }) => ({
+                url: `/resort/dashboard/tails/${resortId}`,
+                method: 'GET'
             })
         }),
 
-         //--------------------- Message Management---------------------//
+        //--------------------- Message Management---------------------//
 
-         sendMessage: builder.mutation<IMessage, IMessage>({
-            query: (data) =>({
-                url:`/resort/messages`,
-                method:'POST',
-                body:data
-            }) 
+        sendMessage: builder.mutation<IMessage, IMessage>({
+            query: (data) => ({
+                url: `/resort/messages`,
+                method: 'POST',
+                body: data
+            })
         }),
 
         getMessages: builder.mutation<IConversation, string>({
-            query: (id) =>({
-                url:`/resort/messages/${id}`,
-                method:'GET'
-            }) 
+            query: (id) => ({
+                url: `/resort/messages/${id}`,
+                method: 'GET'
+            })
         }),
 
         getReceivers: builder.mutation<IConversation[], void>({
-            query: () =>({
-                url:`/resort/messages/receivers`,
-                method:'GET'
-            }) 
+            query: () => ({
+                url: `/resort/messages/receivers`,
+                method: 'GET'
+            })
         }),
 
 
@@ -128,7 +128,7 @@ export const resortAdminApi = createApi({
 })
 
 export const {
-    
+
     useListCategoriesQuery,
     useListFacilitiesQuery,
     useGetMyResortQuery,

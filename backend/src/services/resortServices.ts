@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken'
 import CustomError from '../errors/customError';
 import { IResort } from '../models/resortModel'
 import resortRepository from '../repositories/resortRepository'
@@ -7,6 +6,7 @@ import { Response } from 'express'
 import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper';
 import roomRepository from '../repositories/roomRepository';
 import bookingRepository from '../repositories/bookingRepository';
+import { ResortQuery } from '../controllers/userController';
 
 export default new class ResortService {
 
@@ -58,21 +58,24 @@ export default new class ResortService {
         return await resortRepository.editResort(resortData, resortId)
     }
 
-    async searchRooms({ place, guestCount, checkIn, checkOut }: {
-        place: string;
-        guestCount: number;
-        checkIn: Date;
-        checkOut: Date;
-    }) {
+    async searchRooms(queryData: ResortQuery) {
+        const {
+            place,guestCount,checkIn,checkOut,sortBy,categories,facilities,minPrice,maxPrice,
+        } = queryData
 
-        const resorts = await resortRepository.findResortsByCity(place)
+        const checkInDate = new Date(checkIn!)
+        const checkOutDate = new Date(checkOut!)
+
+        const resorts = await resortRepository.findResortsByQuery({
+            place:place!,categories:categories?.split(','),facilities:facilities?.split(','),sortBy
+        })
         if (!resorts || resorts.length === 0) {
             return []
         }
 
         const availableRooms = [];
         for (const resort of resorts) {
-            const rooms = await roomRepository.findAvailableRooms(resort._id as string, guestCount, checkIn, checkOut);
+            const rooms = await roomRepository.findAvailableRooms(resort._id as string, guestCount!, checkInDate, checkOutDate);
             if (rooms && rooms.length > 0) {
                 availableRooms.push({
                     resort,

@@ -1,5 +1,6 @@
-import { IBanner, IBooking, IConversation, ICoupon, IMessage, IResort, IReview, IRoom, IWalletHistory, IWishlist } from '../types/types'
+import { CategoryDetails, FacilityDetails, IBanner, IBooking, IConversation, ICoupon, IMessage, IResort, IReview, IRoom, IWalletHistory, IWishlist } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { ResortQuery } from './searchSlice';
 
 export const userApi = createApi({
     reducerPath: 'userApi',
@@ -30,12 +31,24 @@ export const userApi = createApi({
             query: (id: string) => `/user/resorts/${id}`
         }),
 
-        searchRooms: builder.mutation<{ resort: IResort; rooms: IRoom[] }[], { place: string, guestCount: number, checkIn: string, checkOut: string }>({
+        searchRooms: builder.mutation<{ resort: IResort; rooms: IRoom[] }[], ResortQuery>({
             query: (data) => ({
                 url: '/user/search-resort',
-                method: 'POST',
-                body: data
+                method: 'GET',
+                params: data
             })
+        }),
+
+        listCategories: builder.query<CategoryDetails[], void>({
+            query: () => ({
+                url: '/user/categories'
+            }),
+        }),
+
+        listFacilities: builder.query<FacilityDetails[], void>({
+            query: () => ({
+                url: '/user/facilities'
+            }),
         }),
 
         createBooking: builder.mutation<{ orderId?: string, amount?: string | number, bookingId: string }, IBooking>({
@@ -152,6 +165,8 @@ export const {
     useSearchRoomsMutation,
     useCreateBookingMutation,
     useSetPaymentStatusMutation,
+    useListCategoriesQuery,
+    useListFacilitiesQuery,
     useListBookingsQuery,
     useEditBookingStatusMutation,
     useUpdateUserMutation,
