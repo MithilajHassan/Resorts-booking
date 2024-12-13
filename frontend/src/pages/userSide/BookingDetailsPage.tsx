@@ -11,8 +11,10 @@ import { updateOneBooking } from "../../slices/bookingSlice"
 import { Button } from "../../components/ui/button"
 import WriteReview from "../../components/users/WriteReview"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog"
-import { useState } from "react"
-import { IConversation } from "@/types/types"
+import { useEffect, useState } from "react"
+import { IConversation, IMessage } from "@/types/types"
+import { io, Socket } from "socket.io-client"
+import { format } from "date-fns"
 
 
 export default function BookingDetailsPage() {
@@ -26,6 +28,34 @@ export default function BookingDetailsPage() {
     const dispatch = useDispatch()
     const [conversation, setConversation] = useState<IConversation>()
     const [newMessageTxt, setNewMessageTxt] = useState<string>('')
+    const [messages, setMessages] = useState<IMessage[]>([])
+    const [socket, setSocket] = useState<Socket | null>(null);
+
+    useEffect(() => {
+        const newSocket = io('http://localhost:7000', {
+            query: { userId: userInfo?._id },
+        });
+
+        setSocket(newSocket);
+
+        newSocket.on('connect', () => {
+            console.log('Connected to socket:', newSocket.id);
+            newSocket.emit('joinRoom', userInfo?._id)
+        })
+
+        newSocket.on('receiveMessage', (message: IMessage) => {
+            console.log('recieved');
+
+            if (userInfo?._id == message.receiverId) {
+                setMessages((prevMessages) => [...prevMessages, message]);
+            }
+        });
+
+        return () => {
+            newSocket.disconnect();
+            setSocket(null)
+        };
+    }, [userInfo]);
 
     const cancelBooking = async () => {
         const res = await editBookingStatus({ id: id!, status: 'Cancelled' }).unwrap()
@@ -34,10 +64,11 @@ export default function BookingDetailsPage() {
 
     const getChats = async () => {
         try {
-            const resortId = typeof bookingData?.resortId !== 'string' ? bookingData?.resortId._id!:''
+            const resortId = typeof bookingData?.resortId !== 'string' ? bookingData?.resortId._id! : ''
             const res = await getMessges(resortId).unwrap()
             if (res) {
                 setConversation(res)
+                setMessages(res.messages)
             }
         } catch (err) {
             console.log(err);
@@ -49,28 +80,14 @@ export default function BookingDetailsPage() {
             const res = await sendMessage({
                 senderId: userInfo?._id!,
                 senderType: 'User',
-                receiverId: typeof bookingData?.resortId !== 'string' ? bookingData?.resortId._id!:'',
+                receiverId: typeof bookingData?.resortId !== 'string' ? bookingData?.resortId._id! : '',
                 receiverType: 'Resort',
                 message: newMessageTxt,
             }).unwrap()
             if (res) {
-                setConversation((prev) => {
-                    if (!prev) {
-                        // If prev is undefined, create a new conversation object
-                        return {
-                            messages: [res],
-                            _id: '', // Add other required fields with defaults if needed
-                            participants: [],
-                            createdAt: new Date(),
-                            updatedAt: new Date(),
-                        };
-                    }
-                    return {
-                        ...prev, // Spread the existing conversation
-                        messages: [...(prev.messages || []), res], // Append the new message
-                    };
-                });
-                setNewMessageTxt('')
+                setMessages((prevMessages) => [...prevMessages, res]);
+                setNewMessageTxt('');
+                socket?.emit('sendMessage', res);
             }
         } catch (err) {
             console.log(err);
@@ -137,16 +154,22 @@ export default function BookingDetailsPage() {
                                         </DialogHeader>
                                         <div className="flex-1 flex flex-col border-x border-b border-black h-96">
                                             <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-white">
-                                                {conversation?.messages?.length ? conversation?.messages.map((message) => (
-                                                    <div
-                                                        key={message._id}
-                                                        className={`max-w-xs p-2 rounded-lg text-white shadow-md ${message.senderType == 'User'
-                                                            ? 'bg-blue-700 place-self-end'
-                                                            : 'bg-blue-500 place-self-start'
-                                                            }`}
-                                                    >
-                                                        {message.message}
-                                                    </div>
+                                                {messages?.length ? messages.map((message) => (
+                                                    <>
+                                                        <div
+                                                            key={message._id}
+                                                            className={`max-w-xs p-2 rounded-lg text-white shadow-md ${message.senderType == 'User'
+                                                                ? 'bg-blue-700 place-self-end'
+                                                                : 'bg-blue-500 place-self-start'
+                                                                }`}
+                                                        >
+                                                            {message.message}
+                                                        </div>
+                                                        <p
+                                                            style={{ marginTop: "0" }}
+                                                            className={`text-xs text-gray-800 ${message.senderType === 'User' ? 'place-self-end' : 'place-self-start'}`}
+                                                        >{format(message.createdAt!, "h:mm a")}</p>
+                                                    </>
                                                 )) : (
                                                     <div className="w-full">
                                                         <p className="text-center font-bold">

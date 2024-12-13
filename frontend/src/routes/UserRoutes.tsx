@@ -36,7 +36,7 @@ const UserRoutes = () => {
                 <Route path="/bookings/:id" element={<BookingDetailsPage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/wallet" element={<WalletPage />} />
-                <Route path="/messages" element={<MessagePage />} />
+                {/* <Route path="/messages" element={<MessagePage />} /> */}
 
             </Route>
 

@@ -72,11 +72,11 @@ function UserNav() {
                                             </Link>
                                         </li>
 
-                                        <li>
+                                        {/* <li>
                                             <Link to={'/messages'} className="flex items-center gap-1 px-6 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                 <FaMessage /> Messages
                                             </Link>
-                                        </li>
+                                        </li> */}
 
                                         <li className="">
                                             <p onClick={logoutHandler} className="flex items-center gap-1 px-6 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
