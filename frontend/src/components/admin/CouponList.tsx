@@ -61,7 +61,7 @@ export default function CouponList() {
                                     <TableHead className="text-black font-bold">Coupon Code</TableHead>
                                     <TableHead className="text-black font-bold">Discount</TableHead>
                                     <TableHead className="text-black font-bold">Min Price</TableHead>
-                                    <TableHead className="text-black font-bold">Limit</TableHead>
+                                    <TableHead className="text-black font-bold">Max Price</TableHead>
                                     <TableHead className="text-black font-bold">Expiry</TableHead>
                                     <TableHead className="text-black font-bold text-right">Actions</TableHead>
                                 </TableRow>
@@ -73,7 +73,7 @@ export default function CouponList() {
                                             <TableCell className="font-medium">{item.code}</TableCell>
                                             <TableCell className="font-medium">{item.discount}</TableCell>
                                             <TableCell className="font-medium">{item.minBooking}</TableCell>
-                                            <TableCell className="font-medium">{item.limit}</TableCell>
+                                            <TableCell className="font-medium">{item.maxBooking}</TableCell>
                                             <TableCell className="font-medium">{format(item.expireAt,"MM-dd-yyy")}</TableCell>
                                             <TableCell className="text-right flex justify-end items-center gap-5">
                                                 <MdEdit onClick={() => handleEdit(item._id!)} style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />

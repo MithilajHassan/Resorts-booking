@@ -72,11 +72,14 @@ const SignupForm = () => {
         e.preventDefault()
         const nameRegex = /^[a-zA-Z]+[a-z\sA-Z]+$/
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])[^\s]{4,18}$/
         try {
             if (!nameRegex.test(name)) {
                 setErrMsg("Only alphabets are allowed in name.")
             }else if (!emailRegex.test(email)) {
                 setErrMsg("Invalid email format!")
+            }else if (!passwordRegex.test(password)) {
+                setErrMsg("Password must be at least 4 characters, contain at least one lowercase letter, one uppercase letter, one special character and one digit without space")
             }else if (password != confirmPassword) {
                 setErrMsg("Passwords do not match!")
             } else {

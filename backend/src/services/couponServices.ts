@@ -39,7 +39,7 @@ class CouponService {
     }
 
     async getAvailableCoupons(price:number): Promise<ICoupon[]> {
-        return await couponRepository.findAll({minBooking:{$lte:price}});
+        return await couponRepository.findAll({minBooking:{$lte:price},maxBooking:{$gte:price}});
     }
     async applyCoupon(userId:string,couponId:string){
         const exist = await couponUsageRepository.findUsageByUserAndCoupon(userId,couponId)

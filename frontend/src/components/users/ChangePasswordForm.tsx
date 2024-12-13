@@ -25,9 +25,12 @@ export default function ChangePasswordForm({ }: Props) {
     const submitHandler = async (e: FormEvent) => {
         e.preventDefault()
         try {
-            const reg = /^[^\s]{4,}$/
-            if (!reg.test(currPassword) || !reg.test(newPassword)) {
-                return setErrMsg('Password at least 4 characters without space')
+            const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])[^\s]{4,18}$/
+            if(currPassword.trim().length <= 0){
+                return setErrMsg('Enter the current password')
+            }
+            if (!reg.test(newPassword)) {
+                return setErrMsg('Password must be at least 4 characters, contain at least one lowercase letter, one uppercase letter, one special character and one digit without space')
             }
             if (newPassword !== confirmPassword) {
                 return setErrMsg('Password are not match')

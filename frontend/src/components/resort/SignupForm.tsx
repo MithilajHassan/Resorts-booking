@@ -23,7 +23,8 @@ const formSchema = z.object({
         .max(50, { message: "Resort name cannot exceed 50 characters" })
         .regex(/^[A-Z\sa-z]+$/, { message: "Resort name should contain only letters" }),
     email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().min(4, { message: "Password must be at least 4 characters" }),
+    password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])[^\s]{4,18}$/, 
+        { message: "Password must be at least 4 characters, contain at least one lowercase letter, one uppercase letter, one special character and one digit without space" }),
     address: z.string().min(10, { message: "Address is required" })
         .max(150, { message: "Address cannot exceed 150 characters" }),
     city: z.string().min(3, { message: "City is required" })

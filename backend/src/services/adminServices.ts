@@ -119,11 +119,15 @@ class AdminServices {
         }
         return chartDetails
     }
-    async getTailsDetails(): Promise<{ users: number, resorts: number, bookings: number, revenue: number }> {
+    async getTailsDetails(): Promise<{ users: number, resorts: number, bookings: number, revenue: number,resortRevenue: number }> {
         const users = await userRepository.findAllUsers()
         const resorts = await resortRepository.findAllVerifiedResorts()
         const bookings = await bookingRepository.findAll({ status: { $ne: 'Cancelled' } })
-        return { users: users.length, resorts: resorts.length, bookings: bookings.length, revenue: bookings.length * 200 }
+        let resortRevenue = 0
+        for(let x of bookings){
+            resortRevenue += x.totalPrice - 200
+        }
+        return { users: users.length, resorts: resorts.length, bookings: bookings.length, revenue: bookings.length * 200,resortRevenue }
     }
 }
 

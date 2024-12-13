@@ -173,7 +173,7 @@ export const adminApi = createApi({
                 method:'GET'
             })
         }),
-        getTailsDetails: builder.mutation <{users:number,resorts:number,bookings:number,revenue:number},void>({
+        getTailsDetails: builder.mutation <{users:number,resorts:number,bookings:number,revenue:number,resortRevenue:number},void>({
             query:()=>({
                 url:`/admin/dashboard/tails`,
                 method:'GET'

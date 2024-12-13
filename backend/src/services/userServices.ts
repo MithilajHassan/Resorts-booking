@@ -10,7 +10,6 @@ import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper'
 import bookingRepository from '../repositories/bookingRepository'
 import { IWalletHistory } from '../models/walletHistoryModel'
 import walletHistoryRepository from '../repositories/walletHistoryRepository'
-import roomRepository from '../repositories/roomRepository'
 
 class UserServices {
     async handleUserSignup(email: string) {
