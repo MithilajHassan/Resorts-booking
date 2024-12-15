@@ -62,11 +62,11 @@ export default new class ResortRepository {
         };
 
         if (validCategories.length > 0) {
-            query.categories = { $in: validCategories };
+            query.categories = { $all: validCategories };
         }
 
         if (validFacilities.length > 0) {
-            query.facilities = { $in: validFacilities };
+            query.facilities = { $all: validFacilities };
         }
         let sort: any = {};
 

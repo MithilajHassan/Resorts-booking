@@ -116,7 +116,6 @@ export interface ICoupon {
     _id?: string;
     code: string;
     minBooking: number;
-    maxBooking: number;
     discount: number;
     createdAt?: Date;
     expireAt: Date;

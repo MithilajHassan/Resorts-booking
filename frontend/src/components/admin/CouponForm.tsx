@@ -17,19 +17,12 @@ interface Props {
 
 const formSchema = z.object({
     code: z.string().min(10, "Code at least 10 characters"),
-    discount: z.string().regex(/^(100|[1-9]?\d)$/, 'Discount percentage must be between 0 and 100'),
+    discount: z.string().regex(/^[1-9][0-9]*$/, 'Discount price required'),
     minBooking: z.string().regex(/^[1-9][0-9]{2,}$/, 'Minimum booking price must be a number greater than 99'),
-    maxBooking: z.string().regex(/^[1-9][0-9]{2,}$/, 'Maximum booking price must be a number greater than minmum'),
     expiry: z.string().refine(date => new Date(date) > new Date(), {
         message: "Expiry Date should be in the future"
     })
-}).refine(
-    (data) => parseFloat(data.maxBooking) > parseFloat(data.minBooking),
-    {
-      message: "Maximum booking price must be greater than minimum booking price",
-      path: ["maxBooking"], 
-    }
-  )
+})
 
 export default function CouponForm({ setGetForm }: Props) {
 
@@ -51,7 +44,6 @@ export default function CouponForm({ setGetForm }: Props) {
                 code: values.code,
                 discount: Number(values.discount),
                 minBooking: Number(values.minBooking),
-                maxBooking: Number(values.maxBooking),
                 expireAt: new Date(values.expiry)
             }).unwrap()
             if (res.success) {
@@ -59,7 +51,6 @@ export default function CouponForm({ setGetForm }: Props) {
                     code: values.code,
                     discount: Number(values.discount),
                     minBooking: Number(values.minBooking),
-                    maxBooking: Number(values.maxBooking),
                     expireAt: new Date(values.expiry)
                 }))
                 setGetForm(false)
@@ -99,9 +90,9 @@ export default function CouponForm({ setGetForm }: Props) {
                             name="discount"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Discount Percentage</FormLabel>
+                                    <FormLabel>Discount Price</FormLabel>
                                     <FormControl>
-                                        <Input className="bg-indigo-50" placeholder="Enter the discount" {...field} />
+                                        <Input className="bg-indigo-50" placeholder="Enter the discount price" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -116,20 +107,6 @@ export default function CouponForm({ setGetForm }: Props) {
                                     <FormLabel>Minimun Booking Price</FormLabel>
                                     <FormControl>
                                         <Input className="bg-indigo-50" placeholder="Enter the minimun price" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="maxBooking"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Maximum Booking Price</FormLabel>
-                                    <FormControl>
-                                        <Input className="bg-indigo-50" placeholder="Enter the maximun price" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

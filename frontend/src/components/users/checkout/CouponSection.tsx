@@ -51,7 +51,6 @@ export default function CouponSection({ checkoutDetails }: Props) {
                     couponId: coupon?._id!
                 }).unwrap()
                 if (res.success) {
-                    const discount: number = Math.floor((checkoutDetails.totalPrice * coupon?.discount!) / 100)
                     dispatch(setCheckout({
                         userId: checkoutDetails.userId,
                         resortId: checkoutDetails.resortId,
@@ -65,8 +64,8 @@ export default function CouponSection({ checkoutDetails }: Props) {
                         checkInDate: checkoutDetails.checkInDate,
                         checkOutDate: checkoutDetails.checkOutDate,
                         paymentMethod: checkoutDetails.paymentMethod,
-                        totalPrice: checkoutDetails.totalPrice - discount,
-                        discount: discount,
+                        totalPrice: checkoutDetails.totalPrice - coupon?.discount!,
+                        discount: coupon?.discount,
                     }))
                     setCode('')
                     setApplied(true)
@@ -113,7 +112,7 @@ export default function CouponSection({ checkoutDetails }: Props) {
                                         {coupons.map((item) => (
                                             <div className="flex justify-around border-2 my-2">
                                                 <p className="text-center">{item.code}</p>
-                                                <p className="text-center">{item.discount}%</p>
+                                                <p className="text-center">{item.discount}₹</p>
                                             </div>
                                         ))}
                                     </div>

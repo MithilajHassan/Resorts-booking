@@ -132,10 +132,10 @@ const Chats: React.FC = () => {
                                 >
                                     {message.message}
                                 </div>
-                                <p 
-                                style={{marginTop:"0"}}
-                                className={`text-xs text-gray-800 ${message.senderType === 'Resort'? 'place-self-end' : 'place-self-start'}`}
-                                >{format(message.createdAt!,"h:mm a")}</p>
+                                <p
+                                    style={{ marginTop: "0" }}
+                                    className={`text-xs text-gray-800 ${message.senderType === 'Resort' ? 'place-self-end' : 'place-self-start'}`}
+                                >{format(message.createdAt!, "h:mm a")}</p>
                             </>
 
                         )) : (

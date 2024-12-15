@@ -26,7 +26,7 @@ export default function ChangePasswordForm({ }: Props) {
         e.preventDefault()
         try {
             const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])[^\s]{4,18}$/
-            if(currPassword.trim().length <= 0){
+            if (currPassword.trim().length <= 0) {
                 return setErrMsg('Enter the current password')
             }
             if (!reg.test(newPassword)) {
@@ -43,9 +43,9 @@ export default function ChangePasswordForm({ }: Props) {
             if (res.success) {
                 setErrMsg('')
                 toast('Password changed successfully')
-                setTimeout(()=>{
+                setTimeout(() => {
                     navigate('/myprofile')
-                },2000)
+                }, 2000)
             }
         } catch (err) {
             if (isApiError(err)) {
@@ -101,7 +101,7 @@ export default function ChangePasswordForm({ }: Props) {
                 <div className="flex items-center gap-2">
                     <input
                         type="checkbox"
-                        onChange={() => setShowPasswords((v)=>!v)}
+                        onChange={() => setShowPasswords((v) => !v)}
                         className="bg-indigo-50 size-4"
                     />
                     <label htmlFor="confirmPassword" className="text-gray-700">Show Passwords</label>
