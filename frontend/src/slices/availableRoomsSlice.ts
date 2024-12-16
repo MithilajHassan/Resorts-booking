@@ -1,34 +1,29 @@
-import { IResort, IRoom } from '../types/types';
+import { SearchRoomsResult } from '../types/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface AvailableRoomsState {
-    availableRooms:{
-        resort:IResort;
-        rooms: IRoom[];
-    }[];
-}
-
-const initialState: AvailableRoomsState = {
-   availableRooms:[]
+const initialState: SearchRoomsResult = {
+  availableRooms: [],
+  totalResorts: 0
 }
 
 const availableRoomsSlice = createSlice({
-    name: 'availableRooms',
-    initialState,
-    reducers: {
-        setAvailableRooms: (
-            state,
-            action: PayloadAction<{ resort: IResort; rooms: IRoom[] }[]>
-          ) => {
-            state.availableRooms = action.payload;
-          },
+  name: 'availableRooms',
+  initialState,
+  reducers: {
+    setAvailableRooms: (
+      state,
+      action: PayloadAction<SearchRoomsResult>
+    ) => {
+      state.availableRooms = action.payload.availableRooms;
+      state.totalResorts = action.payload.totalResorts;
     },
+  },
 
 })
 
 export const {
-    setAvailableRooms,
+  setAvailableRooms,
 
-}= availableRoomsSlice.actions
+} = availableRoomsSlice.actions
 
 export default availableRoomsSlice.reducer;

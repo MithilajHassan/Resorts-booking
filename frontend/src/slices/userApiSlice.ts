@@ -1,4 +1,4 @@
-import { CategoryDetails, FacilityDetails, IBanner, IBooking, IConversation, ICoupon, IMessage, IResort, IReview, IRoom, IWalletHistory, IWishlist } from '../types/types'
+import { CategoryDetails, FacilityDetails, IBanner, IBooking, IConversation, ICoupon, IMessage, IResort, IReview, IRoom, IWalletHistory, IWishlist, SearchRoomsResult } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { ResortQuery } from './searchSlice';
 
@@ -31,11 +31,14 @@ export const userApi = createApi({
             query: (id: string) => `/user/resorts/${id}`
         }),
 
-        searchRooms: builder.mutation<{ resort: IResort; rooms: IRoom[] }[], ResortQuery>({
+        searchRooms: builder.mutation<SearchRoomsResult,{page:number, query:ResortQuery}>({
             query: (data) => ({
                 url: '/user/search-resort',
                 method: 'GET',
-                params: data
+                params: {
+                    page:data.page,
+                    ...data.query
+                }
             })
         }),
 

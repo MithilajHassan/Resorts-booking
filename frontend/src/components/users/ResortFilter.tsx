@@ -44,7 +44,7 @@ const FilterSidebar = () => {
   const { data: facilitiesData = [] } = useListFacilitiesQuery()
   const { data: categoriesData = [] } = useListCategoriesQuery()
 
-  const { place, guestCount, checkIn, checkOut, facilities, categories } = useSelector((state: RootState) => state.search.search)
+  const { place, guestCount, checkIn, checkOut, facilities, categories, sortBy } = useSelector((state: RootState) => state.search.search)
   const dispatch = useDispatch()
   const [searchRoom] = useSearchRoomsMutation()
 
@@ -53,52 +53,57 @@ const FilterSidebar = () => {
     defaultValues: {
       minPrice: "",
       maxPrice: "",
-      facilities: facilities?facilities:[],
-      categories: categories?categories:[],
+      facilities: facilities ? facilities : [],
+      categories: categories ? categories : [],
     },
   });
 
 
-  const onSubmit = async(values: FilterFormValues) => {
+  const onSubmit = async (values: FilterFormValues) => {
     try {
-    const { minPrice, maxPrice, categories, facilities } = values
-    if (!place && !guestCount && !checkIn && !checkOut) {
-      toast.error('Queries missing')
-      return
-    }
-    if (!minPrice && !maxPrice && !categories.length && !facilities.length) {
-      toast.info("Please select any filter options")
-      return
-    }
-    
-    dispatch(setSearchParams({
-      place,
-      guestCount,
-      checkIn,
-      checkOut,
-      minPrice: minPrice ? parseInt(minPrice, 10) : undefined,
-      maxPrice: maxPrice ? parseInt(maxPrice, 10) : undefined,
-      facilities,
-      categories
-    }))
+      const { minPrice, maxPrice, categories, facilities } = values
+      if (!place && !guestCount && !checkIn && !checkOut) {
+        toast.error('Queries missing')
+        return
+      }
+      if (!minPrice && !maxPrice && !categories.length && !facilities.length) {
+        toast.info("Please select any filter options")
+        return
+      }
 
-    const res = await searchRoom({
-      place,
-      guestCount:guestCount!,
-      checkIn,
-      checkOut,
-      minPrice: minPrice ? parseInt(minPrice, 10) : undefined,
-      maxPrice: maxPrice ? parseInt(maxPrice, 10) : undefined,
-      facilities,
-      categories
-    }).unwrap()
+      dispatch(setSearchParams({
+        place,
+        guestCount,
+        checkIn,
+        checkOut,
+        minPrice: minPrice ? parseInt(minPrice, 10) : undefined,
+        maxPrice: maxPrice ? parseInt(maxPrice, 10) : undefined,
+        facilities,
+        categories,
+        sortBy
+      }))
 
-    dispatch(setAvailableRooms(res))
-  }catch(err){
-    if(isApiError(err)){
-      toast(err.data.message)
+      const res = await searchRoom({
+        query: {
+          place,
+          guestCount: guestCount!,
+          checkIn,
+          checkOut,
+          minPrice: minPrice ? parseInt(minPrice, 10) : undefined,
+          maxPrice: maxPrice ? parseInt(maxPrice, 10) : undefined,
+          facilities,
+          categories,
+          sortBy
+        },
+        page: 1
+      }).unwrap()
+
+      dispatch(setAvailableRooms(res))
+    } catch (err) {
+      if (isApiError(err)) {
+        toast(err.data.message)
+      }
     }
-  }
   };
 
   return (

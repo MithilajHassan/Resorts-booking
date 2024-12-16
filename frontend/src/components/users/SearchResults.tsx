@@ -1,12 +1,38 @@
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { RootState } from "../../store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import SortResorts from "./ResortSort";
+import PaginationComponent from "../common/Pagination";
+import { useState } from "react";
+import { useSearchRoomsMutation } from "../../slices/userApiSlice";
+import { setAvailableRooms } from "../../slices/availableRoomsSlice";
 
 
 const SearchResults = () => {
-  const { availableRooms } = useSelector((state: RootState) => state.availableRsorts)
+  const { availableRooms, totalResorts } = useSelector((state: RootState) => state.availableRsorts)
+  const { place, guestCount, checkIn, checkOut, facilities, categories, sortBy } = useSelector(
+    (state: RootState) => state.search.search
+  );
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchRoom] = useSearchRoomsMutation();
+  const dispatch = useDispatch();
+
+  const updatePage = async (page:number) => {
+    const res = await searchRoom({
+      query: {
+        place,
+        guestCount: guestCount!,
+        checkIn,
+        checkOut,
+        sortBy,
+        facilities,
+        categories,
+      },
+      page
+    }).unwrap()
+    dispatch(setAvailableRooms(res));
+  }
 
   return (
     <div className="w-full sm:w-3/4 p-4 space-y-6">
@@ -15,7 +41,7 @@ const SearchResults = () => {
         availableRooms.map((resort, index) => (
           <Link
             to={`/resortdetails/${resort.resort._id}`}
-            key={index} // Place key on Link
+            key={index}
             className="block mb-3"
           >
             <div className="flex flex-col sm:flex-row bg-white shadow-lg rounded-lg p-4 space-y-4 sm:space-y-0 sm:space-x-6">
@@ -42,9 +68,18 @@ const SearchResults = () => {
             </div>
           </Link>
         ))
+
       ) : (
         <p className="text-center text-red-600">No available resorts found.</p>
       )}
+
+      {availableRooms.length > 0 && <PaginationComponent
+        totalItems={totalResorts}
+        limit={3}
+        currentPage={currentPage}
+        onPageChange={(page) => setCurrentPage(page)}
+        updatePage={updatePage}
+      />}
     </div>
   );
 };

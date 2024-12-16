@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../../store";
 import { isApiError } from "../../utils/errorHandling";
 
-const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
-    const { search } = useSelector((state:RootState)=>state.search)
+const SearchBar: React.FC<{ redirect?: string }> = ({ redirect }) => {
+    const { search } = useSelector((state: RootState) => state.search)
     const [place, setPlace] = useState('');
     const [guestCount, setGuestCount] = useState('');
     const [checkIn, setCheckIn] = useState('');
@@ -23,22 +23,22 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
     const navigate = useNavigate()
     const [searchRoom] = useSearchRoomsMutation()
 
-    useEffect(()=>{
-        if(search.place || search.checkIn || search.guestCount){
+    useEffect(() => {
+        if (search.place || search.checkIn || search.guestCount) {
             setPlace(search.place)
             setGuestCount(String(search.guestCount))
             setCheckIn(search.checkIn)
             setCheckOut(search.checkOut)
         }
-    },[])
+    }, [])
 
     const submitHandler = async (e: FormEvent) => {
         e.preventDefault()
         try {
-            if(!checkIn){
+            if (!checkIn) {
                 toast('Please select dates')
-                return 
-            }else if(parseInt(guestCount) > 8){
+                return
+            } else if (parseInt(guestCount) > 8) {
                 toast("Guest count less than 8")
                 return
             }
@@ -50,18 +50,18 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
             }))
 
             const res = await searchRoom({
-                place,
-                guestCount: Number(guestCount),
-                checkIn,
-                checkOut
+                query: {
+                    place,
+                    guestCount: Number(guestCount),
+                    checkIn,
+                    checkOut
+                },
+                page: 1
             }).unwrap()
-
-           dispatch(setAvailableRooms(res))
-           if(redirect) navigate(redirect)
-           
-
+            dispatch(setAvailableRooms(res))
+            if (redirect) navigate(redirect)
         } catch (err) {
-            if(isApiError(err)){
+            if (isApiError(err)) {
                 toast(err.data.message)
             }
         }
@@ -115,17 +115,17 @@ const SearchBar:React.FC<{redirect?:string}> = ({redirect}) => {
                         value={checkOut ? format(checkOut, "PP") : "Check-out"}
                         onClick={() => setShowDatePicker(!showDatePicker)}
                         readOnly
-                    /> 
+                    />
+                </div>
+                {showDatePicker && (
+                    <div className="absolute z-10 shadow-lg rounded-lg bg-white p-2" style={{ top: '60px' }}>
+                        <MyDatePicker
+                            setCheckIn={handleSetCheckIn}
+                            setCheckOut={handleSetCheckOut}
+                        />
                     </div>
-                    {showDatePicker && (
-                        <div className="absolute z-10 shadow-lg rounded-lg bg-white p-2" style={{ top: '60px' }}>
-                            <MyDatePicker
-                                setCheckIn={handleSetCheckIn}
-                                setCheckOut={handleSetCheckOut}
-                            />
-                        </div>
-                    )}
-               
+                )}
+
 
 
                 <Button className="bg-blue-700 hover:bg-blue-500">

@@ -7,6 +7,17 @@ import { generateAccessToken, generateRefreshToken } from '../utils/jwtHelper';
 import roomRepository from '../repositories/roomRepository';
 import bookingRepository from '../repositories/bookingRepository';
 import { ResortQuery } from '../controllers/userController';
+import { IRoom } from '../models/roomModel';
+
+interface AvailableRoom {
+    resort: IResort;
+    rooms: IRoom[];
+  }
+  
+  interface SearchRoomsResult {
+    availableRooms: AvailableRoom[];
+    totalResorts: number;
+  }
 
 export default new class ResortService {
 
@@ -58,23 +69,22 @@ export default new class ResortService {
         return await resortRepository.editResort(resortData, resortId)
     }
 
-    async searchRooms(queryData: ResortQuery) {
+    async searchRooms(queryData: ResortQuery):Promise<SearchRoomsResult> {
         const {
-            place,guestCount,checkIn,checkOut,sortBy,categories,facilities,minPrice,maxPrice,
+            place,guestCount,checkIn,checkOut,sortBy,categories,facilities,minPrice,maxPrice,page
         } = queryData
 
         const checkInDate = new Date(checkIn!)
         const checkOutDate = new Date(checkOut!)
 
-        const resorts = await resortRepository.findResortsByQuery({
-            place:place!,categories:categories?.split(','),facilities:facilities?.split(','),sortBy
-        })
-        if (!resorts || resorts.length === 0) {
-            return []
+        const response = await resortRepository.findResortsByQuery({
+            place:place!,categories:categories?.split(','),facilities:facilities?.split(','),sortBy,page:page!})
+        if (!response.resorts || response.resorts.length === 0) {
+            return {availableRooms:[],totalResorts:response.totalResorts}
         }
 
         const availableRooms = [];
-        for (const resort of resorts) {
+        for (const resort of response.resorts) {
             const rooms = await roomRepository.findAvailableRooms(resort._id as string, guestCount!, checkInDate, checkOutDate);
             if (rooms && rooms.length > 0) {
                 availableRooms.push({
@@ -84,7 +94,7 @@ export default new class ResortService {
             }
         }
 
-        return availableRooms;
+        return {availableRooms,totalResorts:response.totalResorts};
     }
 
     async getTailsDetails(resortId:string):Promise<{rooms:number,stays:number,bookings:number,revenue:number}> {

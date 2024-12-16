@@ -44,10 +44,10 @@ export default new class ResortRepository {
             .populate('categories').populate('facilities')
     }
 
-    async findResortsByQuery({ place, categories, facilities, sortBy }
+    async findResortsByQuery({ place, categories, facilities, sortBy, page }
         : {
-            place: string; categories?: string[]; facilities?: string[]; sortBy?: string;
-        }): Promise<IResort[] | null> {
+            place: string; categories?: string[]; facilities?: string[]; sortBy?: string; page: number
+        }): Promise<{resorts:IResort[],totalResorts:number }> {
 
         const validCategories = categories ?categories.filter(id => mongoose.Types.ObjectId.isValid(id)):[]
         const validFacilities = facilities ?facilities.filter(id => mongoose.Types.ObjectId.isValid(id)):[]
@@ -85,7 +85,13 @@ export default new class ResortRepository {
                     sort = {};
             }
         }
-
-        return await Resort.find(query).sort(sort);
+        const limit = 3; 
+        const skip = (page - 1) * limit; 
+      
+        const totalResorts = await Resort.countDocuments(query);
+      
+        const resorts = await Resort.find(query).sort(sort).skip(skip).limit(limit);
+      
+        return {resorts,totalResorts}
     }
 }

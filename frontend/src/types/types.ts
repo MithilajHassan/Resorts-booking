@@ -27,7 +27,7 @@ export interface IResort {
     isVerify?: boolean;
     isBlock?: boolean;
     location: Location;
-    isRejected?:boolean;
+    isRejected?: boolean;
 }
 
 export interface IUser {
@@ -61,6 +61,16 @@ export interface IRoom {
     offerPercentage: number;
     offerPrice?: number;
     isDeleted?: boolean;
+}
+
+export interface AvailableRoom {
+    resort: IResort;
+    rooms: IRoom[];
+}
+
+export interface SearchRoomsResult {
+    availableRooms: AvailableRoom[];
+    totalResorts: number;
 }
 
 
@@ -122,7 +132,7 @@ export interface ICoupon {
     isDeleted?: boolean;
 }
 
-export interface IWalletHistory{
+export interface IWalletHistory {
     id?: string,
     userId: string,
     amount: number;

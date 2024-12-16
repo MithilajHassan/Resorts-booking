@@ -20,7 +20,7 @@ const SortResorts = () => {
       const selectedSort = e.target.value;
       setSortBy(selectedSort);
       console.log(selectedSort);
-      
+
 
       if (!place && !guestCount && !checkIn && !checkOut) {
         toast.error("Queries missing");
@@ -40,13 +40,16 @@ const SortResorts = () => {
       );
 
       const res = await searchRoom({
-        place,
-        guestCount: guestCount!,
-        checkIn,
-        checkOut,
-        sortBy: selectedSort,
-        facilities: facilities ? facilities : undefined,
-        categories: categories ? categories : undefined,
+        query: {
+          place,
+          guestCount: guestCount!,
+          checkIn,
+          checkOut,
+          sortBy: selectedSort,
+          facilities: facilities ? facilities : undefined,
+          categories: categories ? categories : undefined,
+        },
+        page:1
       }).unwrap();
 
       dispatch(setAvailableRooms(res));

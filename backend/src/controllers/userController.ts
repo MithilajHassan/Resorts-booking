@@ -3,7 +3,6 @@ import userServices from "../services/userServices"
 import CustomError from "../errors/customError"
 import { CustomRequest } from "../middleware/auth"
 import resortServices from "../services/resortServices"
-import { ParsedQs } from "qs"
 
 export interface ResortQuery {
     place?: string;
@@ -15,6 +14,7 @@ export interface ResortQuery {
     facilities?: string;
     minPrice?: number;
     maxPrice?: number;
+    page?: number;
 }
 
 class UserController {
@@ -200,13 +200,13 @@ class UserController {
     async searchRooms(req: Request, res: Response) {
         try {
             const {
-                place, guestCount, checkIn, checkOut, sortBy, maxPrice, minPrice, categories, facilities,
+                place, guestCount, checkIn, checkOut, sortBy, maxPrice, minPrice, categories, facilities, page
             }: ResortQuery = req.query 
 
             if (!place || !guestCount || !checkIn || !checkOut) {
                 throw new CustomError("Missing required search parameters", 400);
             }          
-            const availableRooms = await resortServices.searchRooms({
+            const response = await resortServices.searchRooms({
                 place,
                 guestCount: guestCount,
                 checkIn,
@@ -216,13 +216,14 @@ class UserController {
                 facilities,
                 minPrice,
                 maxPrice,
+                page
             });
 
-            if (!availableRooms.length) {
+            if (!response.availableRooms.length) {
                 throw new CustomError("No available rooms found", 404);
             }
 
-            return res.status(200).json(availableRooms);
+            return res.status(200).json({availableRooms:response.availableRooms,totalResorts:response.totalResorts});
         } catch (err) {
             if (err instanceof CustomError) {
                 res.status(err.statusCode).json({ message: err.message })
