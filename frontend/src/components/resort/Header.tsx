@@ -18,7 +18,6 @@ function ReosrtAdminNav(){
             dispatch(clearResortAdminAuth())
             navigate('/resort/signin')
         } catch (err) {
-            console.log(err)
         }    
     }
 

@@ -51,7 +51,6 @@ export default function ChangePasswordForm({ }: Props) {
             if (isApiError(err)) {
                 setErrMsg(err.data?.message)
             } else {
-                console.log(err)
             }
         }
     }

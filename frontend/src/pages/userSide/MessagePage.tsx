@@ -35,7 +35,6 @@ const MessagePage: React.FC = () => {
                 });
                 setReceivers(transformedReceivers)
             } catch (err) {
-                console.log(err)
             }
 
         })()

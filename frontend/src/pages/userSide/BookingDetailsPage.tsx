@@ -39,13 +39,10 @@ export default function BookingDetailsPage() {
         setSocket(newSocket);
 
         newSocket.on('connect', () => {
-            console.log('Connected to socket:', newSocket.id);
             newSocket.emit('joinRoom', userInfo?._id)
         })
 
         newSocket.on('receiveMessage', (message: IMessage) => {
-            console.log('recieved');
-
             if (userInfo?._id == message.receiverId) {
                 setMessages((prevMessages) => [...prevMessages, message]);
             }
@@ -71,7 +68,6 @@ export default function BookingDetailsPage() {
                 setMessages(res.messages)
             }
         } catch (err) {
-            console.log(err);
         }
     }
 
@@ -90,7 +86,6 @@ export default function BookingDetailsPage() {
                 socket?.emit('sendMessage', res);
             }
         } catch (err) {
-            console.log(err);
         }
     }
 

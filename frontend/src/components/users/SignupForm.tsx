@@ -61,7 +61,7 @@ const SignupForm = () => {
             if (isApiError(err)) {
                 setErrMsg(err.data.message)
             } else {
-                console.log('An unexpected error occurred:', err)
+                toast('Internal server error')
             }
         }
     }
@@ -92,7 +92,7 @@ const SignupForm = () => {
                 }
             }
         } catch (err) {
-            console.log(err)
+            toast('Internal server error')
         }
     }
 
@@ -104,7 +104,6 @@ const SignupForm = () => {
             toast(res.message)
         } catch (err: any) {
             if (err?.data) setErrMsg(err.data.message)
-            console.log(err)
         }
     }
 

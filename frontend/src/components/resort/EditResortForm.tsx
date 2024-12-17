@@ -133,7 +133,7 @@ export default function ResortEditForm() {
             if (isApiError(err)) {
                 toast(<div className="text-red-600">{err.data.message}</div>);
             } else {
-                console.log('An unexpected error occurred:', err);
+                toast('Internal server error')
             }
         }
     }
@@ -149,7 +149,7 @@ export default function ResortEditForm() {
         setImagePreviews((prev) => prev.filter((_, i) => i !== index));
         form.setValue("images", form.getValues("images")!.filter((img) => img !== imageUrl));
         const imageRef = ref(firebaseStore, imageUrl);
-        deleteObject(imageRef).catch((err) => console.log("Error deleting image:", err));
+        deleteObject(imageRef).catch((err) => toast("Error deleting image"));
     };
 
     if (isLoading) return <p>Loading...</p>;

@@ -4,31 +4,16 @@ import { useListBookingsQuery } from "../../slices/resortAdminApiSlice";
 import { AppDispatch, RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { isApiError } from "../../utils/errorHandling";
-import { clearResortAdminAuth } from "../../slices/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { setBookings } from "../../slices/bookingSlice";
 
 export default function BookingsList() {
     const { resortAdmin } = useSelector((state: RootState) => state.auth)
-    const { data, error: err, isError } = useListBookingsQuery(resortAdmin?._id!)
+    const { data } = useListBookingsQuery(resortAdmin?._id!)
     const { bookings } = useSelector((state: RootState) => state.bookings)
     const dispatch = useDispatch<AppDispatch>()
-    // const navigate = useNavigate()
 
     useEffect(() => {
-        // if (isError) {
-        //     if (isApiError(err)) {
-        //         if (err.status == 401) {
-        //             dispatch(clearResortAdminAuth())
-        //             navigate('/resort/signin')
-        //         } else {
-        //             console.log(err.data.message || 'Unknown error occurred')
-        //         }
-        //     } else {
-        //         console.log(err)
-        //     }
-        // } 
         if (data && bookings === null) {
             dispatch(setBookings(data.bookings));
         }

@@ -49,7 +49,7 @@ export default function ResortDetails() {
             if (isApiError(err)) {
                 toast(<div className="text-red-600">{err.data.message || "Internal Server Error"}</div>)
             } else {
-                console.log('An unexpected error occurred:', err)
+                toast('An unexpected error occurred')
             }
         }
     }
@@ -85,7 +85,7 @@ export default function ResortDetails() {
             if (isApiError(err)) {
                 toast(<div className="text-red-600">{err.data.message || "Internal Server Error"}</div>)
             } else {
-                console.log('An unexpected error occurred:', err)
+                toast('An unexpected error occurred')
             }
         }
     }

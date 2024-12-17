@@ -54,10 +54,9 @@ function ResortDetails({ resort }: Props) {
         if (err.status == 409) {
           toast(<div className="text-green-800">{err.data.message}</div>)
         } else {
-          console.log('Api erorr : ' + err)
+          toast('Internal server error')
         }
       } else {
-        console.log('error: ' + err)
         toast('Internal server error')
       }
     }
@@ -74,7 +73,6 @@ function ResortDetails({ resort }: Props) {
         //'This deleted from your wishlist'
       }
     } catch (err) { 
-        console.log('error: ' + err)
         toast(<div className="text-red-700">'Internal server error'</div>)
     }
   }

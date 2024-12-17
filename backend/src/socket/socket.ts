@@ -21,7 +21,6 @@ io.on("connection", (socket) => {
     })
 
     socket.on('sendMessage', (message:IMessage) => {
-        console.log('Message received:', message.receiverType)
         socket.to(String(message.receiverId)).emit('receiveMessage', message);
     })
 

@@ -33,7 +33,7 @@ export default function CouponSection({ checkoutDetails }: Props) {
                     dispatch(setCoupon(res.data))
                 }
             } catch (err) {
-                console.log(err);
+                toast('Internal server error')
             }
         })()
     }, [])
@@ -79,7 +79,7 @@ export default function CouponSection({ checkoutDetails }: Props) {
             if (isApiError(err)) {
                 toast(<div className="text-red-600">{err.data.message}</div>)
             } else {
-                console.log('An unexpected error occurred:', err)
+                toast('Internal server error')
             }
         }
     }

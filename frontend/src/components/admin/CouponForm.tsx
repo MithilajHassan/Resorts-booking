@@ -60,7 +60,7 @@ export default function CouponForm({ setGetForm }: Props) {
             if (isApiError(err)) {
                 toast(err.data.message)
             } else {
-                console.log(err)
+                toast('Internal server error')
             }
         }
     }

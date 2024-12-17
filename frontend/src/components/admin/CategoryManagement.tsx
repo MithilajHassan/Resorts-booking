@@ -66,7 +66,6 @@ function CategoryManagement() {
 
         } catch (err: any) {
             if (err?.data) toast(<div className="text-red-600">{err.data.message}</div>)
-            console.log(err)
         }
     }
 
@@ -79,7 +78,6 @@ function CategoryManagement() {
             }
         } catch (err: any) {
             if (err?.data) toast(<div className="text-red-600">Something went wrong</div>)
-            console.log(err)
         }
     }
     function handleEdit(id: unknown, category: string) {

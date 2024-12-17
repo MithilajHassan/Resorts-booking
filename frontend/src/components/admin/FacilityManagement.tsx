@@ -65,7 +65,6 @@ function FacilityManagement() {
             }
         } catch (err: any) {
             if (err?.data) toast(<div className="text-red-600">{err.data.message}</div>)
-            console.log(err)
         }
     }
 
@@ -78,7 +77,6 @@ function FacilityManagement() {
             }
         } catch (err: any) {
             if (err?.data) toast(<div className="text-red-600">Something went wrong</div>)
-            console.log(err);
         }
     }
 

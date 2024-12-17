@@ -51,7 +51,6 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
             if (err?.data) {
                 setErrMsg(err.data?.message)
             }
-            console.log(err)
         }
     }
 

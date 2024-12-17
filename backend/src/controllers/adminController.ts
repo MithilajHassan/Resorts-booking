@@ -67,10 +67,8 @@ class AdminController {
             }
         } catch (err) {
             if (err instanceof CustomError) {
-                console.log(err)
                 res.status(err.statusCode).json({ message: err.message })
             } else {
-                console.error(err)
                 res.status(500).json({ message: 'Internal Server Error' })
             }
         }
@@ -88,10 +86,8 @@ class AdminController {
             }
         } catch (err) {
             if (err instanceof CustomError) {
-                console.log(err)
                 res.status(err.statusCode).json({ message: err.message })
             } else {
-                console.error(err)
                 res.status(500).json({ message: 'Internal Server Error' })
             }
         }
@@ -140,10 +136,8 @@ class AdminController {
             }
         } catch (err) {
             if (err instanceof CustomError) {
-                console.log(err)
                 res.status(err.statusCode).json({ message: err.message })
             } else {
-                console.error(err)
                 res.status(500).json({ message: 'Internal Server Error' })
             }
         }
@@ -162,10 +156,8 @@ class AdminController {
             }
         } catch (err) {
             if (err instanceof CustomError) {
-                console.log(err)
                 res.status(err.statusCode).json({ message: err.message })
             } else {
-                console.error(err)
                 res.status(500).json({ message: 'Internal Server Error' })
             }
         }

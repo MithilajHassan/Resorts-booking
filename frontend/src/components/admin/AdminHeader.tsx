@@ -18,7 +18,6 @@ function AdminHeader() {
             dispatch(clearAdminAuth())
             navigate('/admin/signin')
         } catch (err) {
-            console.log(err)
         }
     }
 

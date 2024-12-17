@@ -25,7 +25,6 @@ export default function CouponList() {
                     dispatch(setCoupon(res.data))
                 }
             } catch (err) {
-                console.log(err);
             }
         })()
     }, [])

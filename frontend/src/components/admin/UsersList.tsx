@@ -26,10 +26,10 @@ function UsersList() {
                     dispatch(clearAdminAuth())
                     navigate('/admin/signin')
                 }else {
-                    console.log(err.data.message || 'Unknown error occurred')
+                    toast('Internal server error')
                 }
             } else {
-                console.log(err)
+                toast('Internal server error')
             }
         }
     }, [data,err])

@@ -19,7 +19,6 @@ export default function ResortTails() {
     const [revenue,setRevenue] = useState<number>(0)
 
     useEffect(()=>{
-        console.log(resortAdmin?._id!);
         
         getTailsDetails({resortId:resortAdmin?._id!}).then((v)=>{
             if(v.data){

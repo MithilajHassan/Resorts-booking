@@ -31,7 +31,6 @@ const WishlistCard: React.FC = () => {
             toast(<div className="text-green-800">{res.message}</div>) 
           }
         } catch (err) { 
-            console.log('error: ' + err)
             toast(<div className="text-red-700">'Internal server error'</div>)
         }
       }

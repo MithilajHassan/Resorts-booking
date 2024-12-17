@@ -27,7 +27,6 @@ const Chats: React.FC = () => {
         setSocket(newSocket);
 
         newSocket.on('connect', () => {
-            console.log('Connected to socket:', newSocket.id);
             newSocket?.emit('joinRoom', resortAdmin?._id)
         })
 
@@ -63,7 +62,6 @@ const Chats: React.FC = () => {
 
                 setReceivers(transformedReceivers)
             } catch (err) {
-                console.log(err)
             }
 
         })()
@@ -75,7 +73,6 @@ const Chats: React.FC = () => {
             setActive(id)
             setMessages(conversation.messages)
         } catch (err) {
-            console.log(err)
         }
     }
 
@@ -94,7 +91,6 @@ const Chats: React.FC = () => {
                 socket?.emit('sendMessage', res);
             }
         } catch (err) {
-            console.log(err);
         }
     }
 

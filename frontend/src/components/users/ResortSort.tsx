@@ -19,8 +19,6 @@ const SortResorts = () => {
     try {
       const selectedSort = e.target.value;
       setSortBy(selectedSort);
-      console.log(selectedSort);
-
 
       if (!place && !guestCount && !checkIn && !checkOut) {
         toast.error("Queries missing");

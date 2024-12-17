@@ -36,7 +36,6 @@ const SigninForm = ()=>{
             if (err?.data) {
                 setErrMsg(err.data?.message) 
             } 
-            console.log(err)     
         }
     }
 
