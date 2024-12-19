@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ToastContainer, toast } from "react-toastify";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
 import { firebaseStore } from "../../config/firebaseConfig";
 import { Checkbox } from "../ui/checkbox";
@@ -149,7 +149,7 @@ export default function ResortEditForm() {
         setImagePreviews((prev) => prev.filter((_, i) => i !== index));
         form.setValue("images", form.getValues("images")!.filter((img) => img !== imageUrl));
         const imageRef = ref(firebaseStore, imageUrl);
-        deleteObject(imageRef).catch((err) => toast("Error deleting image"));
+        deleteObject(imageRef).catch(() => toast("Error deleting image"));
     };
 
     if (isLoading) return <p>Loading...</p>;
@@ -311,7 +311,7 @@ export default function ResortEditForm() {
 
                         <FormItem>
                             <FormLabel>Location</FormLabel>
-                            <button type="button" className="bg-indigo-50 py-1.5 text-sm font-semibold border rounded-md w-full" onClick={(e: FormEvent) => setShowMap(true)} >Change Your location</button>
+                            <button type="button" className="bg-indigo-50 py-1.5 text-sm font-semibold border rounded-md w-full" onClick={() => setShowMap(true)} >Change Your location</button>
                         </FormItem>
 
                         <Button type="submit" className="bg-blue-600 hover:bg-blue-500 w-full">EDIT</Button>

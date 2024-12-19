@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
 import UserHeader from '../../components/users/UserHeader'
-import { IConversation } from '@/types/types';
 import { useGetReceiversMutation } from '../../slices/userApiSlice';
-
-interface Messenger {
-    id: number;
-    name: string;
-}
 
 interface Message {
     id: number;

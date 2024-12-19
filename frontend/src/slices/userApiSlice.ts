@@ -1,4 +1,4 @@
-import { CategoryDetails, FacilityDetails, IBanner, IBooking, IConversation, ICoupon, IMessage, IResort, IReview, IRoom, IWalletHistory, IWishlist, SearchRoomsResult } from '../types/types'
+import { CategoryDetails, FacilityDetails, IBanner, IBooking, IConversation, ICoupon, IMessage, IResort, IReview, IWalletHistory, IWishlist, SearchRoomsResult } from '../types/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { ResortQuery } from './searchSlice';
 

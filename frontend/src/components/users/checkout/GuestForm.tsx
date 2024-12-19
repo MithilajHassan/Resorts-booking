@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify"
 import { z } from "zod"
 import { Button } from "../../ui/button"
 import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { RootState } from "@/store"
 import { useCreateBookingMutation, useSetPaymentStatusMutation } from "../../../slices/userApiSlice"
@@ -80,7 +80,7 @@ export default function GuestForm() {
                     description: 'Booking Payment',
                     image: '/images/Logo.png',
                     order_id: res?.orderId!,
-                    async handler(response) {
+                    async handler() {
                         await setPaymentStatus({ bookingId: res.bookingId, status: true }).unwrap()
                         navigate('/booking-success')
                     }

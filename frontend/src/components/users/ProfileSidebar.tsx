@@ -1,13 +1,8 @@
 import { ReactElement } from "react";
-import { FaBook, FaHeart, FaUserCircle, FaWallet } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
 interface Props {
   children: ReactElement[]
 }
-// interface sidebarItem {
-//   icon
-// }
 
 export default function ProfileSidebar({ children }: Props) {
   return (
@@ -19,10 +14,3 @@ export default function ProfileSidebar({ children }: Props) {
     </div>
   )
 }
-
-// export function ProfileSidebarItem(){
-
-//  return(
-
-//  )
-// }

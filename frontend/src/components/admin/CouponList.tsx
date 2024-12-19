@@ -29,9 +29,6 @@ export default function CouponList() {
         })()
     }, [])
 
-    const handleEdit = (id:string)=>{
-        
-    }
     const handleDelete = async (id:string)=>{
         const res = await deleteCoupon(id).unwrap()
         if(res.success){
@@ -73,7 +70,7 @@ export default function CouponList() {
                                             <TableCell className="font-medium">{item.minBooking}</TableCell>
                                             <TableCell className="font-medium">{format(item.expireAt,"MM-dd-yyy")}</TableCell>
                                             <TableCell className="text-right flex justify-end items-center gap-5">
-                                                <MdEdit onClick={() => handleEdit(item._id!)} style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />
+                                                <MdEdit style={{ fontSize: '1.3rem' }} className="text-blue-700 hover:text-blue-400" />
                                                 <DeletConfirm id={item._id!} onConfirm={handleDelete} />
                                             </TableCell>
                                         </TableRow>

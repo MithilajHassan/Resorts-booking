@@ -38,7 +38,6 @@ export default function ResortDataTable() {
   const { resorts } = useSelector((state: RootState) => state.resorts)
   const [manageResortBlock] = useManageBlockUnblockResortMutation()
   const [globalFilter, setGlobalFilter] = useState('')
-  const [pageSize, setPageSize] = useState(10)
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {

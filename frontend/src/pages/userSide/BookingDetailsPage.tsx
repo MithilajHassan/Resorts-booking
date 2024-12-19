@@ -12,7 +12,7 @@ import { Button } from "../../components/ui/button"
 import WriteReview from "../../components/users/WriteReview"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog"
 import { useEffect, useState } from "react"
-import { IConversation, IMessage } from "@/types/types"
+import { IMessage } from "@/types/types"
 import { io, Socket } from "socket.io-client"
 import { format } from "date-fns"
 
@@ -26,7 +26,6 @@ export default function BookingDetailsPage() {
     const [getMessges] = useGetMessagesMutation()
     const [sendMessage] = useSendMessageMutation()
     const dispatch = useDispatch()
-    const [conversation, setConversation] = useState<IConversation>()
     const [newMessageTxt, setNewMessageTxt] = useState<string>('')
     const [messages, setMessages] = useState<IMessage[]>([])
     const [socket, setSocket] = useState<Socket | null>(null);
@@ -64,7 +63,6 @@ export default function BookingDetailsPage() {
             const resortId = typeof bookingData?.resortId !== 'string' ? bookingData?.resortId._id! : ''
             const res = await getMessges(resortId).unwrap()
             if (res) {
-                setConversation(res)
                 setMessages(res.messages)
             }
         } catch (err) {

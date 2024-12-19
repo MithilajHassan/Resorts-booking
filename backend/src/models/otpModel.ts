@@ -12,8 +12,6 @@ const otpSchema = new Schema<IOtp>({
     createdAt: { type: Date, default: Date.now, expires: '60s' }
 })
 
-otpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 })
-
 const Otp = model('Otp', otpSchema)
 
 export default Otp

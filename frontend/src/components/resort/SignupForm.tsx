@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { ToastContainer, toast } from "react-toastify"
-import { FormEvent, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { firebaseStore } from "../../config/firebaseConfig"
 import { Checkbox } from "../ui/checkbox"
@@ -310,7 +310,7 @@ export default function ResortRegistrationForm() {
 
                         <FormItem>
                             <FormLabel>Location</FormLabel>
-                            <button type="button" className="bg-indigo-50 py-1.5 text-sm font-semibold border rounded-md w-full" onClick={(e:FormEvent)=>setShowMap(true)} >Select Your Location</button>
+                            <button type="button" className="bg-indigo-50 py-1.5 text-sm font-semibold border rounded-md w-full" onClick={()=>setShowMap(true)} >Select Your Location</button>
                         </FormItem>
 
                         <div className="flex justify-center">
