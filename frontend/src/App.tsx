@@ -1,4 +1,4 @@
-import './App.css'
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import UserRoutes from './routes/UserRoutes'
 import ResortRoutes from './routes/ResortRoutes'

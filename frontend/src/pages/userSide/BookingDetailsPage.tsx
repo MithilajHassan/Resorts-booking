@@ -11,7 +11,7 @@ import { updateOneBooking } from "../../slices/bookingSlice"
 import { Button } from "../../components/ui/button"
 import WriteReview from "../../components/users/WriteReview"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { IMessage } from "@/types/types"
 import { io, Socket } from "socket.io-client"
 import { format } from "date-fns"
@@ -29,9 +29,19 @@ export default function BookingDetailsPage() {
     const [newMessageTxt, setNewMessageTxt] = useState<string>('')
     const [messages, setMessages] = useState<IMessage[]>([])
     const [socket, setSocket] = useState<Socket | null>(null);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null)
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     useEffect(() => {
-        const newSocket = io('http://localhost:7000', {
+        const newSocket = io(`${process.env.REACT_APP_BACKEND_URL}`, {
             query: { userId: userInfo?._id },
         });
 
@@ -137,7 +147,7 @@ export default function BookingDetailsPage() {
                             bookingData?.status != 'Cancelled' && (
                                 <Dialog>
                                     <DialogTrigger className="w-full">
-                                        <p className="text-center underline text-blue-800 font-bold mt-4" onClick={getChats}>Send Message</p>
+                                        <Button className="place-content-center bg-blue-700 hover:bg-blue-400 font-bold mt-4" onClick={getChats}>Send Message</Button>
                                     </DialogTrigger>
                                     <DialogContent className="gap-0">
                                         <DialogHeader>
@@ -170,6 +180,7 @@ export default function BookingDetailsPage() {
                                                         </p>
                                                     </div>
                                                 )}
+                                                <div ref={messagesEndRef} />
                                             </div>
                                             <div className="p-3 bg-blue-100 border-t border-blue-300 flex items-center space-x-2">
                                                 <input

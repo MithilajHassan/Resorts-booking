@@ -7,7 +7,6 @@ import { DateRange } from "react-day-picker";
 interface MyDatePickerProps {
   setCheckIn: (date: Date | undefined) => void;
   setCheckOut: (date: Date | undefined) => void;
-  // setShowDatePicker:React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function MyDatePicker({ setCheckIn, setCheckOut }: MyDatePickerProps) {
@@ -31,7 +30,7 @@ function MyDatePicker({ setCheckIn, setCheckOut }: MyDatePickerProps) {
       setRange({ from: fromDate, to: toDate });
       setCheckIn(fromDate);
       setCheckOut(toDate);
-    } 
+    }
   }
 
   return (

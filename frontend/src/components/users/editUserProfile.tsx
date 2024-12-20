@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage} from '../ui/form';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { useForm } from 'react-hook-form';
@@ -36,7 +36,7 @@ const EditUserProfile = () => {
   });
 
   const uploadImageToFirebase = async (file: File): Promise<string> => {
-    
+
     const storageRef = ref(firebaseStore, `profilePictures/${file.name}`);
     setUploading(true);
     try {
@@ -60,19 +60,19 @@ const EditUserProfile = () => {
       }
 
       const res = await updateUser({
-        id:userInfo?._id!,
-        name:data.name,
-        phone:Number(data.phone),
+        id: userInfo?._id!,
+        name: data.name,
+        phone: Number(data.phone),
         avatar: profilePictureUrl
-     }).unwrap()
-     
-     dispatch(setCredentials({
-      _id:res.id!,
-      name:res.name!,
-      email:res.email,
-      phone:res.phone,
-      avatar:res.avatar
-     }))
+      }).unwrap()
+
+      dispatch(setCredentials({
+        _id: res.id!,
+        name: res.name!,
+        email: res.email,
+        phone: res.phone,
+        avatar: res.avatar
+      }))
 
       navigate('/myprofile')
     } catch (error) {
@@ -124,7 +124,7 @@ const EditUserProfile = () => {
               <FormItem>
                 <FormLabel>Profile Picture</FormLabel>
                 <FormControl>
-                  <Input type="file" accept="image/*" onChange={(e:React.ChangeEvent<HTMLInputElement>) => field.onChange(e.target.files?.[0])} />
+                  <Input type="file" accept="image/*" onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(e.target.files?.[0])} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

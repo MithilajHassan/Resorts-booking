@@ -47,35 +47,8 @@ userRouter.post('/coupons', userProtect, couponController.applyCoupon)
 
 userRouter.get('/wallet', userProtect, userController.walletDetails)
 
-// userRouter.get('/messages/receivers', userProtect, messageContoller.getReceivers)
 userRouter.get('/messages/:id', userProtect, messageContoller.getMessages)
 userRouter.post('/messages', userProtect, messageContoller.sendMessage)
 
 
-
-
-
 export default userRouter
-
-
-
-
-
-
-
-
-
-
-// userRouter.get('/auth/google/url', (req, res) => {
-//     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:5000&response_type=code&scope=profile email`;
-//     res.json({ url });
-// })
-
-// userRouter.get('/auth/google/callback',
-//     passport.authenticate('google', { session: false, failureRedirect: '/signin' }),
-//     (req:any, res) => {
-//         res.cookie('userAccessT', req.user.accessToken, { httpOnly: true, maxAge: 15 * 60 * 1000 });
-//         res.cookie('userRefreshT', req.user.refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
-//         res.json({ success:true })
-//     }
-// )

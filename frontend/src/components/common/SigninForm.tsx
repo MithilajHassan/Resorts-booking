@@ -55,7 +55,7 @@ const SigninForm: React.FC<SigninFormProps> = ({ role, signupUrl, nextPage }) =>
     }
 
     const loginWithGoogle = async () => {
-        window.location.href = 'http://localhost:7000/auth/google'
+        window.location.href = `${process.env.REACT_APP_GOOGLE_AUTH_URL}`
     }
 
     return (

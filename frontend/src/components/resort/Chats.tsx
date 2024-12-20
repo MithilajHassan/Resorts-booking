@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGetReceiversMutation, useGetMessagesMutation, useSendMessageMutation } from '../../slices/resortAdminApiSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
@@ -16,11 +16,20 @@ const Chats: React.FC = () => {
     const [getMessages] = useGetMessagesMutation()
     const [sendMessage] = useSendMessageMutation()
     const [active, setActive] = useState<string>('')
-
     const [socket, setSocket] = useState<Socket | null>(null);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null)
+    
+        const scrollToBottom = () => {
+            if (messagesEndRef.current) {
+                messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+            }
+        };
+        useEffect(() => {
+            scrollToBottom();
+        }, [messages]);
 
     useEffect(() => {
-        const newSocket = io('http://localhost:7000', {
+        const newSocket = io(`${process.env.REACT_APP_BACKEND_URL}`, {
             query: { userId: resortAdmin?._id },
         });
 
@@ -139,6 +148,7 @@ const Chats: React.FC = () => {
                                 <p className="text-2xl text-center mt-32">No chats</p>
                             </div>
                         )}
+                        <div ref={messagesEndRef} />
                     </div>
 
                     {active != '' && (<div className="p-4 bg-blue-100 border-t border-blue-300 flex items-center space-x-2">

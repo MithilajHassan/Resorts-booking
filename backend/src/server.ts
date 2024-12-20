@@ -19,7 +19,7 @@ const port = process.env.PORT || 5000
 
 
 app.use(cors({
-    origin: "http://localhost:5000",
+    origin: `${process.env.FRONTEND_URL}`,
     methods: "GET, POST, PUT, DELETE, PATCH",
     credentials: true
 }))
@@ -61,7 +61,7 @@ app.get('/auth/google/callback',
         res.cookie('userAccessT', req.user.accessToken, { httpOnly: true, maxAge: 15 * 60 * 1000 });
         res.cookie('userRefreshT', req.user.refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
 
-        res.redirect('http://localhost:5000/')
+        res.redirect(`${process.env.FRONTEND_URL}`)
     }
 )
 

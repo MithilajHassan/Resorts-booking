@@ -78,3 +78,20 @@
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-in-out;
 }
+
+
+*::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px; 
+}
+
+*::-webkit-scrollbar-track {
+  background: rgb(223, 232, 246); 
+  border-radius: 8px; 
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(122, 122, 255);
+  border-radius: 8px; 
+  border: 2px solid lightblue; 
+}
