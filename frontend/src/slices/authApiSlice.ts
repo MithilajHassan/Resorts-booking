@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://luminova.fun/api', credentials: 'include' }),
     endpoints: (builder) => ({
 
         signup: builder.mutation({
@@ -52,6 +52,15 @@ export const authApi = createApi({
             })
         }),
 
+
+        adminSignin: builder.mutation({
+            query: (data: { email: string, password: string, role: string }) => ({
+                url: `/admin/signin`,
+                method: 'POST',
+                body: data
+            })
+        }),
+
         signoutAdmin: builder.mutation({
             query: () => ({
                 url: `/admin/signout`,
@@ -84,20 +93,6 @@ export const authApi = createApi({
             })
         }),
         
-        // getGoogleLoginUrl: builder.mutation({
-        //     query: () => ({
-        //         url: '/user/auth/google/url',
-        //         method: 'GET',
-        //     }),
-        // }),
-
-        // googleCallback: builder.mutation({
-        //     query: (code) => ({
-        //         url: '/user/auth/google/callback',
-        //         method: 'POST',
-        //         body: { code },
-        //     }),
-        // }),
 
     })
 })
@@ -113,9 +108,6 @@ export const {
     useSignoutResortAdminMutation,
     useRegisterResortMutation,
     useResortSigninMutation,
+    useAdminSigninMutation,
 
-
-
-    // useGetGoogleLoginUrlMutation,
-    // useGoogleCallbackMutation,
 } = authApi

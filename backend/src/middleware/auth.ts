@@ -8,7 +8,7 @@ import { IResort } from '../models/resortModel';
 
 export interface CustomRequest extends Request {
     user?: Partial<IUser>;
-    resort?:Partial<IResort>;
+    resort?: Partial<IResort>;
 }
 
 export const adminProtect = async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -28,7 +28,7 @@ export const adminProtect = async (req: CustomRequest, res: Response, next: Next
         } catch (error) {
             return res.status(401).json({ message: 'Not authorized, invalid token' });
         }
-    }else if (refreshToken) {
+    } else if (refreshToken) {
         try {
             const decodedRefresh = verifyRefreshToken(refreshToken)
             const user = await userRepository.findById(decodedRefresh.id);
@@ -41,7 +41,7 @@ export const adminProtect = async (req: CustomRequest, res: Response, next: Next
             res.cookie('adminAccessT', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 15 * 60 * 1000,
             });
 
@@ -73,7 +73,7 @@ export const userProtect = async (req: CustomRequest, res: Response, next: NextF
         } catch (error) {
             res.status(401).json({ message: 'Not authorized, invalid token' });
         }
-    }else if (refreshToken) {
+    } else if (refreshToken) {
         try {
             const decodedRefresh = verifyRefreshToken(refreshToken)
             const user = await userRepository.findById(decodedRefresh.id);
@@ -83,10 +83,10 @@ export const userProtect = async (req: CustomRequest, res: Response, next: NextF
             }
 
             const newAccessToken = generateAccessToken({ id: user._id as string, role: user.role });
-            res.cookie('adminAccessT', newAccessToken, {
+            res.cookie('userAccessT', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 15 * 60 * 1000,
             });
 
@@ -121,7 +121,7 @@ export const userUnProtect = async (req: CustomRequest, res: Response, next: Nex
             res.status(401);
             return res.json({ message: 'Not authorized, invalid token' });
         }
-    }else if (refreshToken) {
+    } else if (refreshToken) {
         try {
             const decodedRefresh = verifyRefreshToken(refreshToken)
             const user = await userRepository.findById(decodedRefresh.id);
@@ -131,10 +131,10 @@ export const userUnProtect = async (req: CustomRequest, res: Response, next: Nex
             }
 
             const newAccessToken = generateAccessToken({ id: user._id as string, role: user.role });
-            res.cookie('adminAccessT', newAccessToken, {
+            res.cookie('userAccessT', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 15 * 60 * 1000,
             });
 
@@ -161,19 +161,27 @@ export const resortProtect = async (req: CustomRequest, res: Response, next: Nex
             if (!resort) {
                 return res.status(401).json({ message: 'Not authorized, invalid token' })
             } else if (resort.isBlock) {
-                res.cookie('jwt', '', {
+                res.cookie('resortAccessT', '', {
                     httpOnly: true,
+                    secure: process.env.NODE_ENV !== 'development',
+                    sameSite: 'none',
+                    expires: new Date(0),
+                })
+                res.cookie('resortAccessT', '', {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV !== 'development',
+                    sameSite: 'none',
                     expires: new Date(0),
                 })
                 return res.status(401).json({ messsage: 'Your account is blocked', isBlocked: resort.isBlock })
             }
-            req.resort = resort 
+            req.resort = resort
             next()
         } catch (error) {
             res.status(401);
             return res.json({ message: 'Not authorized, invalid token' });
         }
-    }else if (refreshToken) {
+    } else if (refreshToken) {
         try {
             const decodedRefresh = verifyRefreshToken(refreshToken)
             const resort = await resortRepository.findResortById(decodedRefresh.id);
@@ -186,7 +194,7 @@ export const resortProtect = async (req: CustomRequest, res: Response, next: Nex
             res.cookie('resortAccessT', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 15 * 60 * 1000,
             });
 
